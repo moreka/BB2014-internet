@@ -1,5 +1,6 @@
 package javachallenge.util;
 
+import javachallenge.units.UnitCE;
 import javachallenge.units.UnitCell;
 import javachallenge.message.Delta;
 
@@ -233,11 +234,6 @@ public class Map {
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.WALL);//Edge.EdgeType = WALL
                     break;
-                case WALL_DISAPPEAR:
-                    nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
-                    nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
-                    nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.OPEN);//Edge.EdgeType = OPEN
-                    break;
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellDes = this.cells[temp.getDestination().getX()][temp.getDestination().getY()];
@@ -246,18 +242,12 @@ public class Map {
                     cellDes.setUnit(unitCell);
                     cellSr.setUnit(null);
                     break;
-                /*
-                case AGENT_KILL:
-                    cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
-                    cellSr.getUnit().setAlive(false);
-                    cellSr.setUnit(null);
-                    break;
-                */
                 case MINE_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     MineCell mineCell = (MineCell) cellSr;
                     mineCell.setAmount(0);
                     cellSr.setType(CellType.TERRAIN);
+                    mines.remove(mineCell);
                     ////
                     break;
                 case MINE_CHANGE:
@@ -271,6 +261,14 @@ public class Map {
                     UnitCell unitCell2 = (UnitCell) cellSr.getUnit();
                     unitCell2.setCell(null);
                     cellSr.setUnit(null);
+                    break;
+                case SPAWN:
+                    cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
+                    UnitCE newUnit = new UnitCE();
+                    newUnit.setCell(cellSr);
+                    cellSr.setUnit(newUnit);
+                    newUnit.setId(temp.getUnitID());
+                    newUnit.setTeamId(temp.getTeamID());
                     break;
             }
         }

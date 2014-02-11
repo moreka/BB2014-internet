@@ -17,6 +17,15 @@ public class Delta
     //private Direction direction;
     //private NodeDirection nodeDirection;
     private int mineChange;
+    private int teamID;
+    private int unitID;
+
+    public  Delta(DeltaType type, Point source, int teamID, int unitID) {
+        this.type = type;
+        this.source = source;
+        this.teamID = teamID;
+        this.unitID = unitID;
+    }
 
     public Delta(DeltaType type, Point source) {
         this(type, source, null, null, null);
@@ -98,5 +107,13 @@ public class Delta
 
     public void setDestinationWallie(Point destinationWallie) {
         this.destinationWallie = destinationWallie;
+    }
+
+    public int getTeamID() {
+        return teamID;
+    }
+
+    public int getUnitID() {
+        return unitID;
     }
 }

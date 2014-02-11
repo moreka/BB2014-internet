@@ -42,7 +42,7 @@ public class Action {
         return nodeDirection;
     }
 
-    public void setNodeDirection(NodeDirection[] nodeDirection) {
+    public void setNodeDirection(NodeDirection nodeDirection) {
         this.nodeDirection = nodeDirection;
     }
 }
