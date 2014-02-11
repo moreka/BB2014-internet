@@ -123,7 +123,7 @@ public class FJpanel extends JPanel {
     public ArrayList<Delta> getDelta(int round) {
         switch (round % 4) {
             case 0:
-                return game.getAttackDeltaList();
+                //return game.getAttackDeltaList();
             case 1:
                 return game.getWallDeltasList();
             case 2:

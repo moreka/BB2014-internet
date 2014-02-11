@@ -1,8 +1,6 @@
 package javachallenge.server;
 
-import javachallenge.units.UnitAttacker;
-import javachallenge.units.UnitBomber;
-import javachallenge.units.UnitWallie;
+import javachallenge.units.UnitCE;
 import javachallenge.util.Cell;
 
 import java.util.ArrayList;
@@ -15,12 +13,42 @@ public class Team {
     private int resources;
     private Cell spawn;
     private Cell destination;
-    private ArrayList<UnitAttacker> unitAttackers;
-    private ArrayList<UnitBomber> unitBombers;
-    private ArrayList<UnitWallie> unitWallies;
+    private ArrayList<UnitCE> unitCEs;
 
     public Team(int teamId, int resources) {
         this.teamId = teamId;
         this.resources = resources;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public int getResources() {
+        return resources;
+    }
+
+    public Cell getSpawn() {
+        return spawn;
+    }
+
+    public void setSpawn(Cell spawn) {
+        this.spawn = spawn;
+    }
+
+    public Cell getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Cell destination) {
+        this.destination = destination;
+    }
+
+    public ArrayList<UnitCE> getUnitCEs() {
+        return unitCEs;
+    }
+
+    public void setUnitCEs(ArrayList<UnitCE> unitCEs) {
+        this.unitCEs = unitCEs;
     }
 }
