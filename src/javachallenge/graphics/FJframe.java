@@ -3,12 +3,13 @@ package javachallenge.graphics;
 import javachallenge.server.Game;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 public class FJframe extends JFrame{
-	public static final int ROWS = 6;
-	public static final int COLS = 6;
+	private int rows;
+	private int cols;
 	public static final int RADIUS = 30;
 	public static final int PADDING = 15;
     public static final int FJHEIGHT = 8;
@@ -16,11 +17,15 @@ public class FJframe extends JFrame{
 	private FJNode[][] nodes;
 	private FJpanel panel;
     private Game game;
+    private ArrayList<Hexagon[]> outOfMaps;
 	
 	
-	public FJframe(Game game){
+	public FJframe(Game game, int rows, int cols){
 		super();
-		
+
+        this.rows = rows;
+        this.cols = cols;
+
 		// setting basic properties
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -29,8 +34,11 @@ public class FJframe extends JFrame{
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.game = game;
 
-        map = JCmap.makeMap(new Point(50,  20), ROWS, COLS, RADIUS, PADDING);
-        nodes = JCmap.makeNodes(ROWS, 2 * COLS + 1, map);
+        map = JCmap.makeMap(new Point(50,  20), rows, cols, RADIUS, PADDING);
+        nodes = JCmap.makeNodes(rows, 2 * cols + 1, map);
+        for (int i = 0; i<outOfMaps.size(); i++){
+            outOfMaps.set(i, JCmap.makeOutofMapHexagon(new Point(50,  20), rows, cols, RADIUS, PADDING, i));
+        }
 
 		initUI();
 	}
@@ -38,7 +46,7 @@ public class FJframe extends JFrame{
 	
 	
 	private void initUI(){
-		FJpanel panel = new FJpanel(game, map, nodes, ROWS, COLS);
+		FJpanel panel = new FJpanel(game, map, nodes, rows, cols);
 		getContentPane().add(panel);
 		//setLayout(null);
 //		JButton button = new JButton();
