@@ -21,11 +21,11 @@ public class Map {
     private Edge[] walls;
     private int mineRate;
 
-    private Point getSpawnPoint(int teamId) {
+    public Point getSpawnPoint(int teamId) {
         return null;
     }
 
-    private Point getDestinationPoint(int teamId) {
+    public Point getDestinationPoint(int teamId) {
         return null;
     }
 
