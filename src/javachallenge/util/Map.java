@@ -21,6 +21,14 @@ public class Map {
     private Edge[] walls;
     private int mineRate;
 
+    private Point getSpawnPoint(int teamId) {
+        return null;
+    }
+
+    private Point getDestinationPoint(int teamId) {
+        return null;
+    }
+
     public Map(int sizeX, int sizeY) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
