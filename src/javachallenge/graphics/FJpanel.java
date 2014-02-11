@@ -77,10 +77,9 @@ public class FJpanel extends JPanel {
          */
 
         if (buffer == null){
-        buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         }
         Graphics2D buffer_g2d = (Graphics2D) buffer.getGraphics();
-
         /**
          * End of temp
          */
@@ -93,7 +92,8 @@ public class FJpanel extends JPanel {
         //hex.draw(g2d, 50, 50, 20, 0x008844, true);
 
         g2d.drawImage(buffer, 0, 0, null);
-
+        counter++;
+        System.out.println(counter);
     }
 
 
