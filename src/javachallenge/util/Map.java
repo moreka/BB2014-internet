@@ -1,5 +1,6 @@
 package javachallenge.util;
 
+import javachallenge.units.UnitCE;
 import javachallenge.units.UnitCell;
 import javachallenge.message.Delta;
 
@@ -261,7 +262,14 @@ public class Map {
                     unitCell2.setCell(null);
                     cellSr.setUnit(null);
                     break;
-
+                case SPAWN:
+                    cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
+                    UnitCE newUnit = new UnitCE();
+                    newUnit.setCell(cellSr);
+                    cellSr.setUnit(newUnit);
+                    newUnit.setId(temp.getUnitID());
+                    newUnit.setTeamId(temp.getTeamID());
+                    break;
             }
         }
     }
