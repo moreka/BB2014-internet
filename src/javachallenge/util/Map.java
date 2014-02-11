@@ -28,6 +28,7 @@ public class Map {
 
     private void init() {
         nodes = new Node[2 * sizeX + 2][];
+        this.walls = new Edge[(2 * sizeX + 2) * (sizeY + 1)];
 
         for (int k = 0; k < 2 * sizeX + 2; k++) {
             nodes[k] = new Node[sizeY + 1];
@@ -50,6 +51,24 @@ public class Map {
                         input[1] = getNeighborCell(cells[i][j], d);
                         temp[0].getEdge(dirTemp[0]).setCells(input);//set the Cells in Edge Class
                         cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]),d);
+                    }
+                }
+        }
+        int wall_Pointer = 0;
+        for(int i = 0; i < 2 * sizeX + 2; i++){
+            for(int j = 0; j < sizeY + 1 && i + j % 2 == 1; j++)
+                if(isNodeInMap(i,j)){
+                    if(!this.nodes[i][j].getEdge(NodeDirection.NORTH).getType().equals(EdgeType.NONE)){
+                        walls[wall_Pointer] = this.nodes[i][j].getEdge(NodeDirection.NORTH);
+                        wall_Pointer++;
+                    }
+                    if(!this.nodes[i][j].getEdge(NodeDirection.SOUTHEAST).getType().equals(EdgeType.NONE)){
+                        walls[wall_Pointer] = this.nodes[i][j].getEdge(NodeDirection.SOUTHEAST);
+                        wall_Pointer++;
+                    }
+                    if(!this.nodes[i][j].getEdge(NodeDirection.SOUTHWEST).getType().equals(EdgeType.NONE)){
+                        walls[wall_Pointer] = this.nodes[i][j].getEdge(NodeDirection.SOUTHWEST);
+                        wall_Pointer++;
                     }
                 }
         }
@@ -425,4 +444,6 @@ public class Map {
     public void setMineRate(int mineRate) {
         this.mineRate = mineRate;
     }
+
+
 }
