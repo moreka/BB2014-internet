@@ -279,9 +279,9 @@ public class FJpanel extends JPanel {
                     //
                     break;
 
-                case SPAWN_ATTACKER:
+                /*case SPAWN_ATTACKER:
                     drawImage(g2d, map[delta.getSource().x][delta.getSource().y], attacker);
-                    break;
+                    break;*/
                 case MINE_CHANGE:
                     // ye addad draw kon
                     drawImage(g2d, map[delta.getSource().x][delta.getSource().y], mine);
