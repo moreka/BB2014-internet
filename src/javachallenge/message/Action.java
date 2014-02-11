@@ -14,6 +14,21 @@ public class Action {
     private NodeDirection nodeDirection = null;
     private Point position;
 
+    public Action(ActionType type, Point position, Direction direction) {
+        this(type, position, direction, null);
+    }
+
+    public Action(ActionType type, Point position, NodeDirection nodeDirection) {
+        this(type, position, null, nodeDirection);
+    }
+
+    public Action(ActionType type, Point position, Direction direction, NodeDirection nodeDirection) {
+        this.type = type;
+        this.direction = direction;
+        this.nodeDirection = nodeDirection;
+        this.position = position;
+    }
+
     public ActionType getType() {
         return type;
     }

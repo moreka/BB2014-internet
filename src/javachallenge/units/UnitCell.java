@@ -10,11 +10,6 @@ public class UnitCell extends Unit {
     private Direction move;
     private Cell cell;
 
-    public void move (Direction input) {
-        move = input;
-        //Add to action list.
-    }
-
     public Direction getMove() {
         return move;
     }

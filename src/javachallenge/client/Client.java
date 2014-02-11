@@ -19,10 +19,12 @@ public abstract class Client {
     public abstract void step();
 
     public void update(ServerMessage message) {
-
+        this.map.updateMap(message.getMoveDeltaList());
+        this.map.updateMap(message.getGameDeltaList());
+        this.map.updateMap(message.getWallDeltaList());
     }
 
     public ClientMessage end() {
-        return null;
+        return new ClientMessage(actionList);
     }
 }
