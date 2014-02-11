@@ -53,6 +53,10 @@ public class Game {
                 tempOtherMoves[i][j] = new ArrayList<Unit>();
     }
 
+    public Map getMap() {
+        return map;
+    }
+
     public void handleActions(ArrayList<Action> actions) {
         ArrayList<Action> attacks = new ArrayList<Action>();
         ArrayList<Action> constructionDestructionWalls = new ArrayList<Action>();
