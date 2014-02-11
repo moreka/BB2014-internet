@@ -15,6 +15,7 @@ import java.util.*;
  * Created by mohammad on 2/5/14.
  */
 
+
 public class Game {
     private boolean ended;
     private Map map;
