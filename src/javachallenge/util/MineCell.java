@@ -1,11 +1,11 @@
 package javachallenge.util;
 
-import javachallenge.client.Unit;
+import javachallenge.units.Unit;
 
 /**
  * Created by peyman on 2/9/14.
  */
-public class MineCell extends Cell{
+public class MineCell extends Cell {
 
     private int amount;
     private Unit secUnit;
