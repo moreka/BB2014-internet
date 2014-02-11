@@ -28,7 +28,7 @@ public class Map {
 
     private void init() {
         nodes = new Node[2 * sizeX + 2][];
-        this.walls = new Edge[(2 * sizeX + 2) * (sizeY + 1)];
+        this.walls = new Edge[ (3 * (2 * sizeX + 2) * (sizeY + 1)) / 2];
 
         for (int k = 0; k < 2 * sizeX + 2; k++) {
             nodes[k] = new Node[sizeY + 1];
