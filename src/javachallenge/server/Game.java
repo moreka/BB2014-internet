@@ -42,6 +42,8 @@ public class Game {
     //private Point[] ceSpawnLocation = new Point[2];
     //private Point[] destinations = new Point[2];
     private Team team;
+    private int numberOfCEers = 0;
+    private int numberOfEEers = 0;
 
     public boolean isEnded() {
         return ended;
@@ -455,9 +457,12 @@ public class Game {
             otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[1]));
         }
         */
+        otherDeltas.add(new Delta(DeltaType.SPAWN_EEer, map.getSpawnPoint(1), 1, numberOfEEers));
+        numberOfEEers++;
         if (turn % CE_SPAWN_RATE == 0) {
-            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, ceSpawnLocation[0]));
-            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, ceSpawnLocation[1]));
+            otherDeltas.add(new Delta(DeltaType.SPAWN_CEer, map.getSpawnPoint(0), 0, numberOfCEers));
+            numberOfCEers++;
+
         }
     }
 /*
