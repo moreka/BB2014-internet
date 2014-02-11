@@ -87,6 +87,7 @@ public class Game {
         map.updateMap(otherDeltas);
     }
 
+
     public void handleMakeWalls(ArrayList<Action> walls){
 
     }
