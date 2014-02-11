@@ -24,10 +24,12 @@ public class Team {
         return teamId;
     }
 
-    public void addUnitCE(){
+    public UnitCE addUnitCE(){
         UnitCE newUnit = new UnitCE();
         newUnit.setAlive(true);
         newUnit.setTeamId(this.teamId);
+        this.unitCEs.add(newUnit);
+        return newUnit;
     }
 
     public int getResources() {

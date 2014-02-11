@@ -39,21 +39,22 @@ public class Map {
         }
 
         for(int i = 0; i < this.sizeX; i++){
-            for(int j = 0; j < this.sizeY; j++)
+            for(int j = 0; j < this.sizeY; j++){
+                if(this.cells[i][j].getType().equals(CellType.OUTOFMAP) || this.cells[i][j].getType().equals(CellType.MOUNTAIN) || this.cells[i][j].getType().equals(CellType.RIVER))
+                    continue;
                 for (Direction d : Direction.values()){
                     Node[] temp = getNodesFromCellAt(cells[i][j], d);
                     NodeDirection[] dirTemp = getNodDirFromCellDir(d);
                     temp[0].setEdge(temp[1].getEdge(dirTemp[1]),dirTemp[0]); //Same Edge between the Nodes
-                    if(this.cells[i][j].getType().equals(CellType.TERRAIN) || this.cells[i][j].getType().equals(CellType.MINE) || this.cells[i][j].getType().equals(CellType.SPAWN) || this.cells[i][j].getType().equals(CellType.DESTINATION)){
-                        temp[0].getEdge(dirTemp[0]).setType(EdgeType.OPEN);//set the EdgeType = OPEN
-                        temp[0].getEdge(dirTemp[0]).setNodes(temp);//set the Nodes in Edge Class
-                        Cell[] input = new Cell[2];
-                        input[0] = cells[i][j];
-                        input[1] = getNeighborCell(cells[i][j], d);
-                        temp[0].getEdge(dirTemp[0]).setCells(input);//set the Cells in Edge Class
-                        cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]),d);
-                    }
+                    temp[0].getEdge(dirTemp[0]).setType(EdgeType.OPEN);//set the EdgeType = OPEN
+                    temp[0].getEdge(dirTemp[0]).setNodes(temp);//set the Nodes in Edge Class
+                    Cell[] input = new Cell[2];
+                    input[0] = cells[i][j];
+                    input[1] = getNeighborCell(cells[i][j], d);
+                    temp[0].getEdge(dirTemp[0]).setCells(input);//set the Cells in Edge Class
+                    this.cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]), d) 
                 }
+            }
         }
         int wall_Pointer = 0;
         for(int i = 0; i < 2 * sizeX + 2; i++){
