@@ -153,6 +153,7 @@ public class Game {
         handleOthersMoves(otherMoves);
     }
 
+
     private void handleOthersMoves(ArrayList<Action> otherMoves) {
         ArrayDeque<Integer> xOfOverloadedCells = new ArrayDeque<Integer>();
         ArrayDeque<Integer> yOfOverloadedCells = new ArrayDeque<Integer>();
