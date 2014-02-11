@@ -9,7 +9,7 @@ public class JCmap {
 	}*/
 	
 	
-	public static FJNode[][] makeNodes(int rows, int cols, Hexagon[][] map, ArrayList<Hexagon[]> outOfMaps) {
+	public static FJNode[][] makeNodes(int rows, int cols, Hexagon[][] map) {
 		// TODO Auto-generated method stub
 		FJNode[][] nodes = new FJNode[cols][rows];
 		Hexagon first, second, third;
