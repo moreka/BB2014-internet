@@ -47,7 +47,7 @@ public class Game {
 
     public Game (Map map) {
         this.map = map;
-        tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
+        tempOtherMoves = new ArrayList[map.getSizeX()][map.getSizeY()];
         //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
