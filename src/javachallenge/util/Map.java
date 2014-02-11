@@ -133,6 +133,7 @@ public class Map {
         return false;
     }
 
+
     public Cell getCellAt(int x, int y){
         if(isCellInMap(x, y))
             return  cells[x][y];
