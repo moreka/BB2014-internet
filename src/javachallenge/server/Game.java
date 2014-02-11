@@ -93,6 +93,7 @@ public class Game {
 
     public void handleMakeWalls(ArrayList<Action> walls){
         Collections.shuffle(walls);
+        ArrayList<Edge> wallsWantMake = new ArrayList<Edge>();
         for (int i = 0; i < walls.size(); i++) {
             Point point1 = new Point(walls.get(i).getPosition().getX(), walls.get(i).getPosition().getY());
             Node node1 = map.getNodeAt(point1.getX(), point1.getY());
@@ -101,7 +102,8 @@ public class Game {
             Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
             if (resources[team.getResources()] >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
                     edge.getType() == EdgeType.OPEN &&
-                    isTherePathAfterThisEdge(map.getSpawnLocation(), map.getDestination, edge)) {
+                    isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+                wallsWantMake.add(edge);
                 team.decreaseResources(COST_WALL);
                 wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
             }
@@ -407,7 +409,7 @@ public class Game {
 
     }
 
-    private boolean isTherePathAfterThisEdge (Point sourceInput, Point destinationInput, Edge barrier) {
+    private boolean isTherePathAfterThisEdges (Point sourceInput, Point destinationInput, ArrayList<Edge> barriers) {
         Cell source = map.getCellAt(sourceInput.getX(), sourceInput.getY());
         Cell destination = map. getCellAt(destinationInput.getX(), destinationInput.getY());
         boolean[][] flags = new boolean[map.getSizeX()][map.getSizeY()];
@@ -424,7 +426,10 @@ public class Game {
                 Cell neighborCell = map.getNeighborCell(currentCell, dir[i]);
                 Edge neighborEdge = currentCell.getEdge(dir[i]);
                 if (neighborCell != null && flags[neighborCell.getX()][neighborCell.getY()] == false &&
-                        neighborEdge.getType() == EdgeType.OPEN && !neighborEdge.equals(barrier)) {
+                        neighborEdge.getType() == EdgeType.OPEN) {
+                    for (int j = 0; j < barriers.size(); j++)
+                        if (neighborEdge.equals(barriers.get(i)))
+                            continue;
                     dfs.add(neighborCell);
                 }
             }
