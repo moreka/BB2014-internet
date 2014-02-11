@@ -208,7 +208,7 @@ public class Map {
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.WALL);//Edge.EdgeType = WALL
-                    nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
+                    //nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
                     nodeDes.setUnitWallie(nodeSr.getUnitWallie());//
                     nodeSr.setUnitWallie(null);
                     break;
@@ -222,7 +222,7 @@ public class Map {
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.OPEN);//Edge.EdgeType = OPEN
-                    nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
+                    //nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
                     nodeDes.setUnitWallie(nodeSr.getUnitWallie());//
                     nodeSr.setUnitWallie(null);
                     break;

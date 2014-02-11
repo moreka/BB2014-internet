@@ -1,7 +1,5 @@
 package javachallenge.util;
 
-import javachallenge.units.UnitWallie;
-
 /**
  * Created by peyman on 2/6/14.
  */

@@ -1,9 +1,7 @@
 package javachallenge.server;
 
 import javachallenge.units.Unit;
-import javachallenge.units.UnitAttacker;
 import javachallenge.units.UnitCell;
-import javachallenge.units.UnitWallie;
 import javachallenge.message.Action;
 import javachallenge.message.ActionType;
 import javachallenge.message.Delta;
@@ -34,7 +32,7 @@ public class Game {
     private static final int ATTACKER_SPAWN_RATE = 2;
     private static final int BOMBER_SPAWN_RATE = 3;
     private int[] resources = new int[2];
-    private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
+    //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
     private Point[] attackerSpawnLocation = new Point[2];
     private Point[] bomberSpawnLocation = new Point[2];
@@ -66,17 +64,17 @@ public class Game {
                 moves.add(actions.get(i));
             }
         }
-        handleAttacks(attacks);
+        //handleAttacks(attacks);
         map.updateMap(attackDeltas);
 
-        handleConstructionDestructionWalls(constructionDestructionWalls);
+        //handleConstructionDestructionWalls(constructionDestructionWalls);
         map.updateMap(wallDeltas);
         handleMoves(moves);
         map.updateMap(moveDeltas);
         handleOthers();
         map.updateMap(otherDeltas);
     }
-
+/*
     private void handleAttacks(ArrayList<Action> attacks) {
         for (int i = 0; i < attacks.size(); i++) {
             UnitAttacker unit = ((UnitAttacker)map.getCellAtPoint(attacks.get(i).getPosition()).getUnit());
@@ -93,7 +91,8 @@ public class Game {
             }
         }
     }
-
+*/
+/*
     private void handleConstructionDestructionWalls(ArrayList<Action> constructionDestructionWalls) {
         for (int i = wallsUnderConstruction.size() - 1; i >= 0; i--) {
             Node tempNode1 = wallsUnderConstruction.get(i).getNodes()[0];
@@ -135,7 +134,7 @@ public class Game {
             }
         }
     }
-
+*/
     private void handleMoves(ArrayList<Action> moves) {
         ArrayList<Action> walliesMoves = new ArrayList<Action>();
         ArrayList<Action> otherMoves = new ArrayList<Action>();
@@ -146,7 +145,7 @@ public class Game {
                 otherMoves.add(moves.get(i));
             }
         }
-        handleWalliesMoves(walliesMoves);
+        //handleWalliesMoves(walliesMoves);
         handleOthersMoves(otherMoves);
     }
 
@@ -227,7 +226,7 @@ public class Game {
                 }
             }
     }
-
+/*
     private void handleWalliesMoves(ArrayList<Action> walliesMoves) {
         ArrayDeque<Integer> xOfOverloadedNodes = new ArrayDeque<Integer>();
         ArrayDeque<Integer> yOfOverloadedNodes = new ArrayDeque<Integer>();
@@ -304,7 +303,7 @@ public class Game {
                 }
             }
     }
-
+*/
     private void handleOthers() {
 
     }
