@@ -41,7 +41,8 @@ public class Game {
     //private Point[] bomberSpawnLocation = new Point[2];
     //private Point[] ceSpawnLocation = new Point[2];
     //private Point[] destinations = new Point[2];
-    private Team team;
+    private Team CETeam;
+    private Team EETeam;
     private int numberOfCEers = 0;
     private int numberOfEEers = 0;
 
@@ -52,7 +53,8 @@ public class Game {
     public Game (Map map) {
         this.map = map;
         tempOtherMoves = new ArrayList[map.getSizeX()][map.getSizeY()];
-        team = new Team(0, INITIAL_RECOURCE);
+        CETeam = new Team(0, INITIAL_RECOURCE);
+        EETeam = new Team(1, 0);
         //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
@@ -102,11 +104,11 @@ public class Game {
             Node node2 = map.getNeighborNode(node1, walls.get(i).getNodeDirection());
             Point point2 = new Point(node2.getX(), node2.getY());
             Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
-            if (resources[team.getResources()] >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
+            if (resources[CETeam.getResources()] >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
                     edge.getType() == EdgeType.OPEN &&
                     isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
                 wallsWantMake.add(edge);
-                team.decreaseResources(COST_WALL);
+                CETeam.decreaseResources(COST_WALL);
                 wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
             }
         }
@@ -457,12 +459,13 @@ public class Game {
             otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[1]));
         }
         */
-        otherDeltas.add(new Delta(DeltaType.SPAWN_EEer, map.getSpawnPoint(1), 1, numberOfEEers));
+        otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, numberOfEEers));
+        CETeam.addUnitCE();
         numberOfEEers++;
         if (turn % CE_SPAWN_RATE == 0) {
-            otherDeltas.add(new Delta(DeltaType.SPAWN_CEer, map.getSpawnPoint(0), 0, numberOfCEers));
+            otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, numberOfCEers));
+            EETeam.addUnitCE();
             numberOfCEers++;
-
         }
     }
 /*

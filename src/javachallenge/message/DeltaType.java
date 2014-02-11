@@ -14,7 +14,5 @@ public enum DeltaType {
     MINE_DISAPPEAR,
     AGENT_DISAPPEAR,
     MINE_CHANGE,
-    SPAWN_CEer,
-    SPAWN_EEer,
-
+    SPAWN
 }
