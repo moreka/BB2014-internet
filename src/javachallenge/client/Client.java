@@ -10,9 +10,9 @@ import java.util.ArrayList;
  * Created by mohammad on 2/5/14.
  */
 public abstract class Client {
-    private ArrayList<Unit> units;
-    private ArrayList<Action> actionList;
-    private Map map;
+    protected ArrayList<Unit> units;
+    protected ArrayList<Action> actionList;
+    protected Map map;
 
     public abstract void step();
 }
