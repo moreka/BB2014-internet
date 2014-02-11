@@ -15,6 +15,7 @@ import java.net.Socket;
  */
 public class Connector {
 
+    private static final int WAIT_TIME = 50;
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
@@ -53,15 +54,25 @@ public class Connector {
             @Override
             public void run() {
                 while (true) {
-                    synchronized (lock) {
-                        otherThreadMessage = serverMessage;
-                    }
-                    client.update(otherThreadMessage);
-                    client.step();
-                    ClientMessage message = client.end();
                     try {
-                        out.writeObject(message);
+                        synchronized (lock) {
+                            otherThreadMessage = serverMessage;
+                        }
+                        if (otherThreadMessage != null) {
+                            synchronized (lock) {
+                                serverMessage = null;
+                            }
+                            client.update(otherThreadMessage);
+                            client.step();
+                            ClientMessage message = client.end();
+                            out.writeObject(message);
+                        }
+                        else {
+                            Thread.sleep(WAIT_TIME);
+                        }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
