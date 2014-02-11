@@ -331,7 +331,7 @@ public class Map {
         return sizeY;
     }
 
-    private Node[] getNodesFromCellAt(Cell c, Direction dir){
+    public Node[] getNodesFromCellAt(Cell c, Direction dir){
         Node[] res = new Node[2];
         switch (dir){
             case NORTHWEST:

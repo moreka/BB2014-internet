@@ -52,7 +52,7 @@ public class Game {
 
     public Game (Map map) {
         this.map = map;
-        tempOtherMoves = new ArrayList[map.getSizeX()][map.getSizeY()];
+        tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
         CETeam = new Team(0, INITIAL_RECOURCE);
         EETeam = new Team(1, 0);
         //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
