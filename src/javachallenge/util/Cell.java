@@ -18,6 +18,8 @@ public class Cell {
         this.x = x;
         this.y = y;
         this.type = type;
+        for(int i = 0; i < 6; i++)
+            edges[i] = new Edge();
     }
 
     public Edge getEdge(Direction dir){

@@ -11,7 +11,7 @@ import javachallenge.util.Point;
 public class Action {
     private ActionType type;
     private Direction direction = null;
-    private NodeDirection[] nodeDirection = null;
+    private NodeDirection nodeDirection = null;
     private Point position;
 
     public ActionType getType() {
@@ -38,11 +38,11 @@ public class Action {
         this.position = position;
     }
 
-    public NodeDirection[] getNodeDirection() {
+    public NodeDirection getNodeDirection() {
         return nodeDirection;
     }
 
-    public void setNodeDirection(NodeDirection[] nodeDirection) {
+    public void setNodeDirection(NodeDirection nodeDirection) {
         this.nodeDirection = nodeDirection;
     }
 }

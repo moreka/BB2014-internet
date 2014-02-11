@@ -24,6 +24,14 @@ public class Team {
         return teamId;
     }
 
+    public UnitCE addUnitCE(){
+        UnitCE newUnit = new UnitCE();
+        newUnit.setAlive(true);
+        newUnit.setTeamId(this.teamId);
+        this.unitCEs.add(newUnit);
+        return newUnit;
+    }
+
     public int getResources() {
         return resources;
     }
@@ -50,5 +58,9 @@ public class Team {
 
     public void setUnitCEs(ArrayList<UnitCE> unitCEs) {
         this.unitCEs = unitCEs;
+    }
+
+    public void decreaseResources (int input) {
+        resources -= input;
     }
 }

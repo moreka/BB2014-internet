@@ -19,7 +19,6 @@ public class DummyPanel extends JPanel {
     private final Map map;
     private Image bufferImage;
     private Image sand, ocean, zombie, ce;
-    private Image[] walls;
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
 
@@ -32,13 +31,6 @@ public class DummyPanel extends JPanel {
             this.ocean = ImageIO.read(new File("/home/mohammad/ocean.png"));
             this.zombie = ImageIO.read(new File("/home/mohammad/zombie.png"));
             this.ce = ImageIO.read(new File("/home/mohammad/ce.png"));
-            walls = new Image[6];
-            walls[0] = ImageIO.read(new File("/home/mohammad/wall3.png"));
-            walls[1] = ImageIO.read(new File("/home/mohammad/wall1.png"));
-            walls[2] = ImageIO.read(new File("/home/mohammad/wall2.png"));
-            walls[3] = ImageIO.read(new File("/home/mohammad/wall3.png"));
-            walls[4] = ImageIO.read(new File("/home/mohammad/wall1.png"));
-            walls[5] = ImageIO.read(new File("/home/mohammad/wall2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,12 +74,24 @@ public class DummyPanel extends JPanel {
             }
         }
 
+        int[] xEdge = { 36, 72, 72, 36, 0, 0 };
+        int[] yEdge = { 0, 18, 54, 72, 54, 18};
+
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(2));
+
         for (int i = 0; i < map.getSizeX(); i++) {
             for (int j = 0; j < map.getSizeY(); j++) {
+                int x, y = j * 54;
+                if (j % 2 == 0)
+                    x = i * 72;
+                else
+                    x = i * 72 + 36;
                 for (Direction dir : Direction.values()) {
                     if (map.getCellAt(i, j).getEdge(dir) != null &&
-                            map.getCellAt(i, j).getEdge(dir).getType() != null) {
-
+                            map.getCellAt(i, j).getEdge(dir).getType() != EdgeType.NONE) {
+                        g.drawLine(x + xEdge[dir.ordinal()], y + yEdge[dir.ordinal()],
+                                x + xEdge[(dir.ordinal() + 1) % 6], y + yEdge[(dir.ordinal() + 1) % 6]);
                     }
                 }
             }
