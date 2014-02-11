@@ -8,11 +8,11 @@ public class JCmap {
 	}*/
 	
 	
-	public static Node[][] makeNodes(int rows, int cols, Hexagon[][] map) {
+	public static FJNode[][] makeNodes(int rows, int cols, Hexagon[][] map) {
 		// TODO Auto-generated method stub
-		Node[][] nodes = new Node[cols][rows];
+		FJNode[][] nodes = new FJNode[cols][rows];
 		Hexagon first, second, third;
-		Node newNode;
+		FJNode newNode;
 		
 		// version 1.23
 		// preventing index out of bound
@@ -22,15 +22,15 @@ public class JCmap {
 					first = map[col/2 - 1][row - 1];
 					second = map[col/2][row - 1];
 					third = map[(col - 1)/2][row];
-					newNode = new Node(first.getPoint(2), second.getPoint(4), third.getPoint(0));
+					newNode = new FJNode(first.getPoint(2), second.getPoint(4), third.getPoint(0));
 				}
 				else{
 					first = map[(col - 1)/2][row - 1];
 					second = map[col/2][row];
 					third = map[col/2 - 1][row];
-					newNode = new Node(first.getPoint(3), second.getPoint(5), third.getPoint(1));
+					newNode = new FJNode(first.getPoint(3), second.getPoint(5), third.getPoint(1));
 				}
-				//nodes[col][row] = new Node(one, two, three)
+				//nodes[col][row] = new FJNode(one, two, three)
 				nodes[col][row] = newNode;
 			}
 		}

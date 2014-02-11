@@ -207,10 +207,10 @@ class FJgon extends Polygon{
 }
 
 
-class Node extends Polygon{
+class FJNode extends Polygon{
 	public static final int SIDES = 3;
 
-    public Node(Point one, Point two, Point three) {
+    public FJNode(Point one, Point two, Point three) {
         npoints = SIDES;
         xpoints = new int[]{one.x, two.x, three.x};
         ypoints = new int[]{one.y, two.y, three.y};

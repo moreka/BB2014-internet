@@ -2,28 +2,28 @@ package javachallenge.graphics;
 
 
 import javachallenge.message.Delta;
-import javachallenge.message.DeltaType;
 import javachallenge.server.Game;
-import javachallenge.util.Cell;
-import javachallenge.util.CellType;
+import javachallenge.units.UnitAttacker;
+import javachallenge.units.UnitBomber;
+import javachallenge.util.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.prefs.Preferences;
 
 public class FJpanel extends JPanel {
     BufferedImage slate;
     TexturePaint slatetp;
-    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination;
+    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination, bomber;
     private Image wall1, wall2, wall3, semiWall1, semiWall2, semiWall3;
     private Image[] cells;
     private Image[] walls;
     private Random random;
     private Hexagon[][] map;
-    private Node[][] nodes;
+    private FJNode[][] nodes;
     private int rows;
     private int cols;
     private int counter;
@@ -32,7 +32,7 @@ public class FJpanel extends JPanel {
     private Game game;
     private BufferedImage buffer;
 
-    public FJpanel(Game game, Hexagon[][] map, Node[][] nodes, int rows, int cols){
+    public FJpanel(Game game, Hexagon[][] map, FJNode[][] nodes, int rows, int cols){
         this.map = map;
         this.nodes = nodes;
         this.rows = rows;
@@ -52,6 +52,7 @@ public class FJpanel extends JPanel {
         black = new ImageIcon("data/black.png").getImage();
         spawn = new ImageIcon("data/spawn.png").getImage();
         destination = new ImageIcon("data/destination.png").getImage();
+        bomber = new ImageIcon("data/bomber.png").getImage();
         //cells = new Image[]{grass, mountain, water};
         wall1 = new ImageIcon("data/wall_1.png").getImage();
         wall2 = new ImageIcon("data/wall_2.png").getImage();
@@ -75,7 +76,9 @@ public class FJpanel extends JPanel {
          * this is temporary!!!
          */
 
+        if (buffer == null){
         buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        }
         Graphics2D buffer_g2d = (Graphics2D) buffer.getGraphics();
 
         /**
@@ -84,6 +87,7 @@ public class FJpanel extends JPanel {
 
         // ino havaset bashe bayad ba tavajjoh be type game bache ha render koni
         drawMap(buffer_g2d);
+        drawUnits(buffer_g2d);
         drawDelta(buffer_g2d, getDelta(counter));
 
         //hex.draw(g2d, 50, 50, 20, 0x008844, true);
@@ -102,13 +106,15 @@ public class FJpanel extends JPanel {
          * this is temporary!!!
          */
 
-        buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         g2d = (Graphics2D) buffer.getGraphics();
 
+        BufferedImage bImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
-        drawDelta(g2d, getDelta(counter));
+        drawUnits(bImage.getGraphics());
+        drawDelta(bImage.getGraphics(), getDelta(counter));
 
-        ((Graphics2D) g).drawImage(buffer, 0, 0, null);
+        g2d.drawImage(buffer, 0, 0, null);
+        g2d.drawImage(bImage, 0, 0, null);
 
         counter++;
 
@@ -161,11 +167,69 @@ public class FJpanel extends JPanel {
                 //Image img = getImage(map[col][row].getType());
             	// man inja bayad ye for ru tamame game ine bezanam ke peyda konam tu har cell chi hast o chi bayad draw she.
                 Cell cell = game.getMap().getCellAt(col, row);
-                //if
+                Hexagon hex = map[col][row];
+
+                // cell textures
             	Image img = getImage(cell.getType());
-                map[col][row].draw(g2d, img, 0, 0, false);
-                
+                hex.draw(g2d, img, 0, 0, false);
+
+
             }
+        }
+    }
+
+    private void drawUnits(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        for (int row = 0; row < rows; row++){
+            for (int col = 0; col < cols; col++){
+                Cell cell = game.getMap().getCellAt(col, row);
+                Hexagon hex = map[col][row];
+                // units
+                if (cell.getType() != CellType.MINE){
+                    drawImage(g2d, hex, getImageByClass(cell.getUnit().getClass()));
+                }
+                else{
+                    MineCell mine = (MineCell) cell;
+                    drawImage(g2d, hex, getImageByClass(mine.getUnit().getClass()));
+                    drawImage(g2d, hex, getImageByClass(mine.getSecUnit().getClass()));
+                    drawImage(g2d, hex, getImageByClass(mine.getThirdUnit().getClass()));
+                }
+            }
+        }
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < 2 * cols + 1; col++){
+                Node utilNode = game.getMap().getNodeAt(row, col);
+                FJNode node = nodes[col][row];
+                if (utilNode.getUnitWallie() != null){
+                    drawImage(g2d, node, wallie);
+                }
+            }
+        }
+
+        Edge[] utilEdges = game.getMap().getWalls();
+
+        for (int i = 0; i < utilEdges.length; i++){
+            Edge edge = utilEdges[i];
+            if (edge != null){
+                FJgon wall = getFJgonByNodes(nodes[edge.getNodes()[0].getX()][edge.getNodes()[0].getY()], nodes[edge.getNodes()[1].getX()][edge.getNodes()[1].getY()]);
+                if (edge.getType() == EdgeType.WALL)
+                    drawImage(g2d, wall, walls[wall.getShib() + 1]);
+                else{
+                    drawImage(g2d, wall, walls[wall.getShib() + 4]);
+                }
+            }
+        }
+    }
+
+    private Image getImageByClass(Class clazz){
+        if (clazz == UnitAttacker.class){
+            return attacker;
+        }
+        else if (clazz == UnitBomber.class){
+            return bomber;
+        }
+        else{
+            return null;
         }
     }
 
@@ -224,12 +288,12 @@ public class FJpanel extends JPanel {
                     //
                     break;
                 case WALL_DRAW:
-                	temp = getFJgonByDelta(delta);
+                	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);
                     drawImage(g2d, temp, walls[temp.getShib() + 1]);
                     break;
                 case WALL_SEMI_DRAW:
-                	temp = getFJgonByDelta(delta);
-                    drawImage(g2d, getFJgonByDelta(delta), walls[temp.getShib() + 4]);
+                	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);
+                    drawImage(g2d, temp, walls[temp.getShib() + 4]);
                     break;
                 case WALLIE_MOVE:
                     drawImage(g2d, nodes[delta.getDestinationWallie().x][delta.getDestinationWallie().y], wallie);
@@ -254,17 +318,28 @@ public class FJpanel extends JPanel {
             return 1;
     }
     
-    private FJgon getFJgonByDelta(Delta delta){
-        Node source;
-        Node dest;
-        if (delta.getSource().x + delta.getSource().y < delta.getDestination().x + delta.getDestination().y){
-            source = nodes[delta.getSource().x][delta.getSource().y];
-            dest = nodes[delta.getDestination().x][delta.getDestination().y];
+    private FJgon getFJgonByNodes(FJNode first, FJNode second){
+        FJNode source = first;
+        FJNode dest = second;
+        //if (delta.getSource().x + delta.getSource().y < delta.getDestination().x + delta.getDestination().y){
+        if (first.getCircleCenter().x  < second.getCircleCenter().x && + first.getCircleCenter().y > second.getCircleCenter().y ){
+            FJNode temp = dest;
+            dest = source;
+            source = temp;
         }
-        else{
-            source = nodes[delta.getDestination().x][delta.getDestination().y];
-            dest = nodes[delta.getSource().x][delta.getSource().y];
+        else if (first.getCircleCenter().x == second.getCircleCenter().x && + first.getCircleCenter().y > second.getCircleCenter().y){
+            FJNode temp = dest;
+            dest = source;
+            source = temp;
         }
+        else if(first.getCircleCenter().x > second.getCircleCenter().x && + first.getCircleCenter().y > second.getCircleCenter().y){
+            FJNode temp = dest;
+            dest = source;
+            source = temp;
+        }
+
+
+
         int shib = shib(source.getCircleCenter(), dest.getCircleCenter());
         Point one, two, three, four;
         if (shib < 0){
@@ -292,6 +367,7 @@ public class FJpanel extends JPanel {
 
 
     private void drawImage(Graphics g, Shape shape, Image img){
+        if (img != null){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
@@ -304,5 +380,5 @@ public class FJpanel extends JPanel {
         Rectangle r = shape.getBounds();
         g2d.drawImage(img, r.x, r.y, null);
     }
-
+    }
 }
