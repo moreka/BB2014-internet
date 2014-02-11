@@ -53,6 +53,7 @@ public class Map {
                     input[1] = getNeighborCell(cells[i][j], d);
                     temp[0].getEdge(dirTemp[0]).setCells(input);//set the Cells in Edge Class
                     this.cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]), d);
+                    getNeighborCell(this.cells[i][j],d).setEdge(temp[0].getEdge(dirTemp[0]),Direction.values()[(d.ordinal() + 3) % 6]);
                 }
             }
         }
