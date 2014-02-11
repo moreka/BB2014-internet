@@ -254,7 +254,13 @@ public class Map {
                     MineCell mineCell2 = (MineCell) cellSr;
                     mineCell2.setAmount(mineCell2.getAmount() - temp.getMineChange());
                     break;
-
+                case AGENT_DISAPPEAR:
+                    cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
+                    cellSr.getUnit().setAlive(false);
+                    UnitCell unitCell2 = (UnitCell) cellSr.getUnit();
+                    unitCell2.setCell(null);
+                    cellSr.setUnit(null);
+                    break;
             }
         }
     }

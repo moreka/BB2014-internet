@@ -47,7 +47,7 @@ public class Game {
     public Game (Map map) {
         this.map = map;
         tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
-        tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
+        //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
                 tempOtherMoves[i][j] = new ArrayList<Unit>();
@@ -61,6 +61,7 @@ public class Game {
         //ArrayList<Action> attacks = new ArrayList<Action>();
         //ArrayList<Action> constructionDestructionWalls = new ArrayList<Action>();
         ArrayList<Action> moves = new ArrayList<Action>();
+        ArrayList<Action> walls = new ArrayList<Action>();
         for (int i = 0; i < actions.size(); i++) {
             /*
             if (actions.get(i).getType() == ActionType.ATTACK) {
@@ -68,20 +69,25 @@ public class Game {
             } else if (actions.get(i).getType() == ActionType.MAKE_WALL || actions.get(i).getType() == ActionType.DESTROY_WALL) {
                 constructionDestructionWalls.add(actions.get(i));
             } else */
-            if (actions.get(i).getType() == ActionType.MOVE) {
+            if (actions.get(i).getType() == ActionType.MOVE)
                 moves.add(actions.get(i));
-            }
-
+            else if(actions.get(i).getType() == ActionType.MAKE_WALL)
+                walls.add(actions.get(i));
         }
         //handleAttacks(attacks);
         //map.updateMap(attackDeltas);
 
         //handleConstructionDestructionWalls(constructionDestructionWalls);
+        handleMakeWalls(walls);
         map.updateMap(wallDeltas);
         handleMoves(moves);
         map.updateMap(moveDeltas);
         handleOthers();
         map.updateMap(otherDeltas);
+    }
+
+    public void handleMakeWalls(ArrayList<Action> walls){
+
     }
 /*
     private void handleAttacks(ArrayList<Action> attacks) {
@@ -145,20 +151,84 @@ public class Game {
     }
 */
     private void handleMoves(ArrayList<Action> moves) {
-        ArrayList<Action> walliesMoves = new ArrayList<Action>();
-        ArrayList<Action> otherMoves = new ArrayList<Action>();
+        ArrayDeque<Integer> xOfOverloadedCells = new ArrayDeque<Integer>();
+        ArrayDeque<Integer> yOfOverloadedCells = new ArrayDeque<Integer>();
         for (int i = 0; i < moves.size(); i++) {
-            if (moves.get(i).getType() == ActionType.WALLIE_MOVE) {
-                walliesMoves.add(moves.get(i));
-            } else {
-                otherMoves.add(moves.get(i));
+            UnitCell unit = (UnitCell)map.getCellAtPoint(moves.get(i).getPosition()).getUnit();
+            Cell source = unit.getCell();
+            Cell destination = map.getNeighborCell(source ,moves.get(i).getDirection());
+            if (destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
+                    destination.getType() != CellType.OUTOFMAP &&
+                    source.getEdge(moves.get(i).getDirection()).getType() == EdgeType.OPEN) {
+                tempOtherMoves[source.getX()][source.getY()].remove(0);
+                tempOtherMoves[destination.getX()][destination.getY()].add(map.getCellAtPoint(moves.get(i).getPosition()).getUnit());
             }
         }
-        //handleWalliesMoves(walliesMoves);
-        handleOthersMoves(otherMoves);
+        for (int i = 0; i < tempOtherMoves.length; i++)
+            for (int j = 0; j < tempOtherMoves[0].length; j++)
+                if (tempOtherMoves[i][j].size() > 1) {
+                    xOfOverloadedCells.add(i);
+                    yOfOverloadedCells.add(j);
+                }
+        Random rand = new Random();
+        while (!xOfOverloadedCells.isEmpty()) {
+            int xTemp = xOfOverloadedCells.pop();
+            int yTemp = yOfOverloadedCells.pop();
+            int overloadedNumber = tempOtherMoves[xTemp][yTemp].size();
+            if (overloadedNumber < 2)
+                continue;
+            boolean fullFlag = false;
+            for (int i = 0; i < overloadedNumber; i++) {
+                UnitCell existant = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                if (existant.getCell().getX() == xTemp && existant.getCell().getY() == yTemp)
+                    fullFlag = true;
+            }
+            if (fullFlag == false) {
+                int lasting = rand.nextInt(overloadedNumber);
+                for (int i = 0; i < overloadedNumber; i++)
+                    if (i != lasting) {
+                        UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                        tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
+                        if (tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].size() > 1) {
+                            xOfOverloadedCells.add(goner.getCell().getX());
+                            yOfOverloadedCells.add(goner.getCell().getY());
+                        }
+                        tempOtherMoves[xTemp][yTemp].remove(i);
+                    }
+            } else {
+                for (int i = 0; i < overloadedNumber; i++) {
+                    UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                    tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
+                    if (tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].size() > 1) {
+                        xOfOverloadedCells.add(goner.getCell().getX());
+                        yOfOverloadedCells.add(goner.getCell().getY());
+                    }
+                    tempOtherMoves[xTemp][yTemp].remove(i);
+                }
+            }
+        }
+        for (int i = 0; i < tempOtherMoves.length; i++)
+            for (int j = 0; j < tempOtherMoves[0].length; j++) {
+                UnitCell thisUnit = (UnitCell)tempOtherMoves[i][j].get(0);
+                Cell tempCell = thisUnit.getCell();
+                Point sourcePoint = new Point (tempCell.getX(), tempCell.getY());
+                if (thisUnit.getCell().getX() != i || thisUnit.getCell().getY() != j) {
+                    Point destinationPoint = new Point(i, j);
+                    moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
+                } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j && thisUnit.getCell().getType() == CellType.MINE) {
+                    MineCell mineCell = (MineCell) thisUnit.getCell();
+                    if (mineCell.getAmount() > MINE_RATE) {
+                        resources[thisUnit.getTeamId()] += MINE_RATE;
+                        otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, MINE_RATE));
+                    } else if (mineCell.getAmount() > 0) {
+                        resources[thisUnit.getTeamId()] += mineCell.getAmount();
+                        otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, mineCell.getAmount()));
+                    }
+                }
+            }
     }
 
-
+/*
     private void handleOthersMoves(ArrayList<Action> otherMoves) {
         ArrayDeque<Integer> xOfOverloadedCells = new ArrayDeque<Integer>();
         ArrayDeque<Integer> yOfOverloadedCells = new ArrayDeque<Integer>();
@@ -236,6 +306,7 @@ public class Game {
                 }
             }
     }
+*/
 /*
     private void handleWalliesMoves(ArrayList<Action> walliesMoves) {
         ArrayDeque<Integer> xOfOverloadedNodes = new ArrayDeque<Integer>();
