@@ -52,7 +52,7 @@ public class Map {
                     input[0] = cells[i][j];
                     input[1] = getNeighborCell(cells[i][j], d);
                     temp[0].getEdge(dirTemp[0]).setCells(input);//set the Cells in Edge Class
-                    this.cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]), d) 
+                    this.cells[i][j].setEdge(temp[0].getEdge(dirTemp[0]), d);
                 }
             }
         }
