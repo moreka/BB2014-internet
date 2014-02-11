@@ -18,7 +18,7 @@ public class GraphicMain {
                     e.printStackTrace();
                 }
                 Game game = new Game(map);
-                FJframe f = new FJframe(game);
+                FJframe f = new FJframe(game, map.getSizeY(), map.getSizeX());
                 FJpanel p = f.getPanel();
                 f.pack();
             }
