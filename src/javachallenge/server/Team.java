@@ -57,4 +57,8 @@ public class Team {
     public void setUnitCEs(ArrayList<UnitCE> unitCEs) {
         this.unitCEs = unitCEs;
     }
+
+    public void decreaseResources (int input) {
+        resources -= input;
+    }
 }

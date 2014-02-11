@@ -33,13 +33,15 @@ public class Game {
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
     private static final int CE_SPAWN_RATE = 3;
+    private static final int INITIAL_RECOURCE = 50;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
     //private Point[] attackerSpawnLocation = new Point[2];
     //private Point[] bomberSpawnLocation = new Point[2];
-    private Point[] ceSpawnLocation = new Point[2];
-    private Point[] destinations = new Point[2];
+    //private Point[] ceSpawnLocation = new Point[2];
+    //private Point[] destinations = new Point[2];
+    private Team team;
 
     public boolean isEnded() {
         return ended;
@@ -48,6 +50,7 @@ public class Game {
     public Game (Map map) {
         this.map = map;
         tempOtherMoves = new ArrayList[map.getSizeX()][map.getSizeY()];
+        team = new Team(0, INITIAL_RECOURCE);
         //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
@@ -89,7 +92,20 @@ public class Game {
 
 
     public void handleMakeWalls(ArrayList<Action> walls){
-
+        Collections.shuffle(walls);
+        for (int i = 0; i < walls.size(); i++) {
+            Point point1 = new Point(walls.get(i).getPosition().getX(), walls.get(i).getPosition().getY());
+            Node node1 = map.getNodeAt(point1.getX(), point1.getY());
+            Node node2 = map.getNeighborNode(node1, walls.get(i).getNodeDirection());
+            Point point2 = new Point(node2.getX(), node2.getY());
+            Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
+            if (resources[team.getResources()] >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
+                    edge.getType() == EdgeType.OPEN &&
+                    isTherePathAfterThisEdge(map.getSpawnLocation(), map.getDestination, edge)) {
+                team.decreaseResources(COST_WALL);
+                wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
+            }
+        }
     }
 /*
     private void handleAttacks(ArrayList<Action> attacks) {
