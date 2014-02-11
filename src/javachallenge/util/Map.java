@@ -324,7 +324,6 @@ public class Map {
 
     private Node[] getNodesFromCellAt(Cell c, Direction dir){
         Node[] res = new Node[2];
-        System.out.println("Cell: " + c.getX() + " " + c.getY());
         switch (dir){
             case NORTHWEST:
                 res[0] = nodes[c.getX() * 2 + (c.getY() % 2)][c.getY()];

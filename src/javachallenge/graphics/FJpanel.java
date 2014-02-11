@@ -3,8 +3,8 @@ package javachallenge.graphics;
 
 import javachallenge.message.Delta;
 import javachallenge.server.Game;
-import javachallenge.units.UnitAttacker;
-import javachallenge.units.UnitBomber;
+import javachallenge.units.Unit;
+import javachallenge.units.UnitCE;
 import javachallenge.util.*;
 
 import javax.swing.*;
@@ -185,8 +185,9 @@ public class FJpanel extends JPanel {
                 Cell cell = game.getMap().getCellAt(col, row);
                 Hexagon hex = map[col][row];
                 // units
-                if (cell.getType() != CellType.MINE){
-                    drawImage(g2d, hex, getImageByClass(cell.getUnit().getClass()));
+                if (cell.getType() != CellType.MINE) {
+                    if (cell.getUnit() != null)
+                        drawImage(g2d, hex, getImageByClass(cell.getUnit().getClass()));
                 }
                 else{
                     MineCell mine = (MineCell) cell;
@@ -200,9 +201,9 @@ public class FJpanel extends JPanel {
             for(int col = 0; col < 2 * cols + 1; col++){
                 Node utilNode = game.getMap().getNodeAt(row, col);
                 FJNode node = nodes[col][row];
-                if (utilNode.getUnitWallie() != null){
-                    drawImage(g2d, node, wallie);
-                }
+//                if (utilNode.getUnitWallie() != null){
+//                    drawImage(g2d, node, wallie);
+//                }
             }
         }
 
@@ -222,10 +223,11 @@ public class FJpanel extends JPanel {
     }
 
     private Image getImageByClass(Class clazz){
-        if (clazz == UnitAttacker.class){
-            return attacker;
-        }
-        else if (clazz == UnitBomber.class){
+//        if (clazz == UnitCE.class){
+//            return attacker;
+//        }
+//        else
+        if (clazz == UnitCE.class){
             return bomber;
         }
         else{

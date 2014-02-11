@@ -4,8 +4,10 @@
 
 package javachallenge.server;
 
-import javachallenge.graphics.FJframe;
-import javachallenge.graphics.FJpanel;
+import javachallenge.client.Client;
+//import javachallenge.graphics.FJframe;
+//import javachallenge.graphics.FJpanel;
+import javachallenge.message.Action;
 import javachallenge.message.Delta;
 import javachallenge.message.ServerMessage;
 import javachallenge.util.Map;
@@ -37,8 +39,8 @@ public class Server {
         Map map = Map.loadMap("test.map");
         Game game = new Game(map);
 
-        FJframe graphics = new FJframe(game);
-        FJpanel panel = graphics.getPanel();
+//        FJframe graphics = new FJframe(game);
+//        FJpanel panel = graphics.getPanel();
 
         int cycle = 0;
 
@@ -58,9 +60,15 @@ public class Server {
 
             Thread.sleep(CYCLE_LENGTH);
 
-//            game.initCycle(cycle);
-//            game.handleActions(actions);
-//            game.endTurn()
+            ArrayList<Action> actions = new ArrayList<Action>();
+
+            for (ClientConnection c : clientConnections) {
+                actions.addAll(c.getClientMessage().getActions());
+            }
+
+            game.initTurn(cycle);
+            game.handleActions(actions);
+            game.endTurn();
 
             //update graphics and our map
         }
