@@ -4,6 +4,8 @@ package javachallenge.graphics;
 import javachallenge.message.Delta;
 import javachallenge.message.DeltaType;
 import javachallenge.server.Game;
+import javachallenge.util.Cell;
+import javachallenge.util.CellType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +17,7 @@ import java.util.prefs.Preferences;
 public class FJpanel extends JPanel {
     BufferedImage slate;
     TexturePaint slatetp;
-    private Image grass, mountain, water, mine, attacker, wallie;
+    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination;
     private Image wall1, wall2, wall3, semiWall1, semiWall2, semiWall3;
     private Image[] cells;
     private Image[] walls;
@@ -47,6 +49,9 @@ public class FJpanel extends JPanel {
         mine = new ImageIcon("data/mine.png").getImage();
         attacker = new ImageIcon("data/attacker.png").getImage();
         wallie = new ImageIcon("data/wallie.png").getImage();
+        black = new ImageIcon("data/black.png").getImage();
+        spawn = new ImageIcon("data/spawn.png").getImage();
+        destination = new ImageIcon("data/destination.png").getImage();
         //cells = new Image[]{grass, mountain, water};
         wall1 = new ImageIcon("data/wall_1.png").getImage();
         wall2 = new ImageIcon("data/wall_2.png").getImage();
@@ -128,15 +133,25 @@ public class FJpanel extends JPanel {
 
 	}*/
 
-    private Image getImage(String type){
-        if (type == "grass")
-            return grass;
-        else if (type == "water")
-            return water;
-        else if (type == "mountain")
-            return mountain;
-        else
-            return null;
+    private Image getImage(CellType type){
+        switch (type){
+            case TERRAIN:
+                return grass;
+            case RIVER:
+                return water;
+            case SPAWN:
+                return spawn;
+            case MOUNTAIN:
+                return mountain;
+            case OUTOFMAP:
+                return black;
+            case DESTINATION:
+                return destination;
+            case MINE:
+                return mine;
+            default:
+                return null;
+        }
     }
 
     private void drawMap(Graphics g){
@@ -145,8 +160,11 @@ public class FJpanel extends JPanel {
             for (int col = 0; col < cols; col++){
                 //Image img = getImage(map[col][row].getType());
             	// man inja bayad ye for ru tamame game ine bezanam ke peyda konam tu har cell chi hast o chi bayad draw she.
-            	Image img = getImage(game)
+                Cell cell = game.getMap().getCellAt(col, row);
+                //if
+            	Image img = getImage(cell.getType());
                 map[col][row].draw(g2d, img, 0, 0, false);
+                
             }
         }
     }
