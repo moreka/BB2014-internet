@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Map {
     private Cell[][] cells;
     private Node[][] nodes;
+    private ArrayList<MineCell> mines;
     private int sizeX;
     private int sizeY;
     private Edge[] walls;
@@ -88,6 +89,18 @@ public class Map {
 
         map.init();
         return map;
+    }
+
+    public void addMineCell(int x, int y){
+        mines.add((MineCell) this.cells[x][y]);
+    }
+
+    public void removeMineCell(MineCell e){
+        mines.remove(e);
+    }
+
+    public ArrayList<MineCell> getMines(){
+        return  mines;
     }
 
     public boolean isCellInMap(int x, int y){
@@ -208,29 +221,12 @@ public class Map {
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.WALL);//Edge.EdgeType = WALL
-                    //nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
-                    nodeDes.setUnitWallie(nodeSr.getUnitWallie());//
-                    nodeSr.setUnitWallie(null);
-                    break;
-
-                case WALL_SEMI_DRAW:
-                    nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
-                    nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
-                    nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.SEMI_WALL);
                     break;
                 case WALL_DISAPPEAR:
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.OPEN);//Edge.EdgeType = OPEN
-                    //nodeSr.getUnitWallie().setNode(nodeDes);//UnitWallie.place == node.Dir
-                    nodeDes.setUnitWallie(nodeSr.getUnitWallie());//
-                    nodeSr.setUnitWallie(null);
                     break;
-                case WALLIE_MOVE:
-                    nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
-                    nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
-                    Node nodeDes2 = this.nodes[temp.getDestinationWallie().getX()][temp.getDestinationWallie().getY()];
-
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellDes = this.cells[temp.getDestination().getX()][temp.getDestination().getY()];
@@ -239,15 +235,18 @@ public class Map {
                     cellDes.setUnit(unitCell);
                     cellSr.setUnit(null);
                     break;
+                /*
                 case AGENT_KILL:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellSr.getUnit().setAlive(false);
                     cellSr.setUnit(null);
                     break;
+                */
                 case MINE_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     MineCell mineCell = (MineCell) cellSr;
                     mineCell.setAmount(0);
+                    cellSr.setType(CellType.TERRAIN);
                     ////
                     break;
                 case MINE_CHANGE:

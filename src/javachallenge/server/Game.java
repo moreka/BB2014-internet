@@ -18,24 +18,26 @@ import java.util.*;
 public class Game {
     private boolean ended;
     private Map map;
-    private ArrayList<Edge> wallsUnderConstruction = new ArrayList<Edge>();
-    private ArrayList<Edge> wallsUnderDestruction = new ArrayList<Edge>();
+    //private ArrayList<Edge> wallsUnderConstruction = new ArrayList<Edge>();
+    //private ArrayList<Edge> wallsUnderDestruction = new ArrayList<Edge>();
     private ArrayList<Unit>[][] tempOtherMoves;
     private ArrayList<Unit>[][] tempWallieMoves;
-    private ArrayList<Delta> attackDeltas = new ArrayList<Delta>();
+    //private ArrayList<Delta> attackDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> wallDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> moveDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> otherDeltas = new ArrayList<Delta>();
     private static final int MINE_RATE = 4;
     private static final int COST_WALL = 15;
     private static final int GAME_LENGTH = 700;
-    private static final int ATTACKER_SPAWN_RATE = 2;
-    private static final int BOMBER_SPAWN_RATE = 3;
+    //private static final int ATTACKER_SPAWN_RATE = 2;
+    //private static final int BOMBER_SPAWN_RATE = 3;
+    private static final int CE_SPAWN_RATE = 3;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
-    private Point[] attackerSpawnLocation = new Point[2];
-    private Point[] bomberSpawnLocation = new Point[2];
+    //private Point[] attackerSpawnLocation = new Point[2];
+    //private Point[] bomberSpawnLocation = new Point[2];
+    private Point[] ceSpawnLocation = new Point[2];
     private Point[] destinations = new Point[2];
 
     public boolean isEnded() {
@@ -56,20 +58,23 @@ public class Game {
     }
 
     public void handleActions(ArrayList<Action> actions) {
-        ArrayList<Action> attacks = new ArrayList<Action>();
-        ArrayList<Action> constructionDestructionWalls = new ArrayList<Action>();
+        //ArrayList<Action> attacks = new ArrayList<Action>();
+        //ArrayList<Action> constructionDestructionWalls = new ArrayList<Action>();
         ArrayList<Action> moves = new ArrayList<Action>();
         for (int i = 0; i < actions.size(); i++) {
+            /*
             if (actions.get(i).getType() == ActionType.ATTACK) {
                 attacks.add(actions.get(i));
             } else if (actions.get(i).getType() == ActionType.MAKE_WALL || actions.get(i).getType() == ActionType.DESTROY_WALL) {
                 constructionDestructionWalls.add(actions.get(i));
-            } else if (actions.get(i).getType() == ActionType.MOVE) {
+            } else */
+            if (actions.get(i).getType() == ActionType.MOVE) {
                 moves.add(actions.get(i));
             }
+
         }
         //handleAttacks(attacks);
-        map.updateMap(attackDeltas);
+        //map.updateMap(attackDeltas);
 
         //handleConstructionDestructionWalls(constructionDestructionWalls);
         map.updateMap(wallDeltas);
@@ -339,7 +344,7 @@ public class Game {
     }
 
     public void initTurn (int turn) {
-        attackDeltas = new ArrayList<Delta>();
+        //attackDeltas = new ArrayList<Delta>();
         wallDeltas = new ArrayList<Delta>();
         moveDeltas = new ArrayList<Delta>();
         otherDeltas = new ArrayList<Delta>();
@@ -350,20 +355,22 @@ public class Game {
     }
 
     public void endTurn() {
+        /*
         if (turn % ATTACKER_SPAWN_RATE == 0) {
             otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[0]));
             otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[1]));
         }
-        if (turn % BOMBER_SPAWN_RATE == 0) {
-            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, bomberSpawnLocation[0]));
-            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, bomberSpawnLocation[1]));
+        */
+        if (turn % CE_SPAWN_RATE == 0) {
+            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, ceSpawnLocation[0]));
+            otherDeltas.add(new Delta(DeltaType.SPAWN_BOMBER, ceSpawnLocation[1]));
         }
     }
-
+/*
     public ArrayList<Delta> getAttackDeltaList() {
         return attackDeltas;
     }
-
+*/
     public ArrayList<Delta> getWallDeltasList() {
         return wallDeltas;
     }

@@ -19,4 +19,36 @@ public class Team {
         this.teamId = teamId;
         this.resources = resources;
     }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public int getResources() {
+        return resources;
+    }
+
+    public Cell getSpawn() {
+        return spawn;
+    }
+
+    public void setSpawn(Cell spawn) {
+        this.spawn = spawn;
+    }
+
+    public Cell getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Cell destination) {
+        this.destination = destination;
+    }
+
+    public ArrayList<UnitCE> getUnitCEs() {
+        return unitCEs;
+    }
+
+    public void setUnitCEs(ArrayList<UnitCE> unitCEs) {
+        this.unitCEs = unitCEs;
+    }
 }

@@ -6,7 +6,7 @@ package javachallenge.util;
 public class Node {
     private int x;
     private int y;
-    private UnitWallie unitWallie;
+    //private UnitWallie unitWallie;
     private Edge[] edges = new Edge[6];
 
     public Node(int x, int y) {
@@ -15,7 +15,7 @@ public class Node {
         for(int i = 0; i < 6; i++)
             edges[i] = new Edge();
     }
-
+/*
     public UnitWallie getUnitWallie() {
         return unitWallie;
     }
@@ -23,7 +23,7 @@ public class Node {
     public void setUnitWallie(UnitWallie unitWallie) {
         this.unitWallie = unitWallie;
     }
-
+*/
     public Edge getEdge(NodeDirection dir) {
         return edges[dir.ordinal()];
     }
