@@ -462,6 +462,7 @@ public class Game {
         if (turn % CE_SPAWN_RATE == 0) {
             otherDeltas.add(new Delta(DeltaType.SPAWN_CEer, map.getSpawnPoint(0), 0, numberOfCEers));
             numberOfCEers++;
+
         }
     }
 /*
