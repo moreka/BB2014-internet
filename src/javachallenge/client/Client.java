@@ -1,6 +1,8 @@
 package javachallenge.client;
 
 import javachallenge.message.Action;
+import javachallenge.message.ClientMessage;
+import javachallenge.message.ServerMessage;
 import javachallenge.units.Unit;
 import javachallenge.util.Map;
 
@@ -15,4 +17,12 @@ public abstract class Client {
     protected Map map;
 
     public abstract void step();
+
+    public void update(ServerMessage message) {
+
+    }
+
+    public ClientMessage end() {
+        return null;
+    }
 }
