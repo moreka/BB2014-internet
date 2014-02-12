@@ -45,7 +45,8 @@ public class TeamClient extends Client {
     }
 
     public void move(UnitCE unit, Direction direction) {
-        actionList.add(new Action(ActionType.MOVE, new Point(unit.getCell().getX(), unit.getCell().getY()), direction));
+        if (!unit.isArrived())
+            actionList.add(new Action(ActionType.MOVE, new Point(unit.getCell().getX(), unit.getCell().getY()), direction));
     }
 
     public void makeWall(Cell cell, Direction direction) {

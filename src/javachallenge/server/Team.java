@@ -14,6 +14,7 @@ public class Team {
     private Cell spawn;
     private Cell destination;
     private ArrayList<UnitCE> unitCEs;
+    private int arrivedUnitsNum = 0;
 
     public Team(int teamId, int resources) {
         this.teamId = teamId;
@@ -63,5 +64,13 @@ public class Team {
 
     public void decreaseResources (int input) {
         resources -= input;
+    }
+
+    public int getArrivedUnitsNum() {
+        return arrivedUnitsNum;
+    }
+
+    public void increaseArrivedNumber() {
+        arrivedUnitsNum++;
     }
 }

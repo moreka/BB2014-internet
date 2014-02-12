@@ -264,6 +264,7 @@ public class Map implements Serializable {
                 case AGENT_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellSr.getUnit().setAlive(false);
+                    ((UnitCE)cellSr.getUnit()).setArrived(true);
                     UnitCell unitCell2 = (UnitCell) cellSr.getUnit();
                     unitCell2.setCell(null);
                     cellSr.setUnit(null);

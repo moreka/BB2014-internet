@@ -179,8 +179,9 @@ public class Game {
                 if (thisUnit.getCell().getX() != i || thisUnit.getCell().getY() != j) {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
-                    if (destinationPoint.equals(new Point(CETeam.getDestination().getX(), CETeam.getDestination().getY()))) {
+                    if (destinationPoint.equals(map.getDestinationPoint(0))) {
                         otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
+                        CETeam.increaseArrivedNumber();
                     }
                 } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j && thisUnit.getCell().getType() == CellType.MINE) {
                     MineCell mineCell = (MineCell) thisUnit.getCell();
