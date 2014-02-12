@@ -4,6 +4,7 @@ import javachallenge.units.Unit;
 import javachallenge.units.UnitCE;
 import javachallenge.units.UnitCell;
 import javachallenge.message.Delta;
+import sun.print.resources.serviceui;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -232,8 +233,23 @@ public class Map implements Serializable, Cloneable {
         return null;
     }
 
+    private ArrayList<UnitCE>[][] initUpdate() {
+        ArrayList<UnitCE>[][] units = new ArrayList[sizeX][sizeY];
+        for (int i = 0; i < sizeX; i++) {
+            for (int j = 0; j < sizeY; j++) {
+                if (cells[i][j].getUnit() != null) {
+                    if (units[i][j] == null)
+                        units[i][j] = new ArrayList<UnitCE>(2);
+                    units[i][j].add((UnitCE) cells[i][j].getUnit());
+                }
+            }
+        }
+        return units;
+    }
+
     public void updateMap(ArrayList<Delta> deltaList) {
-        HashMap<Point, UnitCE> hashMap = new HashMap<Point, UnitCE>();
+        ArrayList<UnitCE>[][] oldUnits = initUpdate();
+
         for (int i = 0; i < deltaList.size(); i++) {
             Delta temp = deltaList.get(i);
             Node nodeSr = null;
@@ -249,16 +265,13 @@ public class Map implements Serializable, Cloneable {
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellDes = this.cells[temp.getDestination().getX()][temp.getDestination().getY()];
-                    if (cellDes.getUnit() != null) {
-                        hashMap.put(temp.getDestination(), (UnitCE) cellDes.getUnit());
-                    }
-                    UnitCE unit;
-                    if (hashMap.containsKey(temp.getSource()))
-                        unit = hashMap.get(temp.getSource());
-                    else
-                        unit = (UnitCE) cellSr.getUnit();
-                    unit.setCell(cellDes);
-                    cellDes.setUnit(unit);
+                    UnitCE unit = oldUnits[cellSr.getX()][cellSr.getY()].get(0);
+
+                    if (oldUnits[cellSr.getX()][cellSr.getY()].size() > 0)
+                        oldUnits[cellSr.getX()][cellSr.getY()].remove(0);
+                    if (oldUnits[cellDes.getX()][cellDes.getY()] == null)
+                        oldUnits[cellDes.getX()][cellDes.getY()] = new ArrayList<UnitCE>(2);
+                    oldUnits[cellDes.getX()][cellDes.getY()].add(unit);
                     break;
                 case MINE_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
@@ -288,7 +301,27 @@ public class Map implements Serializable, Cloneable {
                     cellSr.setUnit(newUnit);
                     newUnit.setId(temp.getUnitID());
                     newUnit.setTeamId(temp.getTeamID());
+                    System.out.println("Spawning a new unit with ID " + newUnit.getId());
                     break;
+            }
+        }
+
+        for (int i = 0; i < sizeX; i++) {
+            for (int j = 0; j < sizeY; j++) {
+                if (oldUnits[i][j] != null && oldUnits[i][j].size() > 0) {
+                    UnitCE unit = oldUnits[i][j].get(0);
+
+                    // if unit disappears
+                    if (unit.getCell() == null)
+                        continue;
+
+                    if (oldUnits[unit.getCell().getX()][unit.getCell().getY()] == null ||
+                            oldUnits[unit.getCell().getX()][unit.getCell().getY()].size() == 0) {
+                        unit.getCell().setUnit(null);
+                    }
+                    unit.setCell(cells[i][j]);
+                    cells[i][j].setUnit(unit);
+                }
             }
         }
     }
@@ -417,6 +450,15 @@ public class Map implements Serializable, Cloneable {
         for (int i = 0; i < this.sizeY; i++) {
             for (int j = 0; j < this.sizeX; j++) {
                 System.out.print(cells[j][i].getType() + "\t\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printUnits() {
+        for (int i = 0; i < this.sizeY; i++) {
+            for (int j = 0; j < this.sizeX; j++) {
+                System.out.print(((cells[j][i].getUnit() == null) ? "N" : cells[j][i].getUnit().getId()) + "\t");
             }
             System.out.println();
         }

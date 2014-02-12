@@ -282,8 +282,10 @@ public class Game {
 //            numberOfEEers++;
 //        }
         if (turn % CE_SPAWN_RATE == 0) {
-            if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null){
+            System.out.println("EndTurn Called");
+            if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null) {
                 UnitCE newUnit = CETeam.addUnitCE();
+                System.out.println("Generating a SpawnDelta with id = " + newUnit.getId());
                 otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, newUnit.getId()));
             }
         }
