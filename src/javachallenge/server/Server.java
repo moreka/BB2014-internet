@@ -37,7 +37,7 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("/home/mohammad/IdeaProjects/BB2014-internet/test.map");
+        Map map = Map.loadMap("test.map");
         Game game = new Game(map);
 
         InitialMessage initialMessage = new InitialMessage();
