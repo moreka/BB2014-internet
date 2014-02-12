@@ -33,7 +33,7 @@ public class Game {
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
     private static final int CE_SPAWN_RATE = 3;
-    private static final int INITIAL_RECOURCE = 50;
+    private static final int INITIAL_RESOURCE = 50;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
@@ -53,7 +53,7 @@ public class Game {
     public Game (Map map) {
         this.map = map;
         tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
-        CETeam = new Team(0, INITIAL_RECOURCE);
+        CETeam = new Team(0, INITIAL_RESOURCE);
         EETeam = new Team(1, 0);
         //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
