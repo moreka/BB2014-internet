@@ -13,9 +13,8 @@ public class MineCell extends Cell {
 
 
 
-    public MineCell(int x, int y, int n) {
+    public MineCell(int x, int y) {
         super(x, y, CellType.MINE);
-        this.amount = n;
     }
 
     public int getAmount() {

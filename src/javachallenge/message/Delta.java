@@ -20,6 +20,10 @@ public class Delta
     private int unitID;
     private int changeValue;
 
+    public int getChangeValue() {
+        return changeValue;
+    }
+
     public Delta(DeltaType type, int teamID, int changeValue) {
         this.type = type;
         this.teamID = teamID;

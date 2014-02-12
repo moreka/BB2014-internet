@@ -34,6 +34,9 @@ public abstract class Client {
             if (d.getType() == DeltaType.SPAWN) {
                 myUnits.add(map.getCellAt(d.getSource().getX(), d.getSource().getY()).getUnit());
             }
+            else if(d.getType() == DeltaType.RESOURCE_CHANGE){
+                this.resources = this.resources + d.getChangeValue();
+            }
         }
     }
 

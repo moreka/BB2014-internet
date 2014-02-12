@@ -3,10 +3,7 @@ package javachallenge.util;
 import javachallenge.message.Delta;
 import javachallenge.units.Unit;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +16,10 @@ public class Map implements Serializable, Cloneable {
     private int sizeX;
     private int sizeY;
     private Edge[] walls;
-    private int mineRate;
+    private int MINE_RATE;
+    private int MINE_AMOUNT;
+
+    private String string;
 
     public Point getSpawnPoint(int teamId) {
         //TODO: implement this asshole
@@ -49,6 +49,7 @@ public class Map implements Serializable, Cloneable {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.cells = new Cell[sizeX][sizeY];
+        this.mines = new ArrayList<MineCell>();
     }
 
     private void init() {
@@ -105,15 +106,44 @@ public class Map implements Serializable, Cloneable {
     public static Map loadMap(String mapAddr) throws IOException, IndexOutOfBoundsException {
         BufferedReader br = new BufferedReader(new FileReader(mapAddr));
 
+        String str = "";
         Map map = new Map(Integer.parseInt(br.readLine()), Integer.parseInt(br.readLine()));
-
+        str = map.getSizeX() + "\n" + map.getSizeY();
         for (int i = 0; i < map.getSizeY(); i++) {
-            String[] cell_types = br.readLine().split("[ ]");
+            String line = br.readLine();
+            str = str + "\n" + line;
+            String[] cell_types = line.split("[ ]");
+            for (int j = 0; j < map.getSizeX(); j++) {
+                int index = Integer.parseInt(cell_types[j]);
+                if (index == CellType.MINE.ordinal()) {
+                    map.cells[j][i] = new MineCell(j, i);
+                    map.mines.add((MineCell) map.cells[j][i]);
+                } else {
+                    map.cells[j][i] = new Cell(j, i, CellType.values()[Integer.parseInt(cell_types[j])]);
+                }
+            }
+        }
+        map.MINE_AMOUNT = Integer.parseInt(br.readLine());
+        for (MineCell mine : map.getMines())
+            mine.setAmount(map.MINE_AMOUNT);
+        map.setString(str);
+        map.init();
+        return map;
+    }
+
+    public static Map loadMapFromString(String mapString) throws IndexOutOfBoundsException, IOException {
+        BufferedReader br = new BufferedReader(new StringReader(mapString));
+        Map map = new Map(Integer.parseInt(br.readLine()), Integer.parseInt(br.readLine()));
+        String str = "";
+        for (int i = 0; i < map.getSizeY(); i++) {
+            String line = br.readLine();
+            str = str + "\n" + line;
+            String[] cell_types = line.split("[ ]");
             for (int j = 0; j < map.getSizeX(); j++) {
                 map.cells[j][i] = new Cell(j, i, CellType.values()[Integer.parseInt(cell_types[j])]);
             }
         }
-
+        map.setString(str);
         map.init();
         return map;
     }
@@ -521,13 +551,19 @@ public class Map implements Serializable, Cloneable {
         }
     }
 
-    public int getMineRate() {
-        return mineRate;
+    public int getMINE_RATE() {
+        return MINE_RATE;
     }
 
-    public void setMineRate(int mineRate) {
-        this.mineRate = mineRate;
+    public void setMINE_RATE(int MINE_RATE) {
+        this.MINE_RATE = MINE_RATE;
     }
 
+    public String getString() {
+        return string;
+    }
 
+    public void setString(String string) {
+        this.string = string;
+    }
 }

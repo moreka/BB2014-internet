@@ -8,21 +8,21 @@ import java.io.Serializable;
  * Created by mohammad on 2/6/14.
  */
 public class InitialMessage implements Serializable {
-    private Map map;
+    private String map;
     private int teamId;
     private int resource;
 
-    public InitialMessage(Map map, int teamId, int resource) {
+    public InitialMessage(String map, int teamId, int resource) {
         this.map = map;
         this.teamId = teamId;
         this.resource = resource;
     }
 
-    public Map getMap() {
+    public String getMap() {
         return map;
     }
 
-    public void setMap(Map map) {
+    public void setMap(String map) {
         this.map = map;
     }
 
