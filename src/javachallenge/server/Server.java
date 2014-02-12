@@ -7,6 +7,8 @@ package javachallenge.server;
 import javachallenge.client.Client;
 //import javachallenge.graphics.FJframe;
 //import javachallenge.graphics.FJpanel;
+import javachallenge.graphics.FJframe;
+import javachallenge.graphics.FJpanel;
 import javachallenge.message.Action;
 import javachallenge.message.Delta;
 import javachallenge.message.InitialMessage;
@@ -48,11 +50,11 @@ public class Server {
             c.getOut().flush();
         }
 
-//        FJframe graphics = new FJframe(game);
-//        FJpanel panel = graphics.getPanel();
+        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+        FJpanel panel = graphics.getPanel();
 
-        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);
+/*        DummyGraphics graphics = new DummyGraphics(map);
+        graphics.setVisible(true);*/
 
         int turn = 0;
 
