@@ -389,8 +389,7 @@ public class Map implements Serializable, Cloneable {
                     cellSr.setUnit(newUnit);
                     newUnit.setId(temp.getUnitID());
                     newUnit.setTeamId(temp.getTeamID());
-                    System.out.println("Spawning a new unit with ID " + newUnit.getId() + " teamID: " + newUnit.getTeamId() +
-                        " at " + temp.getSource().getX() + ", " + temp.getSource().getY());
+                    System.out.println("Spawning a new unit with ID " + newUnit.getId() + " teamID: " + newUnit.getTeamId());
 
                     break;
             }

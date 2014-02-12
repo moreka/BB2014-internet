@@ -14,14 +14,14 @@ public class TeamServer extends Client {
     @Override
     public void step() {
         for (Unit myUnit : myUnits)
-            for (int j = 0; j < 6; j++)
+            for (int j = 0; j < 6; j++) {
+                Cell neighbor = map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
                 if (myUnit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
-                        (map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == CellType.TERRAIN ||
-                                map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == CellType.DESTINATION ||
-                                map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == CellType.SPAWN ||
-                                map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == CellType.MINE)) {
+                        (neighbor.getType() == CellType.TERRAIN || neighbor.getType() == CellType.DESTINATION ||
+                                neighbor.getType() == CellType.SPAWN || neighbor.getType() == CellType.MINE)) {
                     move(myUnit, Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
                     break;
                 }
+            }
     }
 }
