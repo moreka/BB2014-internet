@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server {
 
-    public static int CYCLE_LENGTH = 750;
+    public static int CYCLE_LENGTH = 1000;
     public static int PORT = 20140;
 
     public void run() throws InterruptedException, IOException, ClassNotFoundException {
@@ -50,6 +50,9 @@ public class Server {
 
 //        FJframe graphics = new FJframe(game);
 //        FJpanel panel = graphics.getPanel();
+
+        DummyGraphics graphics = new DummyGraphics(map);
+        graphics.setVisible(true);
 
         int cycle = 0;
 
@@ -89,7 +92,7 @@ public class Server {
             game.getMap().updateMap(game.getWallDeltasList());
             game.getMap().updateMap(game.getOtherDeltasList());
 
-            //update graphics and our map
+            graphics.repaint();
         }
     }
 

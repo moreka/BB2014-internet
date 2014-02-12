@@ -25,7 +25,10 @@ public class Map implements Serializable {
 
     public Point getSpawnPoint(int teamId) {
         //TODO: implement this asshole
-        return new Point(1, 1);
+        if (teamId == 0)
+            return new Point(1, 1);
+        else
+            return new Point(1, 6);
     }
 
     public Point getDestinationPoint(int teamId) {
