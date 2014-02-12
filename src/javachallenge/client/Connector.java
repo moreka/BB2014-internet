@@ -25,6 +25,7 @@ public class Connector {
     ServerMessage serverMessage = null;
     ServerMessage otherThreadMessage = null;
     Client client;
+    boolean isGameEnded = false;
 
     public Connector(String server, int port) throws IOException, ClassNotFoundException {
         Socket socket = new Socket(server, port);
@@ -41,12 +42,13 @@ public class Connector {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    while (!isGameEnded) {
                         ServerMessage tmp = (ServerMessage) in.readObject();
                         System.out.println("data recieved from server");
                         synchronized (lock) {
                             serverMessage = tmp;
                         }
+                        isGameEnded = serverMessage.isGameEnded();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -60,7 +62,7 @@ public class Connector {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    while (!isGameEnded) {
                         synchronized (lock) {
                             otherThreadMessage = serverMessage;
                         }

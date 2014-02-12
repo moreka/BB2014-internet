@@ -32,7 +32,7 @@ public class Game {
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
     private static final int CE_SPAWN_RATE = 1;
-    public static final int INITIAL_RESOURCE = 1000;
+    public static final int INITIAL_RESOURCE = 10000;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
@@ -93,21 +93,25 @@ public class Game {
     public void handleMakeWalls(ArrayList<Action> walls){
         Collections.shuffle(walls);
         ArrayList<Edge> wallsWantMake = new ArrayList<Edge>();
-        for (int i = 0; i < walls.size(); i++) {
-            if (!map.isNodeInMap(walls.get(i).getPosition()))
+        for (Action wall : walls) {
+            if (!map.isNodeInMap(wall.getPosition()))
                 continue;
-            Point point1 = new Point(walls.get(i).getPosition().getX(), walls.get(i).getPosition().getY());
+            Point point1 = new Point(wall.getPosition().getX(), wall.getPosition().getY());
             Node node1 = map.getNodeAt(point1.getX(), point1.getY());
-            Node node2 = map.getNeighborNode(node1, walls.get(i).getNodeDirection());
+            Node node2 = map.getNeighborNode(node1, wall.getNodeDirection());
             Point point2 = new Point(node2.getX(), node2.getY());
-            Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
-            if (CETeam.getResources() >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
-                    edge.getType() == EdgeType.OPEN &&
-                    isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+            Edge edge = node1.getEdge(wall.getNodeDirection());
+            if (CETeam.getResources() >= COST_WALL && wall.getType() == ActionType.MAKE_WALL &&
+                    edge.getType() == EdgeType.OPEN) {
                 wallsWantMake.add(edge);
-                CETeam.decreaseResources(COST_WALL);
-                wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
-                otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
+                if (isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+                    CETeam.decreaseResources(COST_WALL);
+                    wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
+                    otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
+                }
+                else {
+                    wallsWantMake.remove(edge);
+                }
             }
         }
     }
@@ -226,20 +230,24 @@ public class Game {
         Cell currentCell;
         Stack<Cell> dfs = new Stack<Cell>();
         dfs.add(source);
-        Direction[] dir = (Direction.EAST).getDirections();
+        Direction[] dir = Direction.values();
         while (!dfs.isEmpty()) {
             currentCell = dfs.pop();
             if (currentCell.equals(destination))
                 return true;
             flags[currentCell.getX()][currentCell.getY()] = true;
-            for (int i = 0; i < 6; i++) {
+            outer: for (int i = 0; i < 6; i++) {
                 Cell neighborCell = map.getNeighborCell(currentCell, dir[i]);
                 Edge neighborEdge = currentCell.getEdge(dir[i]);
                 if (neighborCell != null && flags[neighborCell.getX()][neighborCell.getY()] == false &&
-                        neighborEdge.getType() == EdgeType.OPEN) {
+                        neighborEdge.getType() == EdgeType.OPEN &&
+                        (neighborCell.getType() == CellType.TERRAIN ||
+                        neighborCell.getType() == CellType.MINE ||
+                        neighborCell.getType() == CellType.SPAWN ||
+                        neighborCell.getType() == CellType.DESTINATION)) {
                     for (int j = 0; j < barriers.size(); j++)
-                        if (neighborEdge.equals(barriers.get(i)))
-                            continue;
+                        if (neighborEdge.equals(barriers.get(j)))
+                            continue outer;
                     dfs.add(neighborCell);
                 }
             }

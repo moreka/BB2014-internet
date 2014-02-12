@@ -13,6 +13,7 @@ public class ServerMessage
     private ArrayList<Delta> wallDeltaList,    // goes to updateMap()
             moveDeltaList,                     // goes to updateMap()
             otherDeltaList;                     // goes to Client, including Agent_disappear, resource_changed
+    private boolean isGameEnded = false;
 
     public ServerMessage() {
         this.wallDeltaList = new ArrayList<Delta>();
@@ -48,5 +49,13 @@ public class ServerMessage
 
     public void setOtherDeltaList(ArrayList<Delta> otherDeltaList) {
         this.otherDeltaList = otherDeltaList;
+    }
+
+    public boolean isGameEnded() {
+        return isGameEnded;
+    }
+
+    public void setGameEnded(boolean isGameEnded) {
+        this.isGameEnded = isGameEnded;
     }
 }
