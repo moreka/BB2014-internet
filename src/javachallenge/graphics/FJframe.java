@@ -2,7 +2,7 @@ package javachallenge.graphics;
 
 import javachallenge.server.Game;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -35,7 +35,7 @@ public class FJframe extends JFrame{
         this.game = game;
 
         map = JCmap.makeMap(new Point(50,  20), rows, cols, RADIUS, PADDING);
-        nodes = JCmap.makeNodes(rows, 2 * cols + 1, map);
+        nodes = JCmap.makeNodes(rows, 2 * (cols + 1), map);
         /*for (int i = 0; i<outOfMaps.size(); i++){
             outOfMaps.set(i, JCmap.makeOutofMapHexagon(new Point(50,  20), rows, cols, RADIUS, PADDING, i));
         }*/
@@ -46,6 +46,7 @@ public class FJframe extends JFrame{
 	
 	
 	private void initUI(){
+        this.setBackground(Color.BLACK);
 		FJpanel panel = new FJpanel(game, map, nodes, rows, cols);
 		getContentPane().add(panel);
 		//setLayout(null);

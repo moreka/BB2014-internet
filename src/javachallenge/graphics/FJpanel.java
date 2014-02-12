@@ -17,7 +17,7 @@ import java.util.Random;
 public class FJpanel extends JPanel {
     BufferedImage slate;
     TexturePaint slatetp;
-    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination, bomber;
+    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination, bomber, white;
     private Image wall1, wall2, wall3, semiWall1, semiWall2, semiWall3;
     private Image[] cells;
     private Image[] walls;
@@ -53,6 +53,7 @@ public class FJpanel extends JPanel {
         spawn = new ImageIcon("data/spawn.png").getImage();
         destination = new ImageIcon("data/destination.png").getImage();
         bomber = new ImageIcon("data/bomber.png").getImage();
+        white = new ImageIcon("data/white.jpg").getImage();
         //cells = new Image[]{grass, mountain, water};
         wall1 = new ImageIcon("data/wall_1.png").getImage();
         wall2 = new ImageIcon("data/wall_2.png").getImage();
@@ -60,8 +61,8 @@ public class FJpanel extends JPanel {
         semiWall1 = new ImageIcon("data/semi_wall_1.png").getImage();
         semiWall2 = new ImageIcon("data/semi_wall_2.png").getImage();
         semiWall3 = new ImageIcon("data/semi_wall_3.png").getImage();
-		/*walls = new Image[]{wall1, wall2, wall3, wall4, wall5, wall6};
-		for (int i = 0; i < walls.length; i++) {
+		walls = new Image[]{wall1, wall2, wall3, semiWall1, semiWall2, semiWall3};
+		/*for (int i = 0; i < walls.length; i++) {
 			walls[i] = new ImageIcon("C:\\Users\\AlirezaF\\Desktop\\jc_wall"+ String.valueOf(i) +".png").getImage();
 		}*/
     }
@@ -76,24 +77,27 @@ public class FJpanel extends JPanel {
          * this is temporary!!!
          */
 
-        if (buffer == null){
+        /*if (buffer == null){
             buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        }
-        Graphics2D buffer_g2d = (Graphics2D) buffer.getGraphics();
+        }*/
+        //Graphics2D buffer_g2d = (Graphics2D) buffer.getGraphics();
         /**
          * End of temp
          */
 
         // ino havaset bashe bayad ba tavajjoh be type game bache ha render koni
-        drawMap(buffer_g2d);
+        /*drawMap(buffer_g2d);
         drawUnits(buffer_g2d);
-        drawDelta(buffer_g2d, getDelta(counter));
+        drawDelta(buffer_g2d, getDelta(counter));*/
+        drawMap(g2d);
+        drawUnits(g2d);
+        drawDelta(g2d, getDelta(counter));
 
         //hex.draw(g2d, 50, 50, 20, 0x008844, true);
 
-        g2d.drawImage(buffer, 0, 0, null);
-        counter++;
-        System.out.println(counter);
+        //g2d.drawImage(buffer, 0, 0, null);
+        //counter++;
+        //System.out.println(counter);
     }
 
 
@@ -197,7 +201,7 @@ public class FJpanel extends JPanel {
                 }
             }
         }
-        for (int row = 0; row < rows; row++){
+        /*for (int row = 0; row < rows; row++){
             for(int col = 0; col < 2 * cols + 1; col++){
                 Node utilNode = game.getMap().getNodeAt(row, col);
                 FJNode node = nodes[col][row];
@@ -205,7 +209,7 @@ public class FJpanel extends JPanel {
 //                    drawImage(g2d, node, wallie);
 //                }
             }
-        }
+        }*/
 
         Edge[] utilEdges = game.getMap().getWalls();
 
@@ -213,10 +217,17 @@ public class FJpanel extends JPanel {
             Edge edge = utilEdges[i];
             if (edge != null){
                 FJgon wall = getFJgonByNodes(nodes[edge.getNodes()[0].getX()][edge.getNodes()[0].getY()], nodes[edge.getNodes()[1].getX()][edge.getNodes()[1].getY()]);
+                System.out.println("first-x:"+edge.getNodes()[0].getX());
+                System.out.println("first-y:"+edge.getNodes()[0].getY());
+                System.out.println("sec-x:"+edge.getNodes()[1].getX());
+                System.out.println("sec-y:"+edge.getNodes()[1].getY());
                 if (edge.getType() == EdgeType.WALL)
                     drawImage(g2d, wall, walls[wall.getShib() + 1]);
-                else{
+                else if (edge.getType() == EdgeType.SEMI_WALL){
                     drawImage(g2d, wall, walls[wall.getShib() + 4]);
+                }
+                else if (edge.getType() == EdgeType.OPEN){
+                    drawOpenWall(g2d, wall, grass, 4);
                 }
             }
         }
@@ -309,14 +320,15 @@ public class FJpanel extends JPanel {
     }
 
     private int shib (Point one, Point two){
-        if (one.y - two.y == 0)
+        if (one.x - two.x == 0)
             return 0;
-        float shib = (float)(one.y - two.y) / (float)(one.x - one.y);
-        System.out.println(shib);
+        float shib = (float)(one.y - two.y) / (float)(one.x - two.x);
+        //System.out.println(shib);
+        // shib inja nrgative halate dastgahe safhas
         if (shib < 0)
-            return -1;
-        else // (ship > 0)
             return 1;
+        else // (ship > 0)
+            return -1;
     }
     
     private FJgon getFJgonByNodes(FJNode first, FJNode second){
@@ -347,21 +359,21 @@ public class FJpanel extends JPanel {
             one = new Point(source.xpoints[1], source.ypoints[1]);
             two = new Point(dest.xpoints[0], dest.ypoints[0]);
             three = new Point(dest.xpoints[2], dest.ypoints[2]);
-            four =  new Point(dest.xpoints[1], dest.ypoints[1]);
+            four =  new Point(source.xpoints[2], source.ypoints[2]);
         }
 
         else if (shib == 0){
             one = new Point(source.xpoints[1], source.ypoints[1]);
             two = new Point(dest.xpoints[1], dest.ypoints[1]);
             three = new Point(dest.xpoints[0], dest.ypoints[0]);
-            four =  new Point(dest.xpoints[2], dest.ypoints[2]);
+            four =  new Point(source.xpoints[2], source.ypoints[2]);
         }
 
         else{ //(shib > 0)
             one = new Point(source.xpoints[2], source.ypoints[2]);
             two = new Point(dest.xpoints[1], dest.ypoints[1]);
             three = new Point(dest.xpoints[0], dest.ypoints[0]);
-            four =  new Point(dest.xpoints[0], dest.ypoints[0]);
+            four =  new Point(source.xpoints[0], source.ypoints[0]);
         }
         return new FJgon(new Point[]{one, two, three, four}, FJframe.FJHEIGHT, shib);
     }
@@ -381,5 +393,34 @@ public class FJpanel extends JPanel {
         Rectangle r = shape.getBounds();
         g2d.drawImage(img, r.x, r.y, null);
     }
+    }
+
+    public void drawOpenWall(Graphics2D g, FJgon wall, Image img, int lineThickness) {
+        // Store before changing.
+        Graphics2D g2d = (Graphics2D) g;
+
+        /*Stroke tmpS = g2d.getStroke();
+        Color tmpC = g2d.getColor();
+
+        g2d.setColor(Color.YELLOW);
+        g2d.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+
+        g2d.drawPolygon(wall.xpoints, wall.ypoints, wall.npoints);
+
+        // Set values to previous when done.
+        g2d.setColor(tmpC);
+        g2d.setStroke(tmpS);
+        */
+
+        g2d.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(
+                RenderingHints.KEY_COLOR_RENDERING,
+                RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+
+        g2d.setClip(wall);
+        Rectangle r = wall.getBounds();
+        g2d.drawImage(img, r.x, r.y, null);
     }
 }
