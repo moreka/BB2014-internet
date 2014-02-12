@@ -14,13 +14,15 @@ public class TeamServer extends Client {
     @Override
     public void step() {
         for (Unit myUnit : myUnits)
-            for (int j = 0; j < 6; j++) {
-                Cell neighbor = map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
-                if (myUnit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
-                        (neighbor.getType() == CellType.TERRAIN || neighbor.getType() == CellType.DESTINATION ||
-                                neighbor.getType() == CellType.SPAWN || neighbor.getType() == CellType.MINE)) {
-                    move(myUnit, Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
-                    break;
+            if (!myUnit.isArrived()) {
+                for (int j = 0; j < 6; j++) {
+                    Cell neighbor = map.getNeighborCell(myUnit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
+                    if (myUnit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
+                            (neighbor.getType() == CellType.TERRAIN || neighbor.getType() == CellType.DESTINATION ||
+                                    neighbor.getType() == CellType.SPAWN || neighbor.getType() == CellType.MINE)) {
+                        move(myUnit, Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
+                        break;
+                    }
                 }
             }
     }
