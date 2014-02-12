@@ -89,10 +89,6 @@ public class Server {
             graphics.repaint();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
-            //game.getMap().updateMap(game.getMoveDeltasList());
-            //game.getMap().updateMap(game.getWallDeltasList());
-            //game.getMap().updateMap(game.getOtherDeltasList());
-
             graphics.repaint();
         }
     }

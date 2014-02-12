@@ -220,7 +220,6 @@ public class Game {
     }
 
     private void handleOthers() {
-
     }
 
     private boolean isTherePathAfterThisEdges (Point sourceInput, Point destinationInput, ArrayList<Edge> barriers) {
