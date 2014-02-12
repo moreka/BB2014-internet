@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FJpanel extends JPanel {
+public class FJpanel extends JPanel implements Runnable{
     BufferedImage slate;
     TexturePaint slatetp;
     private Random random;
@@ -24,6 +24,8 @@ public class FJpanel extends JPanel {
     private int cols;
     private int counter;
 
+    private Thread animator;
+    private int delay;
     
     private Game game;
     private BufferedImage buffer;
@@ -35,6 +37,8 @@ public class FJpanel extends JPanel {
         this.cols = cols;
         this.game = game;
         random = new Random();
+        setDoubleBuffered(true);
+        this.delay = 500;
     }
 
 
@@ -69,6 +73,9 @@ public class FJpanel extends JPanel {
         //g2d.drawImage(buffer, 0, 0, null);
         //counter++;
         //System.out.println(counter);
+
+        Toolkit.getDefaultToolkit().sync();
+        g.dispose();
     }
 
 
@@ -188,15 +195,16 @@ public class FJpanel extends JPanel {
                     drawImage(g2d, wall, ImageHolder.semiWalls[wall.getShib() + 1]);
                 }
                 else if (edge.getType() == EdgeType.OPEN){
-                    drawOpenWall(g2d, wall, ImageHolder.black, 4);
+                    //drawOpenWall(g2d, wall, ImageHolder.black, 4);
+                    drawImage(g2d, wall, ImageHolder.black);
                 }
             }
         }
 
         for (int col = 2; col < nodes.length - 2; col++ ){
             for (int row = 1; row < nodes[0].length; row++){
-                drawImage(g2d, (Polygon)nodes[col][row].draw(), new Color(219, 203, 110));
-                //drawImage(g2d, nodes[col][row].draw(), ImageHolder.black);
+                //rawImage(g2d, (Polygon)nodes[col][row].draw(), new Color(219, 203, 110));
+                drawImage(g2d, nodes[col][row].draw(), ImageHolder.black);
             }
         }
     }
@@ -397,5 +405,47 @@ public class FJpanel extends JPanel {
         g2d.setClip(wall);
         Rectangle r = wall.getBounds();
         g2d.drawImage(img, r.x, r.y, null);
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+
+        animator = new Thread(this);
+        animator.start();
+    }
+
+    @Override
+    public void run() {
+
+        long beforeTime, timeDiff, sleep;
+
+        beforeTime = System.currentTimeMillis();
+
+        while (true) {
+
+            cycle(getDelta(counter));
+            counter++;
+            repaint();
+
+            timeDiff = System.currentTimeMillis() - beforeTime;
+            sleep = delay - timeDiff;
+
+            if (sleep < 0) {
+                sleep = 2;
+            }
+
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted: " + e.getMessage());
+            }
+
+            beforeTime = System.currentTimeMillis();
+        }
+    }
+
+    private void cycle(){
+
     }
 }
