@@ -180,7 +180,7 @@ public class Game {
                 if (thisUnit.getCell().getX() != i || thisUnit.getCell().getY() != j) {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
-                    if (destinationPoint.equals(CETeam.getDestination())) {
+                    if (destinationPoint.equals(new Point(CETeam.getDestination().getX(), CETeam.getDestination().getY()))) {
                         otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
                     }
                 } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j && thisUnit.getCell().getType() == CellType.MINE) {
