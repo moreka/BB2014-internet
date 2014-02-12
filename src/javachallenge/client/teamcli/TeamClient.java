@@ -29,23 +29,24 @@ public class TeamClient extends Client {
     public void update(ServerMessage message) {
         super.update(message);
         for (Delta d : message.getGameDeltaList()) {
-            if (d.getType() == DeltaType.SPAWN) {
+            if (d.getType() == DeltaType.SPAWN && d.getTeamID() == this.teamID) {
                 myUnits.add((UnitCE) map.getCellAt(d.getSource().getX(), d.getSource().getY()).getUnit());
             }
         }
     }
 
     @Override
-
     public void step() {
         for (int i = 0; i < myUnits.size(); i++) {
+            System.out.println(myUnits.get(i).getTeamId());
             move(myUnits.get(i), Direction.EAST);
         }
         makeWall(spawn, Direction.EAST);
     }
 
     public void move(UnitCE unit, Direction direction) {
-        actionList.add(new Action(ActionType.MOVE, new Point(unit.getCell().getX(), unit.getCell().getY()), direction));
+        if (!unit.isArrived())
+            actionList.add(new Action(ActionType.MOVE, new Point(unit.getCell().getX(), unit.getCell().getY()), direction));
     }
 
     public void makeWall(Cell cell, Direction direction) {

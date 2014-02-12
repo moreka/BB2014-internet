@@ -1,6 +1,7 @@
 package javachallenge.server;
 
 import javachallenge.units.Unit;
+import javachallenge.units.UnitCE;
 import javachallenge.units.UnitCell;
 import javachallenge.message.Action;
 import javachallenge.message.ActionType;
@@ -32,7 +33,7 @@ public class Game {
     private static final int GAME_LENGTH = 700;
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
-    private static final int CE_SPAWN_RATE = 3;
+    private static final int CE_SPAWN_RATE = 1;
     private static final int INITIAL_RESOURCE = 50;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
@@ -43,7 +44,6 @@ public class Game {
     //private Point[] destinations = new Point[2];
     private Team CETeam;
     private Team EETeam;
-    private int numberOfCEers = 0;
     private int numberOfEEers = 0;
 
     public boolean isEnded() {
@@ -87,10 +87,10 @@ public class Game {
 
         //handleConstructionDestructionWalls(constructionDestructionWalls);
         handleMakeWalls(walls);
+        map.updateMap(this.getWallDeltasList());
         handleMoves(moves);
-        handleOthers();
+        map.updateMap(this.getMoveDeltasList());
     }
-
 
     public void handleMakeWalls(ArrayList<Action> walls){
         Collections.shuffle(walls);
@@ -115,42 +115,57 @@ public class Game {
     private void handleMoves(ArrayList<Action> moves) {
         ArrayDeque<Integer> xOfOverloadedCells = new ArrayDeque<Integer>();
         ArrayDeque<Integer> yOfOverloadedCells = new ArrayDeque<Integer>();
-        for (int i = 0; i < moves.size(); i++) {
-            UnitCell unit = (UnitCell)map.getCellAtPoint(moves.get(i).getPosition()).getUnit();
+
+        // moves units to their destination blindly
+        for (Action move : moves) {
+            UnitCell unit = (UnitCell) map.getCellAtPoint(move.getPosition()).getUnit();
             Cell source = unit.getCell();
-            Cell destination = map.getNeighborCell(source ,moves.get(i).getDirection());
+            Cell destination = map.getNeighborCell(source, move.getDirection());
             if (destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
                     destination.getType() != CellType.OUTOFMAP &&
-                    source.getEdge(moves.get(i).getDirection()).getType() == EdgeType.OPEN) {
+                    source.getEdge(move.getDirection()).getType() == EdgeType.OPEN) {
                 tempOtherMoves[source.getX()][source.getY()].remove(0);
-                tempOtherMoves[destination.getX()][destination.getY()].add(map.getCellAtPoint(moves.get(i).getPosition()).getUnit());
+                tempOtherMoves[destination.getX()][destination.getY()].add(unit);
             }
         }
+
+        // find cells with multiple units inside
         for (int i = 0; i < tempOtherMoves.length; i++)
             for (int j = 0; j < tempOtherMoves[0].length; j++)
                 if (tempOtherMoves[i][j].size() > 1) {
                     xOfOverloadedCells.add(i);
                     yOfOverloadedCells.add(j);
                 }
+
         Random rand = new Random();
         while (!xOfOverloadedCells.isEmpty()) {
             int xTemp = xOfOverloadedCells.pop();
             int yTemp = yOfOverloadedCells.pop();
             int overloadedNumber = tempOtherMoves[xTemp][yTemp].size();
+
             if (overloadedNumber < 2)
                 continue;
-            boolean fullFlag = false;
+
+            // checks if a unit stays and some other want to move to its cell
+            boolean isDestinationFull = false;
+            int stayerId = -1;
             for (int i = 0; i < overloadedNumber; i++) {
-                UnitCell existant = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
-                if (existant.getCell().getX() == xTemp && existant.getCell().getY() == yTemp)
-                    fullFlag = true;
+                UnitCell existent = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                if (existent.getCell().getX() == xTemp && existent.getCell().getY() == yTemp) {
+                    isDestinationFull = true;
+                    stayerId = existent.getId();
+                }
             }
-            if (fullFlag == false) {
+
+            if (!isDestinationFull) {
+                // only move "lasting" unit and others must stay
                 int lasting = rand.nextInt(overloadedNumber);
                 for (int i = overloadedNumber - 1; i >= 0; i--)
                     if (i != lasting) {
                         UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
                         tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
+
+                        // if some other unit wanted to move to previous location of this unit, they must go back
                         if (tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].size() > 1) {
                             xOfOverloadedCells.add(goner.getCell().getX());
                             yOfOverloadedCells.add(goner.getCell().getY());
@@ -158,18 +173,21 @@ public class Game {
                         tempOtherMoves[xTemp][yTemp].remove(i);
                     }
             } else {
-                System.out.println("tempOtherMove.size() = " + tempOtherMoves[xTemp][yTemp].size() + ", overloadedNum = " + overloadedNumber);
                 for (int i = overloadedNumber - 1; i >= 0; i--) {
                     UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
-                    tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
-                    if (tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].size() > 1) {
-                        xOfOverloadedCells.add(goner.getCell().getX());
-                        yOfOverloadedCells.add(goner.getCell().getY());
+                    // send everybody back, except the one who stayed in the cell
+                    if (goner.getId() != stayerId) {
+                        tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
+                        if (tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].size() > 1) {
+                            xOfOverloadedCells.add(goner.getCell().getX());
+                            yOfOverloadedCells.add(goner.getCell().getY());
+                        }
+                        tempOtherMoves[xTemp][yTemp].remove(i);
                     }
-                    tempOtherMoves[xTemp][yTemp].remove(i);
                 }
             }
         }
+
         for (int i = 0; i < tempOtherMoves.length; i++)
             for (int j = 0; j < tempOtherMoves[0].length; j++) {
                 if (tempOtherMoves[i][j].size() == 0)
@@ -177,12 +195,18 @@ public class Game {
                 UnitCell thisUnit = (UnitCell)tempOtherMoves[i][j].get(0);
                 Cell tempCell = thisUnit.getCell();
                 Point sourcePoint = new Point (tempCell.getX(), tempCell.getY());
+                // if this unit is moved, make delta
                 if (thisUnit.getCell().getX() != i || thisUnit.getCell().getY() != j) {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
+                    if (destinationPoint.equals(map.getDestinationPoint(0))) {
+                        otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
+                        CETeam.increaseArrivedNumber();
+                    }
+                // if this unit is stayed in mine
                 } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j && thisUnit.getCell().getType() == CellType.MINE) {
                     MineCell mineCell = (MineCell) thisUnit.getCell();
-                    if (mineCell.getAmount() > MINE_RATE) {
+                    if (mineCell.getAmount() >= MINE_RATE) {
                         resources[thisUnit.getTeamId()] += MINE_RATE;
                         otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, MINE_RATE));
                         otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, thisUnit.getTeamId(), MINE_RATE));
@@ -194,7 +218,6 @@ public class Game {
                 }
             }
     }
-
 
     private void handleOthers() {
 
@@ -254,16 +277,15 @@ public class Game {
             otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[1]));
         }
         */
-        if (map.getCellAtPoint(map.getSpawnPoint(1)).getUnit() == null) {
-            otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, numberOfEEers));
-            CETeam.addUnitCE();
-            numberOfEEers++;
-        }
+//        if (map.getCellAtPoint(map.getSpawnPoint(1)).getUnit() == null) {
+//            otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, numberOfEEers));
+//            EETeam.addUnitCE();
+//            numberOfEEers++;
+//        }
         if (turn % CE_SPAWN_RATE == 0) {
             if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null){
-                otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, numberOfCEers));
-                EETeam.addUnitCE();
-                numberOfCEers++;
+                UnitCE newUnit = CETeam.addUnitCE();
+                otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, newUnit.getId()));
             }
         }
     }

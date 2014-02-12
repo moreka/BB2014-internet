@@ -7,7 +7,7 @@ import javachallenge.util.Direction;
  * Created by merhdad on 2/7/14.
  */
 public class UnitCell extends Unit {
-    private Direction move;
+    private Direction move = null;
     private Cell cell;
 
     public Direction getMove() {

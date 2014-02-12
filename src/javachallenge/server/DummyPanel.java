@@ -27,10 +27,10 @@ public class DummyPanel extends JPanel {
         this.setSize(WIDTH, HEIGHT);
         this.bufferImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         try {
-            this.sand = ImageIO.read(new File("/home/mohammad/desert.png"));
-            this.ocean = ImageIO.read(new File("/home/mohammad/ocean.png"));
-            this.zombie = ImageIO.read(new File("/home/mohammad/zombie.png"));
-            this.ce = ImageIO.read(new File("/home/mohammad/ce.png"));
+            this.sand = ImageIO.read(new File("dummy/desert.png"));
+            this.ocean = ImageIO.read(new File("dummy/ocean.png"));
+            this.zombie = ImageIO.read(new File("dummy/zombie.png"));
+            this.ce = ImageIO.read(new File("dummy/ce.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,10 +67,10 @@ public class DummyPanel extends JPanel {
                 if (map.getCellAt(i, j).getUnit() != null)
                     switch (map.getCellAt(i, j).getUnit().getTeamId()) {
                         case 0:
-                            g.drawImage(zombie, x, y, null);
+                            g.drawImage(ce, x, y, null);
                             break;
                         case 1:
-                            g.drawImage(ce, x, y, null);
+                            g.drawImage(zombie, x, y, null);
                             break;
                     }
             }

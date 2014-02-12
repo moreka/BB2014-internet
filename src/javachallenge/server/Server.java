@@ -56,10 +56,10 @@ public class Server {
 /*        DummyGraphics graphics = new DummyGraphics(map);
         graphics.setVisible(true);*/
 
-        int cycle = 0;
+        int turn = 0;
 
         while (!game.isEnded()) {
-            System.out.println("Cycle: " + (++cycle));
+            System.out.println("Turn: " + (++turn));
 
             ServerMessage serverMessage = new ServerMessage(game.getWallDeltasList(),
                     game.getMoveDeltasList(), game.getOtherDeltasList());
@@ -86,13 +86,14 @@ public class Server {
                 System.out.println(action);
             }
 
-            game.initTurn(cycle);
+            game.initTurn(turn);
             game.handleActions(actions);
+            graphics.repaint();
             game.endTurn();
-
-            game.getMap().updateMap(game.getMoveDeltasList());
-            game.getMap().updateMap(game.getWallDeltasList());
             game.getMap().updateMap(game.getOtherDeltasList());
+            //game.getMap().updateMap(game.getMoveDeltasList());
+            //game.getMap().updateMap(game.getWallDeltasList());
+            //game.getMap().updateMap(game.getOtherDeltasList());
 
             graphics.repaint();
         }
