@@ -54,7 +54,7 @@ public class JCmap {
             }
         }*/
         for (int col = 2; col < cols - 2; col++){
-            for(int row = 1; row < rows - 1; row++){
+            for(int row = 1; row < rows; row++){
                 /*if (col < 2 || col >= cols - 2 || row == 0 || row > rows - 1){
                     newNode = handleCells(row, col, outOfMaps, map);
                 }*/
