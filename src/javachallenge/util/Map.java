@@ -33,7 +33,10 @@ public class Map implements Serializable {
 
     public Point getDestinationPoint(int teamId) {
         //TODO: implement this asshole
-        return new Point(7, 6);
+        if (teamId == 0)
+            return new Point(6, 1);
+        else
+            return new Point(6, 6);
     }
 
     public Map(int sizeX, int sizeY) {

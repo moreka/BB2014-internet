@@ -67,10 +67,10 @@ public class DummyPanel extends JPanel {
                 if (map.getCellAt(i, j).getUnit() != null)
                     switch (map.getCellAt(i, j).getUnit().getTeamId()) {
                         case 0:
-                            g.drawImage(zombie, x, y, null);
+                            g.drawImage(ce, x, y, null);
                             break;
                         case 1:
-                            g.drawImage(ce, x, y, null);
+                            g.drawImage(zombie, x, y, null);
                             break;
                     }
             }
