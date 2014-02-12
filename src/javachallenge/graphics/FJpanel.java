@@ -4,7 +4,6 @@ package javachallenge.graphics;
 import javachallenge.message.Delta;
 import javachallenge.server.Game;
 import javachallenge.units.Unit;
-import javachallenge.units.UnitCE;
 import javachallenge.util.*;
 
 import javax.swing.*;
@@ -206,7 +205,7 @@ public class FJpanel extends JPanel {
 //            return attacker;
 //        }
 //        else
-        if (clazz == UnitCE.class){
+        if (clazz == Unit.class){
             // barghia
             if (teamId == 1)
                 return ImageHolder.attacker;

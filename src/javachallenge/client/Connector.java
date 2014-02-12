@@ -32,7 +32,9 @@ public class Connector {
         out = new ObjectOutputStream(socket.getOutputStream());
 
         InitialMessage initialMessage = (InitialMessage) in.readObject();
-        client = new TeamClient(0, 1000, new Cell(5, 5, CellType.SPAWN), new Cell(1, 1, CellType.DESTINATION));
+        client = new TeamClient();
+        client.setTeamID(initialMessage.getTeamId());
+        client.setResources(initialMessage.getResource());
         client.map = initialMessage.getMap();
 
         new Thread() {

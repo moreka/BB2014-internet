@@ -1,18 +1,13 @@
 package javachallenge.util;
 
-import javachallenge.units.Unit;
-import javachallenge.units.UnitCE;
-import javachallenge.units.UnitCell;
 import javachallenge.message.Delta;
-import sun.print.resources.serviceui;
+import javachallenge.units.Unit;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by mohammad on 2/5/14.
@@ -34,12 +29,20 @@ public class Map implements Serializable, Cloneable {
             return new Point(1, 6);
     }
 
+    public Cell getSpawnCell(int teamId) {
+        return getCellAtPoint(getSpawnPoint(teamId));
+    }
+
     public Point getDestinationPoint(int teamId) {
         //TODO: implement this asshole
         if (teamId == 0)
             return new Point(6, 1);
         else
             return new Point(6, 6);
+    }
+
+    public Cell getDestinationCell(int teamId) {
+        return getCellAtPoint(getDestinationPoint(teamId));
     }
 
     public Map(int sizeX, int sizeY) {
@@ -146,6 +149,10 @@ public class Map implements Serializable, Cloneable {
         return false;
     }
 
+    public boolean isNodeInMap(Point p) {
+        return isNodeInMap(p.getX(), p.getY());
+    }
+
     public Cell getCellAt(int x, int y){
         if(isCellInMap(x, y))
             return  cells[x][y];
@@ -233,14 +240,14 @@ public class Map implements Serializable, Cloneable {
         return null;
     }
 
-    private ArrayList<UnitCE>[][] initUpdate() {
-        ArrayList<UnitCE>[][] units = new ArrayList[sizeX][sizeY];
+    private ArrayList<Unit>[][] initUpdate() {
+        ArrayList<Unit>[][] units = new ArrayList[sizeX][sizeY];
         for (int i = 0; i < sizeX; i++) {
             for (int j = 0; j < sizeY; j++) {
                 if (cells[i][j].getUnit() != null) {
                     if (units[i][j] == null)
-                        units[i][j] = new ArrayList<UnitCE>(2);
-                    units[i][j].add((UnitCE) cells[i][j].getUnit());
+                        units[i][j] = new ArrayList<Unit>(2);
+                    units[i][j].add(cells[i][j].getUnit());
                 }
             }
         }
@@ -248,7 +255,7 @@ public class Map implements Serializable, Cloneable {
     }
 
     public void updateMap(ArrayList<Delta> deltaList) {
-        ArrayList<UnitCE>[][] oldUnits = initUpdate();
+        ArrayList<Unit>[][] oldUnits = initUpdate();
 
         for (int i = 0; i < deltaList.size(); i++) {
             Delta temp = deltaList.get(i);
@@ -265,12 +272,12 @@ public class Map implements Serializable, Cloneable {
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellDes = this.cells[temp.getDestination().getX()][temp.getDestination().getY()];
-                    UnitCE unit = oldUnits[cellSr.getX()][cellSr.getY()].get(0);
+                    Unit unit = oldUnits[cellSr.getX()][cellSr.getY()].get(0);
 
                     if (oldUnits[cellSr.getX()][cellSr.getY()].size() > 0)
                         oldUnits[cellSr.getX()][cellSr.getY()].remove(0);
                     if (oldUnits[cellDes.getX()][cellDes.getY()] == null)
-                        oldUnits[cellDes.getX()][cellDes.getY()] = new ArrayList<UnitCE>(2);
+                        oldUnits[cellDes.getX()][cellDes.getY()] = new ArrayList<Unit>(2);
                     oldUnits[cellDes.getX()][cellDes.getY()].add(unit);
                     break;
                 case MINE_DISAPPEAR:
@@ -289,14 +296,14 @@ public class Map implements Serializable, Cloneable {
                 case AGENT_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellSr.getUnit().setAlive(false);
-                    ((UnitCE)cellSr.getUnit()).setArrived(true);
-                    UnitCell unitCell2 = (UnitCell) cellSr.getUnit();
+                    cellSr.getUnit().setArrived(true);
+                    Unit unitCell2 = cellSr.getUnit();
                     unitCell2.setCell(null);
                     cellSr.setUnit(null);
                     break;
                 case SPAWN:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
-                    UnitCE newUnit = new UnitCE();
+                    Unit newUnit = new Unit();
                     newUnit.setCell(cellSr);
                     cellSr.setUnit(newUnit);
                     newUnit.setId(temp.getUnitID());
@@ -309,7 +316,7 @@ public class Map implements Serializable, Cloneable {
         for (int i = 0; i < sizeX; i++) {
             for (int j = 0; j < sizeY; j++) {
                 if (oldUnits[i][j] != null && oldUnits[i][j].size() > 0) {
-                    UnitCE unit = oldUnits[i][j].get(0);
+                    Unit unit = oldUnits[i][j].get(0);
 
                     // if unit disappears
                     if (unit.getCell() == null)
@@ -470,8 +477,11 @@ public class Map implements Serializable, Cloneable {
 
     public NodeDirection getDirectionFromTwoNodes(Node sr, Node des){
         NodeDirection res = null;
+        if (sr == null || des == null)
+            return null;
         for(NodeDirection dir : NodeDirection.values()){
-            if(getNeighborNode(sr,dir).equals(des)){
+            if(getNeighborNode(sr,dir) != null &&
+                    getNeighborNode(sr,dir).equals(des)){
                 res = dir;
                 break;
             }

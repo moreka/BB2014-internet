@@ -42,11 +42,9 @@ public class Server {
         Map map = Map.loadMap("test.map");
         Game game = new Game(map);
 
-        InitialMessage initialMessage = new InitialMessage();
-        initialMessage.setMap(map);
-
+        int i = 0;
         for (ClientConnection c : clientConnections) {
-            c.getOut().writeObject(initialMessage);
+            c.getOut().writeObject(new InitialMessage(map, i++, Game.INITIAL_RESOURCE));
             c.getOut().flush();
         }
 //

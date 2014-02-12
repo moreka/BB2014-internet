@@ -12,18 +12,18 @@ public class ServerMessage
     private static final long serialVersionUID = 1855437094950563362L;
     private ArrayList<Delta> wallDeltaList,    // goes to updateMap()
             moveDeltaList,                     // goes to updateMap()
-            gameDeltaList;                     // goes to Client, including Agent_disappear, resource_changed
+            otherDeltaList;                     // goes to Client, including Agent_disappear, resource_changed
 
     public ServerMessage() {
         this.wallDeltaList = new ArrayList<Delta>();
         this.moveDeltaList = new ArrayList<Delta>();
-        this.gameDeltaList = new ArrayList<Delta>();
+        this.otherDeltaList = new ArrayList<Delta>();
     }
 
-    public ServerMessage(ArrayList<Delta> wallDeltaList, ArrayList<Delta> moveDeltaList, ArrayList<Delta> gameDeltaList) {
+    public ServerMessage(ArrayList<Delta> wallDeltaList, ArrayList<Delta> moveDeltaList, ArrayList<Delta> otherDeltaList) {
         this.wallDeltaList = wallDeltaList;
         this.moveDeltaList = moveDeltaList;
-        this.gameDeltaList = gameDeltaList;
+        this.otherDeltaList = otherDeltaList;
     }
 
     public ArrayList<Delta> getWallDeltaList() {
@@ -42,11 +42,11 @@ public class ServerMessage
         this.moveDeltaList = moveDeltaList;
     }
 
-    public ArrayList<Delta> getGameDeltaList() {
-        return gameDeltaList;
+    public ArrayList<Delta> getOtherDeltaList() {
+        return otherDeltaList;
     }
 
-    public void setGameDeltaList(ArrayList<Delta> gameDeltaList) {
-        this.gameDeltaList = gameDeltaList;
+    public void setOtherDeltaList(ArrayList<Delta> otherDeltaList) {
+        this.otherDeltaList = otherDeltaList;
     }
 }

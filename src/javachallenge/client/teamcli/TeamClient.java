@@ -1,35 +1,32 @@
 package javachallenge.client.teamcli;
 
 import javachallenge.client.Client;
-import javachallenge.message.*;
 import javachallenge.units.Unit;
-import javachallenge.units.UnitCE;
 import javachallenge.util.*;
 
-import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
  * Created by mohammad on 2/5/14.
  */
 public class TeamClient extends Client {
-    private int teamID;
-    private int resources;
-    private Cell spawn;
-    private Cell destination;
-
-    public TeamClient(int teamID, int resources, Cell spawn, Cell destination) {
-        this.teamID = teamID;
-        this.resources = resources;
-        this.spawn = spawn;
-        this.destination = destination;
-    }
-
     @Override
     public void step() {
-        for (int i = 0; i < myUnits.size(); i++) {
-            move(myUnits.get(i), Direction.EAST);
+        // your code here ...
+        // this is an example implementation:
+        Random rnd = new Random();
+        /**
+         * Move section
+         */
+        for (Unit myUnit : myUnits) {
+            move(myUnit, Direction.values()[rnd.nextInt(6)]);
         }
-        makeWall(spawn, Direction.EAST);
+
+        /**
+         * Making walls section
+         */
+        makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
+                Direction.values()[rnd.nextInt(6)]);
     }
 }

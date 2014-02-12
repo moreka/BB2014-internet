@@ -1,6 +1,6 @@
 package javachallenge.server;
 
-import javachallenge.units.UnitCE;
+import javachallenge.units.Unit;
 import javachallenge.util.Cell;
 
 import java.util.ArrayList;
@@ -11,27 +11,27 @@ import java.util.ArrayList;
 public class Team {
     private int teamId;
     private int resources;
-    private Cell spawn;
-    private Cell destination;
-    private ArrayList<UnitCE> unitCEs;
+//    private Cell spawn;
+//    private Cell destination;
+    private ArrayList<Unit> units;
     private int arrivedUnitsNum = 0;
 
     public Team(int teamId, int resources) {
         this.teamId = teamId;
         this.resources = resources;
-        unitCEs = new ArrayList<UnitCE>();
+        units = new ArrayList<Unit>();
     }
 
     public int getTeamId() {
         return teamId;
     }
 
-    public UnitCE addUnitCE(){
-        UnitCE newUnit = new UnitCE();
+    public Unit addUnit(){
+        Unit newUnit = new Unit();
         newUnit.setAlive(true);
         newUnit.setTeamId(this.teamId);
-        newUnit.setId(unitCEs.size());
-        this.unitCEs.add(newUnit);
+        newUnit.setId(units.size());
+        this.units.add(newUnit);
         return newUnit;
     }
 
@@ -39,28 +39,28 @@ public class Team {
         return resources;
     }
 
-    public Cell getSpawn() {
-        return spawn;
+//    public Cell getSpawn() {
+//        return spawn;
+//    }
+//
+//    public void setSpawn(Cell spawn) {
+//        this.spawn = spawn;
+//    }
+//
+//    public Cell getDestination() {
+//        return destination;
+//    }
+//
+//    public void setDestination(Cell destination) {
+//        this.destination = destination;
+//    }
+
+    public ArrayList<Unit> getUnits() {
+        return units;
     }
 
-    public void setSpawn(Cell spawn) {
-        this.spawn = spawn;
-    }
-
-    public Cell getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Cell destination) {
-        this.destination = destination;
-    }
-
-    public ArrayList<UnitCE> getUnitCEs() {
-        return unitCEs;
-    }
-
-    public void setUnitCEs(ArrayList<UnitCE> unitCEs) {
-        this.unitCEs = unitCEs;
+    public void setUnits(ArrayList<Unit> units) {
+        this.units = units;
     }
 
     public void decreaseResources (int input) {
