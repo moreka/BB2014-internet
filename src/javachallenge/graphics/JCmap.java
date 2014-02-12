@@ -15,44 +15,6 @@ public class JCmap {
 		Hexagon first, second, third;
 		FJNode newNode;
 		
-		// version 1.23
-		// preventing index out of bound
-		/*for (int col = 2; col < cols - 2; col++){
-			for(int row = 1; row < rows; row++){
-				if ((col + row) % 2 == 1){
-					first = map[col/2 - 1][row - 1];
-					second = map[col/2][row - 1];
-					third = map[(col - 1)/2][row];
-					newNode = new FJNode(first.getPoint(2), second.getPoint(4), third.getPoint(0));
-				}
-				else{
-					first = map[(col - 1)/2][row - 1];
-					second = map[col/2][row];
-					third = map[col/2 - 1][row];
-					newNode = new FJNode(first.getPoint(3), second.getPoint(5), third.getPoint(1));
-				}
-				//nodes[col][row] = new FJNode(one, two, three)
-				nodes[col][row] = newNode;
-			}
-		}*/
-        /*for (int col = 2; col < cols - 2; col++){
-            for(int row = 1; row < rows; row++){
-                if ((col + row) % 2 == 1){
-                    first = map[col/2 - 1][row - 1];
-                    second = map[col/2][row - 1];
-                    third = map[(col - 1)/2][row];
-                    newNode = new FJNode(first.getPoint(2), second.getPoint(4), third.getPoint(0));
-                }
-                else{
-                    first = map[(col - 1)/2][row - 1];
-                    second = map[col/2][row];
-                    third = map[col/2 - 1][row];
-                    newNode = new FJNode(first.getPoint(3), second.getPoint(5), third.getPoint(1));
-                }
-                //nodes[col][row] = new FJNode(one, two, three)
-                nodes[col][row] = newNode;
-            }
-        }*/
         for (int col = 2; col < cols - 2; col++){
             for(int row = 1; row < rows; row++){
                 /*if (col < 2 || col >= cols - 2 || row == 0 || row > rows - 1){

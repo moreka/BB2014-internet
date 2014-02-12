@@ -30,6 +30,7 @@ public class Team {
         UnitCE newUnit = new UnitCE();
         newUnit.setAlive(true);
         newUnit.setTeamId(this.teamId);
+        newUnit.setId(unitCEs.size());
         this.unitCEs.add(newUnit);
         return newUnit;
     }

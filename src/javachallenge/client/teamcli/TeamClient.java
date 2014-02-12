@@ -26,7 +26,6 @@ public class TeamClient extends Client {
     }
 
     @Override
-
     public void step() {
         for (int i = 0; i < myUnits.size(); i++) {
             move(myUnits.get(i), Direction.EAST);

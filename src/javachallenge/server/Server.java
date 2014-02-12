@@ -7,6 +7,8 @@ package javachallenge.server;
 import javachallenge.client.Client;
 //import javachallenge.graphics.FJframe;
 //import javachallenge.graphics.FJpanel;
+import javachallenge.graphics.FJframe;
+import javachallenge.graphics.FJpanel;
 import javachallenge.message.Action;
 import javachallenge.message.Delta;
 import javachallenge.message.InitialMessage;
@@ -48,16 +50,16 @@ public class Server {
             c.getOut().flush();
         }
 
-//        FJframe graphics = new FJframe(game);
-//        FJpanel panel = graphics.getPanel();
+        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+        FJpanel panel = graphics.getPanel();
 
-        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);
+/*        DummyGraphics graphics = new DummyGraphics(map);
+        graphics.setVisible(true);*/
 
-        int cycle = 0;
+        int turn = 0;
 
         while (!game.isEnded()) {
-            System.out.println("Cycle: " + (++cycle));
+            System.out.println("Turn: " + (++turn));
 
             ServerMessage serverMessage = new ServerMessage(game.getWallDeltasList(),
                     game.getMoveDeltasList(), game.getOtherDeltasList());
@@ -84,14 +86,11 @@ public class Server {
                 System.out.println(action);
             }
 
-            game.initTurn(cycle);
+            game.initTurn(turn);
             game.handleActions(actions);
+            graphics.repaint();
             game.endTurn();
-
-            game.getMap().updateMap(game.getMoveDeltasList());
-            game.getMap().updateMap(game.getWallDeltasList());
             game.getMap().updateMap(game.getOtherDeltasList());
-
             graphics.repaint();
         }
     }

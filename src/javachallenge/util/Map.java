@@ -1,5 +1,6 @@
 package javachallenge.util;
 
+import javachallenge.units.Unit;
 import javachallenge.units.UnitCE;
 import javachallenge.units.UnitCell;
 import javachallenge.message.Delta;
@@ -10,11 +11,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by mohammad on 2/5/14.
  */
-public class Map implements Serializable {
+public class Map implements Serializable, Cloneable {
     private Cell[][] cells;
     private Node[][] nodes;
     private ArrayList<MineCell> mines;
@@ -33,7 +35,10 @@ public class Map implements Serializable {
 
     public Point getDestinationPoint(int teamId) {
         //TODO: implement this asshole
-        return new Point(7, 6);
+        if (teamId == 0)
+            return new Point(6, 1);
+        else
+            return new Point(6, 6);
     }
 
     public Map(int sizeX, int sizeY) {
@@ -163,7 +168,7 @@ public class Map implements Serializable {
     public Node getNodeAtPoint(Point point){
         int x = point.getX();
         int y = point.getY();
-        if(isNodeInMap(x,y))
+        if(isNodeInMap(x, y))
             return this.nodes[x][y];
         return  null;
     }
@@ -227,8 +232,9 @@ public class Map implements Serializable {
         return null;
     }
 
-    public void updateMap(ArrayList<Delta> deltaList){
-        for(int i = 0; i < deltaList.size(); i++){
+    public void updateMap(ArrayList<Delta> deltaList) {
+        HashMap<Point, UnitCE> hashMap = new HashMap<Point, UnitCE>();
+        for (int i = 0; i < deltaList.size(); i++) {
             Delta temp = deltaList.get(i);
             Node nodeSr = null;
             Node nodeDes = null;
@@ -243,10 +249,16 @@ public class Map implements Serializable {
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
                     cellDes = this.cells[temp.getDestination().getX()][temp.getDestination().getY()];
-                    UnitCell unitCell = (UnitCell) cellSr.getUnit();
-                    unitCell.setCell(cellDes);
-                    cellDes.setUnit(unitCell);
-                    cellSr.setUnit(null);
+                    if (cellDes.getUnit() != null) {
+                        hashMap.put(temp.getDestination(), (UnitCE) cellDes.getUnit());
+                    }
+                    UnitCE unit;
+                    if (hashMap.containsKey(temp.getSource()))
+                        unit = hashMap.get(temp.getSource());
+                    else
+                        unit = (UnitCE) cellSr.getUnit();
+                    unit.setCell(cellDes);
+                    cellDes.setUnit(unit);
                     break;
                 case MINE_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
