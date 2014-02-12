@@ -91,7 +91,7 @@ public class Server {
             graphics.repaint();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
-            graphics.repaint();
+//            graphics.repaint();
             game.getMap().printUnits();
         }
     }
