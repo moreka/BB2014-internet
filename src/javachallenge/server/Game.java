@@ -27,7 +27,7 @@ public class Game {
     private ArrayList<Delta> moveDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> otherDeltas = new ArrayList<Delta>();
     private static final int MINE_RATE = 4;
-    private static final int COST_WALL = 15;
+    private static final int COST_WALL = 10;
     private static final int GAME_LENGTH = 700;
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
