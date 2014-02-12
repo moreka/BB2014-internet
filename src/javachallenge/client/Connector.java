@@ -6,6 +6,7 @@ import javachallenge.message.InitialMessage;
 import javachallenge.message.ServerMessage;
 import javachallenge.util.Cell;
 import javachallenge.util.CellType;
+import javachallenge.util.Map;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,7 +37,7 @@ public class Connector {
         client = new TeamClient();
         client.setTeamID(initialMessage.getTeamId());
         client.setResources(initialMessage.getResource());
-        client.map = initialMessage.getMap();
+        client.map = Map.loadMapFromString(initialMessage.getMap());
 
         new Thread() {
             @Override

@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server {
 
-    public static int CYCLE_LENGTH = 300;
+    public static int CYCLE_LENGTH = 500;
     public static int PORT = 20140;
 
     public void run() throws InterruptedException, IOException, ClassNotFoundException {
@@ -39,20 +39,20 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("test.map");
+        Map map = Map.loadMap("net.map");
         Game game = new Game(map);
 
         int i = 0;
         for (ClientConnection c : clientConnections) {
-            c.getOut().writeObject(new InitialMessage(map, i++, Game.INITIAL_RESOURCE));
+            c.getOut().writeObject(new InitialMessage(map.getString(), i++, Game.INITIAL_RESOURCE));
             c.getOut().flush();
         }
-//
-//        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
-//        FJpanel panel = graphics.getPanel();
 
-        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);
+        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+        FJpanel panel = graphics.getPanel();
+
+//        DummyGraphics graphics = new DummyGraphics(map);
+//        graphics.setVisible(true);
 
         int turn = 0;
 
@@ -88,7 +88,7 @@ public class Server {
 
             game.initTurn(turn);
             game.handleActions(actions);
-            graphics.repaint();
+//            graphics.repaint();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
             graphics.repaint();

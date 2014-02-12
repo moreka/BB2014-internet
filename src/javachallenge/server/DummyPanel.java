@@ -21,16 +21,17 @@ public class DummyPanel extends JPanel {
     private Image sand, ocean, zombie, ce;
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
+    private final int SIZE = 42;
 
     public DummyPanel(Map map) {
         this.map = map;
         this.setSize(WIDTH, HEIGHT);
         this.bufferImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         try {
-            this.sand = ImageIO.read(new File("dummy/desert.png"));
-            this.ocean = ImageIO.read(new File("dummy/ocean.png"));
-            this.zombie = ImageIO.read(new File("dummy/zombie.png"));
-            this.ce = ImageIO.read(new File("dummy/ce.png"));
+            this.sand = ImageIO.read(new File("dummy/desert.png")).getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);
+            this.ocean = ImageIO.read(new File("dummy/ocean.png")).getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);;
+            this.zombie = ImageIO.read(new File("dummy/zombie.png")).getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);;
+            this.ce = ImageIO.read(new File("dummy/ce.png")).getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,14 +46,14 @@ public class DummyPanel extends JPanel {
     private void drawImage() {
         Graphics2D g = (Graphics2D) bufferImage.getGraphics();
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 800, 600);
+        g.fillRect(0, 0, 900, 600);
         for (int i = 0; i < map.getSizeX(); i++) {
             for (int j = 0; j < map.getSizeY(); j++) {
-                int x, y = j * 54;
+                int x, y = j * SIZE * 3 / 4;
                 if (j % 2 == 0)
-                    x = i * 72;
+                    x = i * SIZE;
                 else
-                    x = i * 72 + 36;
+                    x = i * SIZE + (SIZE / 2);
                 switch (map.getCellAt(i, j).getType()) {
                     case TERRAIN:
                         g.drawImage(sand, x, y, null);
@@ -76,19 +77,19 @@ public class DummyPanel extends JPanel {
             }
         }
 
-        int[] xEdge = { 36, 72, 72, 36, 0, 0 };
-        int[] yEdge = { 0, 18, 54, 72, 54, 18};
+        int[] xEdge = { SIZE / 2, SIZE, SIZE, SIZE / 2, 0, 0 };
+        int[] yEdge = { 0, SIZE / 4, SIZE * 3 / 4, SIZE, SIZE * 3 / 4, SIZE / 4};
 
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(6));
 
         for (int i = 0; i < map.getSizeX(); i++) {
             for (int j = 0; j < map.getSizeY(); j++) {
-                int x, y = j * 54;
+                int x, y = j * SIZE * 3 / 4;
                 if (j % 2 == 0)
-                    x = i * 72;
+                    x = i * SIZE;
                 else
-                    x = i * 72 + 36;
+                    x = i * SIZE + SIZE / 2;
                 for (Direction dir : Direction.values()) {
                     if (map.getCellAt(i, j).getEdge(dir) != null &&
                             map.getCellAt(i, j).getEdge(dir).getType() == EdgeType.WALL) {

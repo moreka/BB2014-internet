@@ -173,9 +173,8 @@ public class FJpanel extends JPanel implements Runnable{
                 }
                 else{
                     MineCell mine = (MineCell) cell;
-                    drawImage(g2d, hex, getImageByClassTeam(mine.getUnit().getClass(), cell.getUnit().getTeamId()));
-                    drawImage(g2d, hex, getImageByClassTeam(mine.getSecUnit().getClass(), cell.getUnit().getTeamId()));
-                    drawImage(g2d, hex, getImageByClassTeam(mine.getThirdUnit().getClass(), cell.getUnit().getTeamId()));
+                    if (mine.getUnit() != null)
+                        drawImage(g2d, hex, getImageByClassTeam(mine.getUnit().getClass(), cell.getUnit().getTeamId()));
                 }
             }
         }
@@ -423,7 +422,7 @@ public class FJpanel extends JPanel implements Runnable{
 
         while (true) {
 
-            cycle(getDelta(counter));
+//            cycle(getDelta(counter));
             counter++;
             repaint();
 
