@@ -9,6 +9,7 @@ import javachallenge.client.Client;
 //import javachallenge.graphics.FJpanel;
 import javachallenge.message.Action;
 import javachallenge.message.Delta;
+import javachallenge.message.InitialMessage;
 import javachallenge.message.ServerMessage;
 import javachallenge.util.Map;
 import sun.misc.Cleaner;
@@ -20,7 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server {
 
-    public static int CYCLE_LENGTH = 750;
+    public static int CYCLE_LENGTH = 1000;
     public static int PORT = 20140;
 
     public void run() throws InterruptedException, IOException, ClassNotFoundException {
@@ -36,18 +37,30 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("test.map");
+        Map map = Map.loadMap("/home/mohammad/IdeaProjects/BB2014-internet/test.map");
         Game game = new Game(map);
+
+        InitialMessage initialMessage = new InitialMessage();
+        initialMessage.setMap(map);
+
+        for (ClientConnection c : clientConnections) {
+            c.getOut().writeObject(initialMessage);
+            c.getOut().flush();
+        }
 
 //        FJframe graphics = new FJframe(game);
 //        FJpanel panel = graphics.getPanel();
+
+        DummyGraphics graphics = new DummyGraphics(map);
+        graphics.setVisible(true);
 
         int cycle = 0;
 
         while (!game.isEnded()) {
             System.out.println("Cycle: " + (++cycle));
 
-            ServerMessage serverMessage = new ServerMessage();
+            ServerMessage serverMessage = new ServerMessage(game.getWallDeltasList(),
+                    game.getMoveDeltasList(), game.getOtherDeltasList());
 
             for (ClientConnection c : clientConnections) {
                 c.getOut().writeObject(serverMessage);
@@ -63,14 +76,23 @@ public class Server {
             ArrayList<Action> actions = new ArrayList<Action>();
 
             for (ClientConnection c : clientConnections) {
-                actions.addAll(c.getClientMessage().getActions());
+                if (c.getClientMessage() != null)
+                    actions.addAll(c.getClientMessage().getActions());
+            }
+
+            for (Action action : actions) {
+                System.out.println(action);
             }
 
             game.initTurn(cycle);
             game.handleActions(actions);
             game.endTurn();
 
-            //update graphics and our map
+            game.getMap().updateMap(game.getMoveDeltasList());
+            game.getMap().updateMap(game.getWallDeltasList());
+            game.getMap().updateMap(game.getOtherDeltasList());
+
+            graphics.repaint();
         }
     }
 

@@ -1,14 +1,10 @@
 package javachallenge.client.teamcli;
 
 import javachallenge.client.Client;
-import javachallenge.message.Action;
-import javachallenge.message.ActionType;
+import javachallenge.message.*;
 import javachallenge.units.Unit;
 import javachallenge.units.UnitCE;
-import javachallenge.util.Cell;
-import javachallenge.util.Direction;
-import javachallenge.util.Point;
-import javachallenge.util.Node;
+import javachallenge.util.*;
 
 import java.util.ArrayList;
 
@@ -21,7 +17,7 @@ public class TeamClient extends Client {
     private int resources;
     private Cell spawn;
     private Cell destination;
-    private ArrayList<UnitCE> myUnits = new ArrayList<UnitCE>();
+    protected ArrayList<UnitCE> myUnits = new ArrayList<UnitCE>();
 
     public TeamClient(int teamID, int resources, Cell spawn, Cell destination) {
         this.teamID = teamID;
@@ -30,11 +26,21 @@ public class TeamClient extends Client {
         this.destination = destination;
     }
 
+    public void update(ServerMessage message) {
+        super.update(message);
+        for (Delta d : message.getGameDeltaList()) {
+            if (d.getType() == DeltaType.SPAWN) {
+                myUnits.add((UnitCE) map.getCellAt(d.getSource().getX(), d.getSource().getY()).getUnit());
+            }
+        }
+    }
+
     @Override
 
     public void step() {
-        for (int i = 0; i < myUnits.size(); i++)
+        for (int i = 0; i < myUnits.size(); i++) {
             move(myUnits.get(i), Direction.EAST);
+        }
         makeWall(spawn, Direction.EAST);
     }
 

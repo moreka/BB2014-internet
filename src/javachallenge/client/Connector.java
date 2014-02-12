@@ -4,6 +4,8 @@ import javachallenge.client.teamcli.TeamClient;
 import javachallenge.message.ClientMessage;
 import javachallenge.message.InitialMessage;
 import javachallenge.message.ServerMessage;
+import javachallenge.util.Cell;
+import javachallenge.util.CellType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,7 +32,8 @@ public class Connector {
         out = new ObjectOutputStream(socket.getOutputStream());
 
         InitialMessage initialMessage = (InitialMessage) in.readObject();
-        client = new TeamClient();
+        client = new TeamClient(0, 1000, new Cell(5, 5, CellType.SPAWN), new Cell(1, 1, CellType.DESTINATION));
+        client.map = initialMessage.getMap();
 
         new Thread() {
             @Override
@@ -38,9 +41,11 @@ public class Connector {
                 try {
                     while (true) {
                         ServerMessage tmp = (ServerMessage) in.readObject();
+                        System.out.println("data recieved from server");
                         synchronized (lock) {
                             serverMessage = tmp;
                         }
+                        System.out.println("Lock released");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -48,36 +53,42 @@ public class Connector {
                     e.printStackTrace();
                 }
             }
-        }.run();
+        }.start();
+
+        System.out.println("After first thread");
 
         new Thread() {
             @Override
             public void run() {
-                while (true) {
-                    try {
+                try {
+                    while (true) {
+                        System.out.println("Execution of thread 2");
                         synchronized (lock) {
                             otherThreadMessage = serverMessage;
+                            System.out.println("lock acquired");
                         }
                         if (otherThreadMessage != null) {
                             synchronized (lock) {
                                 serverMessage = null;
                             }
+                            client.init();
                             client.update(otherThreadMessage);
                             client.step();
                             ClientMessage message = client.end();
+                            System.out.println("Writing object to server ...");
                             out.writeObject(message);
                         }
                         else {
                             Thread.sleep(WAIT_TIME);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }.run();
+        }.start();
     }
 
     public static void main(String[] args) {

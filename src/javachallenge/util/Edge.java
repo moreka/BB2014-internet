@@ -1,9 +1,11 @@
 package javachallenge.util;
 
+import java.io.Serializable;
+
 /**
  * Created by peyman on 2/6/14.
  */
-public class Edge {
+public class Edge implements Serializable {
     private Node[] nodes = new Node[2];
     private Cell[] cells = new Cell[2];
     private EdgeType type;
