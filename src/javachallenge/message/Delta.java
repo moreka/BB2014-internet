@@ -18,6 +18,13 @@ public class Delta
     private int mineChange;
     private int teamID;
     private int unitID;
+    private int changeValue;
+
+    public Delta(DeltaType type, int teamID, int changeValue) {
+        this.type = type;
+        this.teamID = teamID;
+        this.changeValue = changeValue;
+    }
 
     public  Delta(DeltaType type, Point source, int teamID, int unitID) {
         this.type = type;

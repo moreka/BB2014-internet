@@ -107,6 +107,7 @@ public class Game {
                 wallsWantMake.add(edge);
                 CETeam.decreaseResources(COST_WALL);
                 wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
+                otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
             }
         }
     }
@@ -184,9 +185,11 @@ public class Game {
                     if (mineCell.getAmount() > MINE_RATE) {
                         resources[thisUnit.getTeamId()] += MINE_RATE;
                         otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, MINE_RATE));
+                        otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, thisUnit.getTeamId(), MINE_RATE));
                     } else if (mineCell.getAmount() > 0) {
                         resources[thisUnit.getTeamId()] += mineCell.getAmount();
                         otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, mineCell.getAmount()));
+                        otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, thisUnit.getTeamId(), mineCell.getAmount()));
                     }
                 }
             }
