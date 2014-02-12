@@ -153,7 +153,10 @@ public class Game {
             // checks if a unit stays and some other want to move to its cell
             boolean isDestinationFull = false;
             int stayerId = -1;
+            int zombieNum = 0;
             for (int i = 0; i < overloadedNumber; i++) {
+                if (tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                    zombieNum++;
                 Unit existent = tempOtherMoves[xTemp][yTemp].get(i);
                 if (existent.getCell().getX() == xTemp && existent.getCell().getY() == yTemp) {
                     isDestinationFull = true;
@@ -163,7 +166,18 @@ public class Game {
 
             if (!isDestinationFull) {
                 // only move "lasting" unit and others must stay
-                int lasting = rand.nextInt(overloadedNumber);
+                int lasting = 0;
+                if (zombieNum > 0) {
+                    int zombieLasting = rand.nextInt(zombieNum);
+                    for (int i = 0; i < overloadedNumber; i++) {
+                        if (zombieLasting == 0 && tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                            lasting = i;
+                        else if (tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                            zombieLasting--;
+                    }
+                } else {
+                    lasting = rand.nextInt(overloadedNumber);
+                }
                 for (int i = overloadedNumber - 1; i >= 0; i--)
                     if (i != lasting) {
                         Unit goner = tempOtherMoves[xTemp][yTemp].get(i);
