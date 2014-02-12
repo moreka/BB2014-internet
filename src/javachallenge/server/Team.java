@@ -18,6 +18,7 @@ public class Team {
     public Team(int teamId, int resources) {
         this.teamId = teamId;
         this.resources = resources;
+        unitCEs = new ArrayList<UnitCE>();
     }
 
     public int getTeamId() {

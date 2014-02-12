@@ -14,16 +14,16 @@ public class ServerMessage
             moveDeltaList,                     // goes to updateMap()
             gameDeltaList;                     // goes to Client, including Agent_disappear, resource_changed
 
-    public ServerMessage(ArrayList<Delta> attackDeltaList, ArrayList<Delta> wallDeltaList, ArrayList<Delta> moveDeltaList, ArrayList<Delta> gameDeltaList) {
-        this.wallDeltaList = wallDeltaList;
-        this.moveDeltaList = moveDeltaList;
-        this.gameDeltaList = gameDeltaList;
-    }
-
     public ServerMessage() {
         this.wallDeltaList = new ArrayList<Delta>();
         this.moveDeltaList = new ArrayList<Delta>();
         this.gameDeltaList = new ArrayList<Delta>();
+    }
+
+    public ServerMessage(ArrayList<Delta> wallDeltaList, ArrayList<Delta> moveDeltaList, ArrayList<Delta> gameDeltaList) {
+        this.wallDeltaList = wallDeltaList;
+        this.moveDeltaList = moveDeltaList;
+        this.gameDeltaList = gameDeltaList;
     }
 
     public ArrayList<Delta> getWallDeltaList() {

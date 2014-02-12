@@ -7,13 +7,14 @@ import javachallenge.message.Delta;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by mohammad on 2/5/14.
  */
-public class Map {
+public class Map implements Serializable {
     private Cell[][] cells;
     private Node[][] nodes;
     private ArrayList<MineCell> mines;
@@ -23,11 +24,12 @@ public class Map {
     private int mineRate;
 
     public Point getSpawnPoint(int teamId) {
-        return null;
+        //TODO: implement this asshole
+        return new Point(1, 1);
     }
 
     public Point getDestinationPoint(int teamId) {
-        return null;
+        return new Point(9, 9);
     }
 
     public Map(int sizeX, int sizeY) {
@@ -278,7 +280,7 @@ public class Map {
         int x = 0;
         int y = 0;
 
-        if(n.getX() + n.getY() % 2 == 0){
+        if((n.getX() + n.getY()) % 2 == 0){
             switch (dir){
                 case NORTHWEST:
                     x = n.getX() - 1;

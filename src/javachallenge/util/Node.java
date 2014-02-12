@@ -1,9 +1,11 @@
 package javachallenge.util;
 
+import java.io.Serializable;
+
 /**
  * Created by peyman on 2/6/14.
  */
-public class Node {
+public class Node implements Serializable {
     private int x;
     private int y;
     //private UnitWallie unitWallie;
@@ -46,5 +48,17 @@ public class Node {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Node other = (Node) obj;
+        return this.x == other.x && this.y == other.y;
     }
 }

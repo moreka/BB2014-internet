@@ -104,7 +104,7 @@ public class Game {
             Node node2 = map.getNeighborNode(node1, walls.get(i).getNodeDirection());
             Point point2 = new Point(node2.getX(), node2.getY());
             Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
-            if (resources[CETeam.getResources()] >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
+            if (CETeam.getResources() >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
                     edge.getType() == EdgeType.OPEN &&
                     isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
                 wallsWantMake.add(edge);
@@ -233,6 +233,8 @@ public class Game {
         }
         for (int i = 0; i < tempOtherMoves.length; i++)
             for (int j = 0; j < tempOtherMoves[0].length; j++) {
+                if (tempOtherMoves[i][j].size() == 0)
+                    continue;
                 UnitCell thisUnit = (UnitCell)tempOtherMoves[i][j].get(0);
                 Cell tempCell = thisUnit.getCell();
                 Point sourcePoint = new Point (tempCell.getX(), tempCell.getY());
@@ -446,6 +448,14 @@ public class Game {
         wallDeltas = new ArrayList<Delta>();
         moveDeltas = new ArrayList<Delta>();
         otherDeltas = new ArrayList<Delta>();
+        tempOtherMoves = new ArrayList[map.getSizeX()][map.getSizeY()];
+        for (int i = 0; i < map.getSizeX(); i++)
+            for(int j = 0; j < map.getSizeY(); j++) {
+                tempOtherMoves[i][j] = new ArrayList<Unit>();
+                if (map.getCellAt(i, j).getUnit() != null)
+                    tempOtherMoves[i][j].add(map.getCellAt(i, j).getUnit());
+            }
+
         this.turn = turn;
         if (turn == GAME_LENGTH) {
             ended = true;

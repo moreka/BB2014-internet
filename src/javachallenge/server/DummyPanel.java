@@ -60,6 +60,8 @@ public class DummyPanel extends JPanel {
                     case RIVER:
                         g.drawImage(ocean, x, y, null);
                         break;
+                    case OUTOFMAP:
+                        g.drawImage(ocean, x, y, null);
                 }
 
                 if (map.getCellAt(i, j).getUnit() != null)
@@ -89,7 +91,7 @@ public class DummyPanel extends JPanel {
                     x = i * 72 + 36;
                 for (Direction dir : Direction.values()) {
                     if (map.getCellAt(i, j).getEdge(dir) != null &&
-                            map.getCellAt(i, j).getEdge(dir).getType() != EdgeType.NONE) {
+                            map.getCellAt(i, j).getEdge(dir).getType() == EdgeType.NONE) {
                         g.drawLine(x + xEdge[dir.ordinal()], y + yEdge[dir.ordinal()],
                                 x + xEdge[(dir.ordinal() + 1) % 6], y + yEdge[(dir.ordinal() + 1) % 6]);
                     }

@@ -2,10 +2,12 @@ package javachallenge.util;
 
 import javachallenge.units.Unit;
 
+import java.io.Serializable;
+
 /**
  * Created by peyman on 2/6/14.
  */
-public class Cell {
+public class Cell implements Serializable {
 
     private int x;
     private int y;

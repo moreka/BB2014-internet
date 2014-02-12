@@ -24,6 +24,7 @@ public class ClientConnection {
                 while (true) {
                     try {
                         ClientMessage tmp = (ClientMessage) in.readObject();
+                        System.out.println("client message recieved");
                         synchronized (ClientConnection.this) {
                             ClientConnection.this.clientMessage = tmp;
                         }

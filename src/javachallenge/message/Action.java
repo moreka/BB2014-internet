@@ -5,10 +5,12 @@ import javachallenge.util.Direction;
 import javachallenge.util.NodeDirection;
 import javachallenge.util.Point;
 
+import java.io.Serializable;
+
 /**
  * Created by mohammad on 2/6/14.
  */
-public class Action {
+public class Action implements Serializable {
     private ActionType type;
     private Direction direction = null;
     private NodeDirection nodeDirection = null;
@@ -59,5 +61,9 @@ public class Action {
 
     public void setNodeDirection(NodeDirection nodeDirection) {
         this.nodeDirection = nodeDirection;
+    }
+
+    public String toString() {
+        return "ACTION: " + (type.toString() + " " + ((direction == null) ? "" : direction.toString()) + " " + position);
     }
 }
