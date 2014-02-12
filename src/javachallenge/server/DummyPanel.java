@@ -80,7 +80,7 @@ public class DummyPanel extends JPanel {
         int[] yEdge = { 0, 18, 54, 72, 54, 18};
 
         g.setColor(Color.BLACK);
-        g.setStroke(new BasicStroke(2));
+        g.setStroke(new BasicStroke(6));
 
         for (int i = 0; i < map.getSizeX(); i++) {
             for (int j = 0; j < map.getSizeY(); j++) {
@@ -91,7 +91,7 @@ public class DummyPanel extends JPanel {
                     x = i * 72 + 36;
                 for (Direction dir : Direction.values()) {
                     if (map.getCellAt(i, j).getEdge(dir) != null &&
-                            map.getCellAt(i, j).getEdge(dir).getType() == EdgeType.NONE) {
+                            map.getCellAt(i, j).getEdge(dir).getType() == EdgeType.WALL) {
                         g.drawLine(x + xEdge[dir.ordinal()], y + yEdge[dir.ordinal()],
                                 x + xEdge[(dir.ordinal() + 1) % 6], y + yEdge[(dir.ordinal() + 1) % 6]);
                     }
