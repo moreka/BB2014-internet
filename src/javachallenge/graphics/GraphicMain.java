@@ -20,7 +20,7 @@ public class GraphicMain {
                 Game game = new Game(map);
                 FJframe f = new FJframe(game, map.getSizeY(), map.getSizeX());
                 FJpanel p = f.getPanel();
-                f.pack();
+                //f.pack();
             }
         });
 	}
