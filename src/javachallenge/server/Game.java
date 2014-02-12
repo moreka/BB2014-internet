@@ -218,7 +218,7 @@ public class Game {
                 if (thisUnit.getCell().getX() != i || thisUnit.getCell().getY() != j) {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
-                    if (destinationPoint.equals(map.getDestinationPoint(0))) {
+                    if (destinationPoint.equals(map.getDestinationPoint(thisUnit.getTeamId()))) {
                         otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
                         CETeam.increaseArrivedNumber();
                     }

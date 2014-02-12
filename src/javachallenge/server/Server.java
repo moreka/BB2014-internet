@@ -48,11 +48,11 @@ public class Server {
             c.getOut().flush();
         }
 
-//        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
-//        FJpanel panel = graphics.getPanel();
-//
-        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);
+        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+        FJpanel panel = graphics.getPanel();
+
+//        DummyGraphics graphics = new DummyGraphics(map);
+//        graphics.setVisible(true);
 
         int turn = 0;
 
