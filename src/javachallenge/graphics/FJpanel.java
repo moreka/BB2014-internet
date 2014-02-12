@@ -24,7 +24,7 @@ public class FJpanel extends JPanel implements Runnable{
     private int counter;
 
     private Thread animator;
-    private int delay;
+    private int cycleTime;
     
     private Game game;
     private BufferedImage buffer;
@@ -37,7 +37,7 @@ public class FJpanel extends JPanel implements Runnable{
         this.game = game;
         random = new Random();
         setDoubleBuffered(true);
-        this.delay = 500;
+        this.cycleTime = 500;
     }
 
 
@@ -406,10 +406,15 @@ public class FJpanel extends JPanel implements Runnable{
         g2d.drawImage(img, r.x, r.y, null);
     }
 
-    @Override
+    /*@Override
     public void addNotify() {
         super.addNotify();
 
+        animator = new Thread(this);
+        animator.start();
+    }*/
+
+    public void startAnimation(){
         animator = new Thread(this);
         animator.start();
     }
@@ -418,17 +423,18 @@ public class FJpanel extends JPanel implements Runnable{
     public void run() {
 
         long beforeTime, timeDiff, sleep;
-
+        boolean end = true;
         beforeTime = System.currentTimeMillis();
 
-        while (true) {
+        //while (true) {
 
-            cycle(getDelta(counter));
-            counter++;
+            for (int i = 0; i < 3; i++){
+                cycle(i);
+            }
             repaint();
 
             timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = delay - timeDiff;
+            sleep = cycleTime - timeDiff;
 
             if (sleep < 0) {
                 sleep = 2;
@@ -441,10 +447,10 @@ public class FJpanel extends JPanel implements Runnable{
             }
 
             beforeTime = System.currentTimeMillis();
-        }
+        //}
     }
 
-    private void cycle(){
+    private void cycle(int counter){
 
     }
 }
