@@ -126,7 +126,8 @@ public class Game {
             Unit unit = map.getCellAtPoint(move.getPosition()).getUnit();
             Cell source = unit.getCell();
             Cell destination = map.getNeighborCell(source, move.getDirection());
-            if (destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
+            if (tempOtherMoves[source.getX()][source.getY()] != null && tempOtherMoves[source.getX()][source.getY()].size() > 0 &&
+                    destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
                     destination.getType() != CellType.OUTOFMAP &&
                     source.getEdge(move.getDirection()).getType() == EdgeType.OPEN) {
                 tempOtherMoves[source.getX()][source.getY()].remove(0);
