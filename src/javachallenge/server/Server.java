@@ -88,10 +88,10 @@ public class Server {
 
             game.initTurn(turn);
             game.handleActions(actions);
-//            graphics.repaint();
+            graphics.repaint();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
-            graphics.repaint();
+//            graphics.repaint();
             game.getMap().printUnits();
         }
     }

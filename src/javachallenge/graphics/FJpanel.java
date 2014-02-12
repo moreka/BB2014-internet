@@ -45,7 +45,7 @@ public class FJpanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+        //g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 
         /**
          * this is temporary!!!
@@ -167,11 +167,11 @@ public class FJpanel extends JPanel implements Runnable{
                 Cell cell = game.getMap().getCellAt(col, row);
                 Hexagon hex = map[col][row];
                 // units
-                if (cell.getType() != CellType.MINE) {
+                if (cell.getType() != CellType.MINE && cell.getType() != CellType.OUTOFMAP) {
                     if (cell.getUnit() != null)
                         drawImage(g2d, hex, getImageByClassTeam(cell.getUnit().getClass(), cell.getUnit().getTeamId()));
                 }
-                else{
+                else if (cell.getType() == CellType.MINE){
                     MineCell mine = (MineCell) cell;
                     if (mine.getUnit() != null)
                         drawImage(g2d, hex, getImageByClassTeam(mine.getUnit().getClass(), cell.getUnit().getTeamId()));
@@ -188,13 +188,13 @@ public class FJpanel extends JPanel implements Runnable{
             if (edge != null){
                 FJgon wall = getFJgonByNodes(nodes[edge.getNodes()[0].getX()][edge.getNodes()[0].getY()], nodes[edge.getNodes()[1].getX()][edge.getNodes()[1].getY()]);
                 if (edge.getType() == EdgeType.WALL)
-                    drawImage(g2d, wall, ImageHolder.walls[wall.getShib() + 1]);
+                    drawImage(g2d, wall, ImageHolder.brickWall);//ImageHolder.walls[wall.getShib() + 1]);
                 else if (edge.getType() == EdgeType.SEMI_WALL){
                     drawImage(g2d, wall, ImageHolder.semiWalls[wall.getShib() + 1]);
                 }
                 else if (edge.getType() == EdgeType.OPEN){
                     //drawOpenWall(g2d, wall, ImageHolder.black, 4);
-                    drawImage(g2d, wall, ImageHolder.black);
+                    drawImage(g2d, wall, ImageHolder.grass);
                 }
             }
         }
@@ -215,9 +215,9 @@ public class FJpanel extends JPanel implements Runnable{
         if (clazz == Unit.class){
             // barghia
             if (teamId == 1)
-                return ImageHolder.attacker;
+                return ImageHolder.zombie;
             else{ // if (teamId == 0){
-                return ImageHolder.bomber;
+                return ImageHolder.attacker;
             }
         }
         /*else if (clazz == ){
@@ -267,7 +267,7 @@ public class FJpanel extends JPanel implements Runnable{
                     break;
                 case WALL_DRAW:
                 	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);
-                    drawImage(g2d, temp, ImageHolder.walls[temp.getShib() + 1]);
+                    drawImage(g2d, temp, ImageHolder.brickWall);//ImageHolder.walls[temp.getShib() + 1]);
                     break;
                 case WALL_SEMI_DRAW:
                 	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);

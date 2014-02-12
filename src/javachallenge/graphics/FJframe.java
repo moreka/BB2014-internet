@@ -6,18 +6,20 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import java.awt.Toolkit;
 
 public class FJframe extends JFrame{
 	private int rows;
 	private int cols;
 	public static final int RADIUS = 24;
-	public static final int PADDING = 4;
+	public static final int PADDING = 2;
     public static final int FJHEIGHT = 4;
 	private Hexagon[][] map;
 	private FJNode[][] nodes;
 	private FJpanel panel;
     private Game game;
     private ArrayList<Hexagon[]> outOfMaps;
+
 	
 	
 	public FJframe(Game game, int rows, int cols){
@@ -32,8 +34,10 @@ public class FJframe extends JFrame{
 		// full screen
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.game = game;
+        System.out.println("FJframe width:" + (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth());
+        Point origin = new Point(((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (int)(Math.sqrt(3) * cols * (RADIUS + PADDING)))/2, 0);
 
-        map = JCmap.makeMap(new Point(50,  20), rows, cols, RADIUS, PADDING);
+        map = JCmap.makeMap(origin, rows, cols, RADIUS, PADDING);
         nodes = JCmap.makeNodes(rows, 2 * (cols + 1), map);
         /*for (int i = 0; i<outOfMaps.size(); i++){
             outOfMaps.set(i, JCmap.makeOutofMapHexagon(new Point(50,  20), rows, cols, RADIUS, PADDING, i));

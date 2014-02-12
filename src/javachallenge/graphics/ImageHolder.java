@@ -19,8 +19,10 @@ public class ImageHolder {
     public static Image black = new ImageIcon("data/black.png").getImage();
     public static Image spawn = new ImageIcon("data/spawn.png").getImage();
     public static Image destination = new ImageIcon("data/destination.png").getImage();
+    public static Image zombie = new ImageIcon("data/zombie.png").getImage();
     public static Image bomber = new ImageIcon("data/bomber.png").getImage();
     public static Image white = new ImageIcon("data/white.jpg").getImage();
+    public static Image brickWall = new ImageIcon("data/brickwall.png").getImage();
     public static Image[] loadImage(String prefix, int size){
 
         Image[] all = new Image[size];
