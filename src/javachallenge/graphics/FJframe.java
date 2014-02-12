@@ -10,9 +10,9 @@ import javax.swing.JFrame;
 public class FJframe extends JFrame{
 	private int rows;
 	private int cols;
-	public static final int RADIUS = 30;
-	public static final int PADDING = 15;
-    public static final int FJHEIGHT = 8;
+	public static final int RADIUS = 24;
+	public static final int PADDING = 4;
+    public static final int FJHEIGHT = 4;
 	private Hexagon[][] map;
 	private FJNode[][] nodes;
 	private FJpanel panel;
@@ -27,7 +27,6 @@ public class FJframe extends JFrame{
         this.cols = cols;
 
 		// setting basic properties
-		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Java Challenge 1392");
 		// full screen
@@ -41,6 +40,7 @@ public class FJframe extends JFrame{
         }*/
 
 		initUI();
+        setVisible(true);
 	}
 	
 	

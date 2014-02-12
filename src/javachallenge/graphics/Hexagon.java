@@ -10,12 +10,9 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
 
 public class Hexagon extends Polygon {
 
@@ -23,12 +20,9 @@ public class Hexagon extends Polygon {
 
     public static final int SIDES = 6;
 
-    private Point[] points = new Point[SIDES];
     private Point center = new Point(0, 0);
     private int radius;
-    private int rotation = 90;
-
-	private String type;
+    private static int ROTATION = 90;
 
     public Hexagon(Point center, int radius) {
         npoints = SIDES;
@@ -45,26 +39,6 @@ public class Hexagon extends Polygon {
         this(new Point(x, y), radius);
     }
 
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-
-        updatePoints();
-    }
-
-    public int getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
-
-        updatePoints();
-    }
-
     public void setCenter(Point center) {
         this.center = center;
 
@@ -76,7 +50,7 @@ public class Hexagon extends Polygon {
     }
 
     private double findAngle(double fraction) {
-        return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
+        return fraction * Math.PI * 2 + Math.toRadians((ROTATION + 180) % 360);
     }
 
     private Point findPoint(double angle) {
@@ -92,7 +66,6 @@ public class Hexagon extends Polygon {
             Point point = findPoint(angle);
             xpoints[p] = point.x;
             ypoints[p] = point.y;
-            points[p] = point;
         }
     }
     public void draw(Graphics2D g, Image img, int lineThickness, int colorValue, boolean filled) {
@@ -137,16 +110,6 @@ public class Hexagon extends Polygon {
     	return result;
     }
 
-	public String getType() {
-		// TODO Auto-generated method stub
-		//return this.type;
-		String[] types = {"grass", "water", "mountain"};
-		return types[new Random().nextInt(3)];
-	}
-	
-	public void setType(String type){
-		this.type = type;
-	}
 }
 
 class FJgon extends Polygon{
@@ -218,7 +181,8 @@ class FJNode extends Polygon{
     }
     
     public Shape draw() {
-    	int radius = (int) Math.round(Math.sqrt(Math.pow(xpoints[0] - xpoints[1], 2) + Math.pow(ypoints[0] -  ypoints[1], 2)));
+    	//int radius = (int) Math.round(Math.sqrt(Math.pow(xpoints[0] - xpoints[1], 2) + Math.pow(ypoints[0] -  ypoints[1], 2)));
+        int radius = FJframe.FJHEIGHT;
         Shape p = new Ellipse2D.Float(getCircleCenter().x - radius, getCircleCenter().y - radius, 2 * radius, 2 * radius);
         return p;
     }

@@ -17,10 +17,6 @@ import java.util.Random;
 public class FJpanel extends JPanel {
     BufferedImage slate;
     TexturePaint slatetp;
-    private Image grass, mountain, water, mine, attacker, wallie, black, spawn, destination, bomber, white;
-    private Image wall1, wall2, wall3, semiWall1, semiWall2, semiWall3;
-    private Image[] cells;
-    private Image[] walls;
     private Random random;
     private Hexagon[][] map;
     private FJNode[][] nodes;
@@ -39,33 +35,8 @@ public class FJpanel extends JPanel {
         this.cols = cols;
         this.game = game;
         random = new Random();
-        loadImage();
     }
 
-    private void loadImage(){
-        grass = new ImageIcon("data/grass.png").getImage();
-        mountain = new ImageIcon("data/mountain.png").getImage();
-        water = new ImageIcon("data/water.png").getImage();
-        mine = new ImageIcon("data/mine.png").getImage();
-        attacker = new ImageIcon("data/attacker.png").getImage();
-        wallie = new ImageIcon("data/wallie.png").getImage();
-        black = new ImageIcon("data/black.png").getImage();
-        spawn = new ImageIcon("data/spawn.png").getImage();
-        destination = new ImageIcon("data/destination.png").getImage();
-        bomber = new ImageIcon("data/bomber.png").getImage();
-        white = new ImageIcon("data/white.jpg").getImage();
-        //cells = new Image[]{grass, mountain, water};
-        wall1 = new ImageIcon("data/wall_1.png").getImage();
-        wall2 = new ImageIcon("data/wall_2.png").getImage();
-        wall3 = new ImageIcon("data/wall_3.png").getImage();
-        semiWall1 = new ImageIcon("data/semi_wall_1.png").getImage();
-        semiWall2 = new ImageIcon("data/semi_wall_2.png").getImage();
-        semiWall3 = new ImageIcon("data/semi_wall_3.png").getImage();
-		walls = new Image[]{wall1, wall2, wall3, semiWall1, semiWall2, semiWall3};
-		/*for (int i = 0; i < walls.length; i++) {
-			walls[i] = new ImageIcon("C:\\Users\\AlirezaF\\Desktop\\jc_wall"+ String.valueOf(i) +".png").getImage();
-		}*/
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -125,14 +96,13 @@ public class FJpanel extends JPanel {
     }
 
     public ArrayList<Delta> getDelta(int round) {
-        switch (round % 4) {
+        switch (round % 3) {
             case 0:
                 //return game.getAttackDeltaList();
-            case 1:
                 return game.getWallDeltasList();
-            case 2:
+            case 1:
                 return game.getMoveDeltasList();
-            case 3:
+            case 2:
                 return game.getOtherDeltasList();
             default:
                 return null;
@@ -146,19 +116,19 @@ public class FJpanel extends JPanel {
     private Image getImage(CellType type){
         switch (type){
             case TERRAIN:
-                return grass;
+                return ImageHolder.grass;
             case RIVER:
-                return water;
+                return ImageHolder.water;
             case SPAWN:
-                return spawn;
+                return ImageHolder.spawn;
             case MOUNTAIN:
-                return mountain;
+                return ImageHolder.mountain;
             case OUTOFMAP:
-                return black;
+                return ImageHolder.black;
             case DESTINATION:
-                return destination;
+                return ImageHolder.destination;
             case MINE:
-                return mine;
+                return ImageHolder.mine;
             default:
                 return null;
         }
@@ -184,6 +154,8 @@ public class FJpanel extends JPanel {
 
     private void drawUnits(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
+
+        // units
         for (int row = 0; row < rows; row++){
             for (int col = 0; col < cols; col++){
                 Cell cell = game.getMap().getCellAt(col, row);
@@ -191,79 +163,67 @@ public class FJpanel extends JPanel {
                 // units
                 if (cell.getType() != CellType.MINE) {
                     if (cell.getUnit() != null)
-                        drawImage(g2d, hex, getImageByClass(cell.getUnit().getClass()));
+                        drawImage(g2d, hex, getImageByClassTeam(cell.getUnit().getClass(), cell.getUnit().getTeamId()));
                 }
                 else{
                     MineCell mine = (MineCell) cell;
-                    drawImage(g2d, hex, getImageByClass(mine.getUnit().getClass()));
-                    drawImage(g2d, hex, getImageByClass(mine.getSecUnit().getClass()));
-                    drawImage(g2d, hex, getImageByClass(mine.getThirdUnit().getClass()));
+                    drawImage(g2d, hex, getImageByClassTeam(mine.getUnit().getClass(), cell.getUnit().getTeamId()));
+                    drawImage(g2d, hex, getImageByClassTeam(mine.getSecUnit().getClass(), cell.getUnit().getTeamId()));
+                    drawImage(g2d, hex, getImageByClassTeam(mine.getThirdUnit().getClass(), cell.getUnit().getTeamId()));
                 }
             }
         }
-        /*for (int row = 0; row < rows; row++){
-            for(int col = 0; col < 2 * cols + 1; col++){
-                Node utilNode = game.getMap().getNodeAt(row, col);
-                FJNode node = nodes[col][row];
-//                if (utilNode.getUnitWallie() != null){
-//                    drawImage(g2d, node, wallie);
-//                }
-            }
-        }*/
 
         Edge[] utilEdges = game.getMap().getWalls();
 
+
+        // walls
         for (int i = 0; i < utilEdges.length; i++){
             Edge edge = utilEdges[i];
             if (edge != null){
                 FJgon wall = getFJgonByNodes(nodes[edge.getNodes()[0].getX()][edge.getNodes()[0].getY()], nodes[edge.getNodes()[1].getX()][edge.getNodes()[1].getY()]);
-                System.out.println("first-x:"+edge.getNodes()[0].getX());
-                System.out.println("first-y:"+edge.getNodes()[0].getY());
-                System.out.println("sec-x:"+edge.getNodes()[1].getX());
-                System.out.println("sec-y:"+edge.getNodes()[1].getY());
                 if (edge.getType() == EdgeType.WALL)
-                    drawImage(g2d, wall, walls[wall.getShib() + 1]);
+                    drawImage(g2d, wall, ImageHolder.walls[wall.getShib() + 1]);
                 else if (edge.getType() == EdgeType.SEMI_WALL){
-                    drawImage(g2d, wall, walls[wall.getShib() + 4]);
+                    drawImage(g2d, wall, ImageHolder.semiWalls[wall.getShib() + 1]);
                 }
                 else if (edge.getType() == EdgeType.OPEN){
-                    drawOpenWall(g2d, wall, grass, 4);
+                    drawOpenWall(g2d, wall, ImageHolder.black, 4);
                 }
+            }
+        }
+
+        for (int col = 2; col < nodes.length - 2; col++ ){
+            for (int row = 1; row < nodes[0].length; row++){
+                drawImage(g2d, (Polygon)nodes[col][row].draw(), new Color(219, 203, 110));
+                //drawImage(g2d, nodes[col][row].draw(), ImageHolder.black);
             }
         }
     }
 
-    private Image getImageByClass(Class clazz){
+    private Image getImageByClassTeam(Class clazz, int teamId){
 //        if (clazz == UnitCE.class){
 //            return attacker;
 //        }
 //        else
         if (clazz == UnitCE.class){
-            return bomber;
+            // barghia
+            if (teamId == 1)
+                return ImageHolder.attacker;
+            else{ // if (teamId == 0){
+                return ImageHolder.bomber;
+            }
         }
-        else{
+        /*else if (clazz == ){
+
+        }*/
+        else {
             return null;
         }
     }
 
     private void drawDelta(Graphics g, ArrayList<Delta> deltas){
         Graphics2D g2d = (Graphics2D) g;
-        //
-        //
-		/*for (int i = 0; i < deltas.length; i++){
-			if (i == 0){
-			Point[] points = new Point[4];
-			points[0] = new Point(nodes[deltas[i].node1.x][deltas[i].node1.y].xpoints[1], nodes[deltas[i].node1.x][deltas[i].node1.y].ypoints[1]);
-			points[1] = new Point(nodes[deltas[i].node2.x][deltas[i].node2.y].xpoints[0], nodes[deltas[i].node2.x][deltas[i].node2.y].ypoints[0]);
-			points[2] = new Point(nodes[deltas[i].node2.x][deltas[i].node2.y].xpoints[2], nodes[deltas[i].node2.x][deltas[i].node2.y].ypoints[2]);
-			points[3] = new Point(nodes[deltas[i].node1.x][deltas[i].node1.y].xpoints[2], nodes[deltas[i].node1.x][deltas[i].node1.y].ypoints[2]);
-			Shape shape= new FJgon(points, 8);
-			drawImage(g2d, shape, wall);
-			}
-			else{
-				drawImage(g2d, nodes[deltas[i].node1.x][deltas[i].node1.y].draw(), wall);
-			}
-		}*/
         for (int i = 0; i < deltas.size(); i++){
             Delta delta = deltas.get(i);
             FJgon temp;
@@ -274,7 +234,7 @@ public class FJpanel extends JPanel {
                     break;
 
                 case CELL_MOVE:
-                    drawImage(g2d, map[delta.getDestination().x][delta.getDestination().y], attacker);
+                    drawImage(g2d, map[delta.getDestination().x][delta.getDestination().y], ImageHolder.attacker);
                     break;
 
                 case AGENT_KILL:
@@ -294,21 +254,21 @@ public class FJpanel extends JPanel {
 //                    break;
                 case MINE_CHANGE:
                     // ye addad draw kon
-                    drawImage(g2d, map[delta.getSource().x][delta.getSource().y], mine);
+                    drawImage(g2d, map[delta.getSource().x][delta.getSource().y], ImageHolder.mine);
                     break;
                 case WALL_DISAPPEAR:
                     //
                     break;
                 case WALL_DRAW:
                 	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);
-                    drawImage(g2d, temp, walls[temp.getShib() + 1]);
+                    drawImage(g2d, temp, ImageHolder.walls[temp.getShib() + 1]);
                     break;
                 case WALL_SEMI_DRAW:
                 	temp = getFJgonByNodes(nodes[delta.getSource().x][delta.getSource().y], nodes[delta.getDestination().x][delta.getDestination().y]);
-                    drawImage(g2d, temp, walls[temp.getShib() + 4]);
+                    drawImage(g2d, temp, ImageHolder.semiWalls[temp.getShib() + 1]);
                     break;
                 case WALLIE_MOVE:
-                    drawImage(g2d, nodes[delta.getDestinationWallie().x][delta.getDestinationWallie().y], wallie);
+                    drawImage(g2d, nodes[delta.getDestinationWallie().x][delta.getDestinationWallie().y], ImageHolder.wallie);
 
 
 
@@ -394,6 +354,21 @@ public class FJpanel extends JPanel {
         g2d.drawImage(img, r.x, r.y, null);
     }
     }
+
+    private void drawImage(Graphics2D g, Polygon shape, Color color){
+        Stroke tmpS = g.getStroke();
+        Color tmpC = g.getColor();
+
+        g.setColor(color);
+        g.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+
+            g.fillPolygon(shape.xpoints, shape.ypoints, shape.npoints);
+
+        // Set values to previous when done.
+        g.setColor(tmpC);
+        g.setStroke(tmpS);
+    }
+
 
     public void drawOpenWall(Graphics2D g, FJgon wall, Image img, int lineThickness) {
         // Store before changing.
