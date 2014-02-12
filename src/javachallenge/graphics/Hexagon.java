@@ -236,20 +236,11 @@ class FJNode extends Polygon{
 	public Point getCircleCenter() {
 		// TODO Auto-generated method stub
 		Point center = new Point((xpoints[0] + xpoints[1] + xpoints[2])/3, (ypoints[0] + ypoints[1] + ypoints[2])/3);
-		System.out.println("triangle: \nx: " + xpoints[0] + " y: " + ypoints[0] + "\nx: " + xpoints[1] + " y: " + ypoints[1]+ "\nx: " + xpoints[2] + " y: " + ypoints[2]);
-		System.out.println("circle x:" +  center.x + "y: " + center.y);
+		//System.out.println("triangle: \nx: " + xpoints[0] + " y: " + ypoints[0] + "\nx: " + xpoints[1] + " y: " + ypoints[1]+ "\nx: " + xpoints[2] + " y: " + ypoints[2]);
+		//System.out.println("circle x:" +  center.x + "y: " + center.y);
 		return center;
 	}
     
     
 }
 
-class FJEdge{
-	int x;
-	int y;
-
-	
-	int status = 0;
-	
-	
-}
