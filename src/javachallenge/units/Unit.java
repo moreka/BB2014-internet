@@ -3,16 +3,14 @@ package javachallenge.units;
 import javachallenge.util.Cell;
 import javachallenge.util.Direction;
 
-/**
- * Created by mohammad on 2/5/14.
- */
-public abstract class Unit {
-    private int teamId;
-    private int unitId;
+public class Unit {
     private int id;
+    private int teamId;
     private Direction move;
     private boolean alive = true;
     private boolean stay = true;
+    private boolean arrived = false;
+    private Cell cell;
 
     public int getTeamId() {
         return teamId;
@@ -20,14 +18,6 @@ public abstract class Unit {
 
     public void setTeamId(int teamId) {
         this.teamId = teamId;
-    }
-
-    public int getUnitId() {
-        return unitId;
-    }
-
-    public void setUnitId(int unitId) {
-        this.unitId = unitId;
     }
 
     public int getId() {
@@ -61,5 +51,25 @@ public abstract class Unit {
 
     public boolean isStay() {
         return stay;
+    }
+
+    public void setStay(boolean stay) {
+        this.stay = stay;
+    }
+
+    public boolean isArrived() {
+        return arrived;
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 }

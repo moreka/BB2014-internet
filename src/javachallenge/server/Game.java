@@ -1,8 +1,6 @@
 package javachallenge.server;
 
 import javachallenge.units.Unit;
-import javachallenge.units.UnitCE;
-import javachallenge.units.UnitCell;
 import javachallenge.message.Action;
 import javachallenge.message.ActionType;
 import javachallenge.message.Delta;
@@ -34,7 +32,7 @@ public class Game {
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
     private static final int CE_SPAWN_RATE = 1;
-    private static final int INITIAL_RESOURCE = 50;
+    public static final int INITIAL_RESOURCE = 10000;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
@@ -95,19 +93,25 @@ public class Game {
     public void handleMakeWalls(ArrayList<Action> walls){
         Collections.shuffle(walls);
         ArrayList<Edge> wallsWantMake = new ArrayList<Edge>();
-        for (int i = 0; i < walls.size(); i++) {
-            Point point1 = new Point(walls.get(i).getPosition().getX(), walls.get(i).getPosition().getY());
+        for (Action wall : walls) {
+            if (!map.isNodeInMap(wall.getPosition()))
+                continue;
+            Point point1 = new Point(wall.getPosition().getX(), wall.getPosition().getY());
             Node node1 = map.getNodeAt(point1.getX(), point1.getY());
-            Node node2 = map.getNeighborNode(node1, walls.get(i).getNodeDirection());
+            Node node2 = map.getNeighborNode(node1, wall.getNodeDirection());
             Point point2 = new Point(node2.getX(), node2.getY());
-            Edge edge = node1.getEdge(walls.get(i).getNodeDirection());
-            if (CETeam.getResources() >= COST_WALL && walls.get(i).getType() == ActionType.MAKE_WALL &&
-                    edge.getType() == EdgeType.OPEN &&
-                    isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+            Edge edge = node1.getEdge(wall.getNodeDirection());
+            if (CETeam.getResources() >= COST_WALL && wall.getType() == ActionType.MAKE_WALL &&
+                    edge.getType() == EdgeType.OPEN) {
                 wallsWantMake.add(edge);
-                CETeam.decreaseResources(COST_WALL);
-                wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
-                otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
+                if (isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+                    CETeam.decreaseResources(COST_WALL);
+                    wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
+                    otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
+                }
+                else {
+                    wallsWantMake.remove(edge);
+                }
             }
         }
     }
@@ -118,7 +122,7 @@ public class Game {
 
         // moves units to their destination blindly
         for (Action move : moves) {
-            UnitCell unit = (UnitCell) map.getCellAtPoint(move.getPosition()).getUnit();
+            Unit unit = map.getCellAtPoint(move.getPosition()).getUnit();
             Cell source = unit.getCell();
             Cell destination = map.getNeighborCell(source, move.getDirection());
             if (destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
@@ -149,8 +153,11 @@ public class Game {
             // checks if a unit stays and some other want to move to its cell
             boolean isDestinationFull = false;
             int stayerId = -1;
+            int zombieNum = 0;
             for (int i = 0; i < overloadedNumber; i++) {
-                UnitCell existent = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                if (tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                    zombieNum++;
+                Unit existent = tempOtherMoves[xTemp][yTemp].get(i);
                 if (existent.getCell().getX() == xTemp && existent.getCell().getY() == yTemp) {
                     isDestinationFull = true;
                     stayerId = existent.getId();
@@ -159,10 +166,21 @@ public class Game {
 
             if (!isDestinationFull) {
                 // only move "lasting" unit and others must stay
-                int lasting = rand.nextInt(overloadedNumber);
+                int lasting = 0;
+                if (zombieNum > 0) {
+                    int zombieLasting = rand.nextInt(zombieNum);
+                    for (int i = 0; i < overloadedNumber; i++) {
+                        if (zombieLasting == 0 && tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                            lasting = i;
+                        else if (tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                            zombieLasting--;
+                    }
+                } else {
+                    lasting = rand.nextInt(overloadedNumber);
+                }
                 for (int i = overloadedNumber - 1; i >= 0; i--)
                     if (i != lasting) {
-                        UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                        Unit goner = tempOtherMoves[xTemp][yTemp].get(i);
                         tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
 
                         // if some other unit wanted to move to previous location of this unit, they must go back
@@ -174,7 +192,7 @@ public class Game {
                     }
             } else {
                 for (int i = overloadedNumber - 1; i >= 0; i--) {
-                    UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
+                    Unit goner = tempOtherMoves[xTemp][yTemp].get(i);
                     // send everybody back, except the one who stayed in the cell
                     if (goner.getId() != stayerId) {
                         tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);
@@ -192,7 +210,7 @@ public class Game {
             for (int j = 0; j < tempOtherMoves[0].length; j++) {
                 if (tempOtherMoves[i][j].size() == 0)
                     continue;
-                UnitCell thisUnit = (UnitCell)tempOtherMoves[i][j].get(0);
+                Unit thisUnit = tempOtherMoves[i][j].get(0);
                 Cell tempCell = thisUnit.getCell();
                 Point sourcePoint = new Point (tempCell.getX(), tempCell.getY());
                 // if this unit is moved, make delta
@@ -219,10 +237,6 @@ public class Game {
             }
     }
 
-    private void handleOthers() {
-
-    }
-
     private boolean isTherePathAfterThisEdges (Point sourceInput, Point destinationInput, ArrayList<Edge> barriers) {
         Cell source = map.getCellAt(sourceInput.getX(), sourceInput.getY());
         Cell destination = map. getCellAt(destinationInput.getX(), destinationInput.getY());
@@ -230,20 +244,24 @@ public class Game {
         Cell currentCell;
         Stack<Cell> dfs = new Stack<Cell>();
         dfs.add(source);
-        Direction[] dir = (Direction.EAST).getDirections();
+        Direction[] dir = Direction.values();
         while (!dfs.isEmpty()) {
             currentCell = dfs.pop();
             if (currentCell.equals(destination))
                 return true;
             flags[currentCell.getX()][currentCell.getY()] = true;
-            for (int i = 0; i < 6; i++) {
+            outer: for (int i = 0; i < 6; i++) {
                 Cell neighborCell = map.getNeighborCell(currentCell, dir[i]);
                 Edge neighborEdge = currentCell.getEdge(dir[i]);
                 if (neighborCell != null && flags[neighborCell.getX()][neighborCell.getY()] == false &&
-                        neighborEdge.getType() == EdgeType.OPEN) {
+                        neighborEdge.getType() == EdgeType.OPEN &&
+                        (neighborCell.getType() == CellType.TERRAIN ||
+                        neighborCell.getType() == CellType.MINE ||
+                        neighborCell.getType() == CellType.SPAWN ||
+                        neighborCell.getType() == CellType.DESTINATION)) {
                     for (int j = 0; j < barriers.size(); j++)
-                        if (neighborEdge.equals(barriers.get(i)))
-                            continue;
+                        if (neighborEdge.equals(barriers.get(j)))
+                            continue outer;
                     dfs.add(neighborCell);
                 }
             }
@@ -279,12 +297,14 @@ public class Game {
         */
 //        if (map.getCellAtPoint(map.getSpawnPoint(1)).getUnit() == null) {
 //            otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, numberOfEEers));
-//            EETeam.addUnitCE();
+//            EETeam.addUnit();
 //            numberOfEEers++;
 //        }
         if (turn % CE_SPAWN_RATE == 0) {
-            if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null){
-                UnitCE newUnit = CETeam.addUnitCE();
+            System.out.println("EndTurn Called");
+            if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null) {
+                Unit newUnit = CETeam.addUnit();
+                System.out.println("Generating a SpawnDelta with id = " + newUnit.getId());
                 otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, newUnit.getId()));
             }
         }

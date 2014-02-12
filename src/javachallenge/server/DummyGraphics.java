@@ -1,7 +1,5 @@
 package javachallenge.server;
 
-import javachallenge.units.Unit;
-import javachallenge.units.UnitCE;
 import javachallenge.util.Map;
 
 import javax.swing.*;

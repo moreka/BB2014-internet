@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server {
 
-    public static int CYCLE_LENGTH = 1000;
+    public static int CYCLE_LENGTH = 300;
     public static int PORT = 20140;
 
     public void run() throws InterruptedException, IOException, ClassNotFoundException {
@@ -42,19 +42,17 @@ public class Server {
         Map map = Map.loadMap("test.map");
         Game game = new Game(map);
 
-        InitialMessage initialMessage = new InitialMessage();
-        initialMessage.setMap(map);
-
+        int i = 0;
         for (ClientConnection c : clientConnections) {
-            c.getOut().writeObject(initialMessage);
+            c.getOut().writeObject(new InitialMessage(map, i++, Game.INITIAL_RESOURCE));
             c.getOut().flush();
         }
+//
+//        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+//        FJpanel panel = graphics.getPanel();
 
-        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
-        FJpanel panel = graphics.getPanel();
-
-/*        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);*/
+        DummyGraphics graphics = new DummyGraphics(map);
+        graphics.setVisible(true);
 
         int turn = 0;
 
@@ -63,6 +61,8 @@ public class Server {
 
             ServerMessage serverMessage = new ServerMessage(game.getWallDeltasList(),
                     game.getMoveDeltasList(), game.getOtherDeltasList());
+
+            serverMessage.setGameEnded(game.isEnded());
 
             for (ClientConnection c : clientConnections) {
                 c.getOut().writeObject(serverMessage);
@@ -91,11 +91,8 @@ public class Server {
             graphics.repaint();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
-            //game.getMap().updateMap(game.getMoveDeltasList());
-            //game.getMap().updateMap(game.getWallDeltasList());
-            //game.getMap().updateMap(game.getOtherDeltasList());
-
             graphics.repaint();
+            game.getMap().printUnits();
         }
     }
 
