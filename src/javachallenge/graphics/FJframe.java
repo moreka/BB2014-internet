@@ -36,9 +36,9 @@ public class FJframe extends JFrame{
 
         map = JCmap.makeMap(new Point(50,  20), rows, cols, RADIUS, PADDING);
         nodes = JCmap.makeNodes(rows, 2 * cols + 1, map);
-        for (int i = 0; i<outOfMaps.size(); i++){
+        /*for (int i = 0; i<outOfMaps.size(); i++){
             outOfMaps.set(i, JCmap.makeOutofMapHexagon(new Point(50,  20), rows, cols, RADIUS, PADDING, i));
-        }
+        }*/
 
 		initUI();
 	}

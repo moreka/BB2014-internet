@@ -12,6 +12,10 @@ public class ClientMessage
     private static final long serialVersionUID = -8150560957430239238L;
     private ArrayList<Action> actions;
 
+    public ClientMessage(ArrayList<Action> actions) {
+        this.actions = actions;
+    }
+
     public ArrayList<Action> getActions() {
         return actions;
     }
