@@ -69,8 +69,8 @@ public class Map {
         }
         int wall_Pointer = 0;
         for(int i = 0; i < 2 * sizeX + 2; i++){
-            for(int j = 0; j < sizeY + 1 && i + j % 2 == 1; j++)
-                if(isNodeInMap(i,j)){
+            for(int j = 0; j < sizeY + 1; j++)
+                if((i + j) % 2 == 1 && isNodeInMap(i,j)){
                     if(!this.nodes[i][j].getEdge(NodeDirection.NORTH).getType().equals(EdgeType.NONE)){
                         walls[wall_Pointer] = this.nodes[i][j].getEdge(NodeDirection.NORTH);
                         wall_Pointer++;
