@@ -158,7 +158,6 @@ public class Game {
                         tempOtherMoves[xTemp][yTemp].remove(i);
                     }
             } else {
-                System.out.println("tempOtherMove.size() = " + tempOtherMoves[xTemp][yTemp].size() + ", overloadedNum = " + overloadedNumber);
                 for (int i = overloadedNumber - 1; i >= 0; i--) {
                     UnitCell goner = (UnitCell)tempOtherMoves[xTemp][yTemp].get(i);
                     tempOtherMoves[goner.getCell().getX()][goner.getCell().getY()].add(goner);

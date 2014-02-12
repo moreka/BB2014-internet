@@ -45,7 +45,6 @@ public class Connector {
                         synchronized (lock) {
                             serverMessage = tmp;
                         }
-                        System.out.println("Lock released");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -55,17 +54,13 @@ public class Connector {
             }
         }.start();
 
-        System.out.println("After first thread");
-
         new Thread() {
             @Override
             public void run() {
                 try {
                     while (true) {
-                        System.out.println("Execution of thread 2");
                         synchronized (lock) {
                             otherThreadMessage = serverMessage;
-                            System.out.println("lock acquired");
                         }
                         if (otherThreadMessage != null) {
                             synchronized (lock) {

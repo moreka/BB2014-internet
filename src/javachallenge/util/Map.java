@@ -32,7 +32,8 @@ public class Map implements Serializable {
     }
 
     public Point getDestinationPoint(int teamId) {
-        return new Point(9, 9);
+        //TODO: implement this asshole
+        return new Point(7, 6);
     }
 
     public Map(int sizeX, int sizeY) {
@@ -238,7 +239,6 @@ public class Map implements Serializable {
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];
                     nodeSr.getEdge(getDirectionFromTwoNodes(nodeSr, nodeDes)).setType(EdgeType.WALL);//Edge.EdgeType = WALL
-                    System.out.println("Wall draw");
                     break;
                 case CELL_MOVE:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
