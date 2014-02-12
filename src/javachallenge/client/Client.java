@@ -31,10 +31,10 @@ public abstract class Client {
         this.map.updateMap(message.getOtherDeltaList());
 
         for (Delta d : message.getOtherDeltaList()) {
-            if (d.getType() == DeltaType.SPAWN) {
+            if (d.getType() == DeltaType.SPAWN && d.getTeamID() == this.getTeamID()) {
                 myUnits.add(map.getCellAt(d.getSource().getX(), d.getSource().getY()).getUnit());
             }
-            else if(d.getType() == DeltaType.RESOURCE_CHANGE){
+            else if(d.getType() == DeltaType.RESOURCE_CHANGE && d.getTeamID() == this.getTeamID()){
                 this.resources = this.resources + d.getChangeValue();
             }
         }
@@ -67,5 +67,13 @@ public abstract class Client {
 
     public void setResources(int resources) {
         this.resources = resources;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public Map getMap() {
+        return map;
     }
 }

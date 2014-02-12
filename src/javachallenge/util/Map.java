@@ -19,14 +19,21 @@ public class Map implements Serializable, Cloneable {
     private int MINE_RATE;
     private int MINE_AMOUNT;
 
+    private Point[] spawnPoints = new Point[2];
+    private Point[] destinationPoints = new Point[2];
+
     private String string;
 
     public Point getSpawnPoint(int teamId) {
-        //TODO: implement this asshole
-        if (teamId == 0)
-            return new Point(1, 1);
-        else
-            return new Point(1, 6);
+        return spawnPoints[teamId];
+    }
+
+    public void setSpawnPoints(Point[] spawnPoints) {
+        this.spawnPoints = spawnPoints;
+    }
+
+    public void setDestinationPoints(Point[] destinationPoints) {
+        this.destinationPoints = destinationPoints;
     }
 
     public Cell getSpawnCell(int teamId) {
@@ -34,11 +41,7 @@ public class Map implements Serializable, Cloneable {
     }
 
     public Point getDestinationPoint(int teamId) {
-        //TODO: implement this asshole
-        if (teamId == 0)
-            return new Point(6, 1);
-        else
-            return new Point(6, 6);
+        return destinationPoints[teamId];
     }
 
     public Cell getDestinationCell(int teamId) {
@@ -123,9 +126,30 @@ public class Map implements Serializable, Cloneable {
                 }
             }
         }
+       // System.out.println(br.readLine());
         map.MINE_AMOUNT = Integer.parseInt(br.readLine());
+        str = str + "\n" + map.MINE_AMOUNT;
         for (MineCell mine : map.getMines())
             mine.setAmount(map.MINE_AMOUNT);
+
+        String line1 = br.readLine(), line2 = br.readLine();
+        str += "\n" + line1 + "\n" + line2;
+        map.setSpawnPoints(new Point[] {
+                new Point(Integer.parseInt(line1.split("[ ]")[0]),
+                        Integer.parseInt(line1.split("[ ]")[1])),
+                new Point(Integer.parseInt(line2.split("[ ]")[0]),
+                        Integer.parseInt(line2.split("[ ]")[1]))
+        });
+        line1 = br.readLine();
+        line2 = br.readLine();
+        str += "\n" + line1 + "\n" + line2;
+        map.setDestinationPoints(new Point[]{
+                new Point(Integer.parseInt(line1.split("[ ]")[0]),
+                        Integer.parseInt(line1.split("[ ]")[1])),
+                new Point(Integer.parseInt(line2.split("[ ]")[0]),
+                        Integer.parseInt(line2.split("[ ]")[1]))
+        });
+
         map.setString(str);
         map.init();
         return map;
@@ -135,14 +159,41 @@ public class Map implements Serializable, Cloneable {
         BufferedReader br = new BufferedReader(new StringReader(mapString));
         Map map = new Map(Integer.parseInt(br.readLine()), Integer.parseInt(br.readLine()));
         String str = "";
+        str = map.getSizeX() + "\n" + map.getSizeY();
         for (int i = 0; i < map.getSizeY(); i++) {
             String line = br.readLine();
             str = str + "\n" + line;
             String[] cell_types = line.split("[ ]");
             for (int j = 0; j < map.getSizeX(); j++) {
-                map.cells[j][i] = new Cell(j, i, CellType.values()[Integer.parseInt(cell_types[j])]);
+                int index = Integer.parseInt(cell_types[j]);
+                if (index == CellType.MINE.ordinal()) {
+                    map.cells[j][i] = new MineCell(j, i);
+                    map.mines.add((MineCell) map.cells[j][i]);
+                } else {
+                    map.cells[j][i] = new Cell(j, i, CellType.values()[Integer.parseInt(cell_types[j])]);
+                }
             }
         }
+        map.MINE_AMOUNT = Integer.parseInt(br.readLine());
+        for (MineCell mine : map.getMines())
+            mine.setAmount(map.MINE_AMOUNT);
+        String line1 = br.readLine(), line2 = br.readLine();
+        str += "\n" + line1 + "\n" + line2;
+        map.setSpawnPoints(new Point[] {
+                new Point(Integer.parseInt(line1.split("[ ]")[0]),
+                        Integer.parseInt(line1.split("[ ]")[1])),
+                new Point(Integer.parseInt(line2.split("[ ]")[0]),
+                        Integer.parseInt(line2.split("[ ]")[1]))
+        });
+        line1 = br.readLine();
+        line2 = br.readLine();
+        str += "\n" + line1 + "\n" + line2;
+        map.setDestinationPoints(new Point[] {
+                new Point(Integer.parseInt(line1.split("[ ]")[0]),
+                        Integer.parseInt(line1.split("[ ]")[1])),
+                new Point(Integer.parseInt(line2.split("[ ]")[0]),
+                        Integer.parseInt(line2.split("[ ]")[1]))
+        });
         map.setString(str);
         map.init();
         return map;
@@ -338,7 +389,9 @@ public class Map implements Serializable, Cloneable {
                     cellSr.setUnit(newUnit);
                     newUnit.setId(temp.getUnitID());
                     newUnit.setTeamId(temp.getTeamID());
-                    System.out.println("Spawning a new unit with ID " + newUnit.getId());
+                    System.out.println("Spawning a new unit with ID " + newUnit.getId() + " teamID: " + newUnit.getTeamId() +
+                        " at " + temp.getSource().getX() + ", " + temp.getSource().getY());
+
                     break;
             }
         }
@@ -544,7 +597,7 @@ public class Map implements Serializable, Cloneable {
     public static void main(String[] args) {
         // map tester!
         try {
-            Map m = Map.loadMap("test.map");
+            Map m = Map.loadMap("net.map");
             m.print();
         } catch (IOException e) {
             e.printStackTrace();

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class DummyGraphics extends JFrame {
     public DummyGraphics(Map map) throws HeadlessException, IOException {
         super("Java Challenge Tester");
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(850, 650));
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         DummyPanel dp = new DummyPanel(map);

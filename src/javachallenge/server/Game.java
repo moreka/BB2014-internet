@@ -31,7 +31,8 @@ public class Game {
     private static final int GAME_LENGTH = 700;
     //private static final int ATTACKER_SPAWN_RATE = 2;
     //private static final int BOMBER_SPAWN_RATE = 3;
-    private static final int CE_SPAWN_RATE = 1;
+    private static final int CE_SPAWN_RATE = 2;
+    private static final int EE_SPAWN_RATE = 1;
     public static final int INITIAL_RESOURCE = 10000;
     private int[] resources = new int[2];
     //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
@@ -289,22 +290,17 @@ public class Game {
     }
 
     public void endTurn() {
-        /*
-        if (turn % ATTACKER_SPAWN_RATE == 0) {
-            otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[0]));
-            otherDeltas.add(new Delta(DeltaType.SPAWN_ATTACKER, attackerSpawnLocation[1]));
+        if (turn % EE_SPAWN_RATE == 0) {
+            if (map.getCellAtPoint(map.getSpawnPoint(1)).getUnit() == null) {
+                Unit newUnit = EETeam.addUnit();
+                System.out.println("[EE] Generating a SpawnDelta with id = " + newUnit.getId());
+                otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, newUnit.getId()));
+            }
         }
-        */
-//        if (map.getCellAtPoint(map.getSpawnPoint(1)).getUnit() == null) {
-//            otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(1), 1, numberOfEEers));
-//            EETeam.addUnit();
-//            numberOfEEers++;
-//        }
         if (turn % CE_SPAWN_RATE == 0) {
-            System.out.println("EndTurn Called");
             if (map.getCellAtPoint(map.getSpawnPoint(0)).getUnit() == null) {
                 Unit newUnit = CETeam.addUnit();
-                System.out.println("Generating a SpawnDelta with id = " + newUnit.getId());
+                System.out.println("[CE] Generating a SpawnDelta with id = " + newUnit.getId());
                 otherDeltas.add(new Delta(DeltaType.SPAWN, map.getSpawnPoint(0), 0, newUnit.getId()));
             }
         }

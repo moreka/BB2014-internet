@@ -19,8 +19,8 @@ public class DummyPanel extends JPanel {
     private final Map map;
     private Image bufferImage;
     private Image sand, ocean, zombie, ce;
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int WIDTH = 950;
+    private final int HEIGHT = 650;
     private final int SIZE = 42;
 
     public DummyPanel(Map map) {
