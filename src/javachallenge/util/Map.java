@@ -376,7 +376,6 @@ public class Map implements Serializable, Cloneable {
                     break;
                 case AGENT_DISAPPEAR:
                     cellSr = this.cells[temp.getSource().getX()][temp.getSource().getY()];
-                    cellSr.getUnit().setAlive(false);
                     cellSr.getUnit().setArrived(true);
                     Unit unitCell2 = cellSr.getUnit();
                     unitCell2.setCell(null);

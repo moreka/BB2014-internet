@@ -5,8 +5,6 @@
 package javachallenge.server;
 
 import javachallenge.client.Client;
-//import javachallenge.graphics.FJframe;
-//import javachallenge.graphics.FJpanel;
 import javachallenge.graphics.FJframe;
 import javachallenge.graphics.FJpanel;
 import javachallenge.message.Action;

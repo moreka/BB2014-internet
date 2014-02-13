@@ -189,9 +189,6 @@ public class FJpanel extends JPanel implements Runnable{
                 FJgon wall = getFJgonByNodes(nodes[edge.getNodes()[0].getX()][edge.getNodes()[0].getY()], nodes[edge.getNodes()[1].getX()][edge.getNodes()[1].getY()]);
                 if (edge.getType() == EdgeType.WALL)
                     drawImage(g2d, wall, ImageHolder.brickWall);//ImageHolder.walls[wall.getShib() + 1]);
-                else if (edge.getType() == EdgeType.SEMI_WALL){
-                    drawImage(g2d, wall, ImageHolder.semiWalls[wall.getShib() + 1]);
-                }
                 else if (edge.getType() == EdgeType.OPEN){
                     //drawOpenWall(g2d, wall, ImageHolder.black, 4);
                     drawImage(g2d, wall, ImageHolder.grass);

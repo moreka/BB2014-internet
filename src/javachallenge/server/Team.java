@@ -28,7 +28,6 @@ public class Team {
 
     public Unit addUnit(){
         Unit newUnit = new Unit();
-        newUnit.setAlive(true);
         newUnit.setTeamId(this.teamId);
         newUnit.setId(units.size());
         this.units.add(newUnit);
@@ -65,6 +64,10 @@ public class Team {
 
     public void decreaseResources (int input) {
         resources -= input;
+    }
+
+    public void increaseResources (int input) {
+        resources += input;
     }
 
     public int getArrivedUnitsNum() {

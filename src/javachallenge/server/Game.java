@@ -208,10 +208,12 @@ public class Game {
                     MineCell mineCell = (MineCell) thisUnit.getCell();
                     if (mineCell.getAmount() >= MINE_RATE) {
                         resources[thisUnit.getTeamId()] += MINE_RATE;
+                        CETeam.increaseResources(MINE_RATE);
                         otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, MINE_RATE));
                         otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, thisUnit.getTeamId(), MINE_RATE));
                     } else if (mineCell.getAmount() > 0) {
                         resources[thisUnit.getTeamId()] += mineCell.getAmount();
+                        CETeam.increaseResources(mineCell.getAmount());
                         otherDeltas.add(new Delta(DeltaType.MINE_CHANGE, sourcePoint, mineCell.getAmount()));
                         otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, thisUnit.getTeamId(), mineCell.getAmount()));
                     }

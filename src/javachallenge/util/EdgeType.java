@@ -5,7 +5,6 @@ package javachallenge.util;
  */
 public enum EdgeType {
     OPEN,
-    SEMI_WALL,
     WALL,
     NONE
 }
