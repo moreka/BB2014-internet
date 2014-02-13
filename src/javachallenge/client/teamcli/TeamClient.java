@@ -11,6 +11,7 @@ import java.util.Random;
  * Created by mohammad on 2/5/14.
  */
 public class TeamClient extends Client {
+    //int turn = 0;
     @Override
     public void step() {
         // your code here ...
@@ -21,17 +22,25 @@ public class TeamClient extends Client {
          */
         for (Unit myUnit : myUnits) {
             move(myUnit, Direction.values()[rnd.nextInt(6)]);
+            /*move(myUnits.get(0), Direction.SOUTHEAST);
+            if (turn < 30 && turn % 2 == 0)
+                move(myUnits.get(0), Direction.SOUTHEAST);
+            else if (turn < 30 && turn % 2 == 1)
+                move(myUnits.get(0), Direction.SOUTHWEST);
+            else
+                move(myUnits.get(0), Direction.WEST);*/
         }
+        //turn++;
 
         /**
          * Making walls section
          */
 
-        makeWall(map.getCellAt(6, 6), Direction.EAST);
+        /*makeWall(map.getCellAt(6, 6), Direction.EAST);
         makeWall(map.getCellAt(6, 6), Direction.SOUTHEAST);
-        makeWall(map.getCellAt(6, 6), Direction.SOUTHWEST);
-        //makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
-        //        Direction.values()[rnd.nextInt(6)]);
+        makeWall(map.getCellAt(6, 6), Direction.SOUTHWEST);*/
+        makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
+            Direction.values()[rnd.nextInt(6)]);
         //for(Direction d : Direction.values())
           //  makeWall(map.getCellAt(3,18),d);
 

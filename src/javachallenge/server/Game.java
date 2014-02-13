@@ -132,7 +132,7 @@ public class Game {
             if (tempOtherMoves[source.getX()][source.getY()] != null && tempOtherMoves[source.getX()][source.getY()].size() > 0 &&
                     destination.getType() != CellType.MOUNTAIN && destination.getType() != CellType.RIVER &&
                     destination.getType() != CellType.OUTOFMAP &&
-                    source.getEdge(move.getDirection()).getType() == EdgeType.OPEN) {
+                    source.getEdge(move.getDirection()).getType() == EdgeType.OPEN && !destination.equals(map.getDestinationCell((unit.getTeamId() + 1) % 2))) {
                 tempOtherMoves[source.getX()][source.getY()].remove(0);
                 tempOtherMoves[destination.getX()][destination.getY()].add(unit);
             }
