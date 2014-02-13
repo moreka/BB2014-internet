@@ -7,7 +7,6 @@ public class Unit {
     private int id;
     private int teamId;
     private Direction move;
-    private boolean alive = true;
     private boolean stay = true;
     private boolean arrived = false;
     private Cell cell;
@@ -34,14 +33,6 @@ public class Unit {
 
     public void setMove(Direction move) {
         this.move = move;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public boolean isAlive() {
-        return alive;
     }
 
     public void stay (boolean input) {

@@ -18,32 +18,20 @@ import java.util.*;
 public class Game {
     private boolean ended;
     private Map map;
-    //private ArrayList<Edge> wallsUnderConstruction = new ArrayList<Edge>();
-    //private ArrayList<Edge> wallsUnderDestruction = new ArrayList<Edge>();
     private ArrayList<Unit>[][] tempOtherMoves;
-    private ArrayList<Unit>[][] tempWallieMoves;
-    //private ArrayList<Delta> attackDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> wallDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> moveDeltas = new ArrayList<Delta>();
     private ArrayList<Delta> otherDeltas = new ArrayList<Delta>();
     private static final int MINE_RATE = 4;
     private static final int COST_WALL = 10;
     private static final int GAME_LENGTH = 700;
-    //private static final int ATTACKER_SPAWN_RATE = 2;
-    //private static final int BOMBER_SPAWN_RATE = 3;
     private static final int CE_SPAWN_RATE = 2;
     private static final int EE_SPAWN_RATE = 1;
-    public static final int INITIAL_RESOURCE = 10000;
+    public static final int INITIAL_RESOURCE = 150;
     private int[] resources = new int[2];
-    //private ArrayList<UnitWallie> busyWallies = new ArrayList<UnitWallie>();
     private int turn;
-    //private Point[] attackerSpawnLocation = new Point[2];
-    //private Point[] bomberSpawnLocation = new Point[2];
-    //private Point[] ceSpawnLocation = new Point[2];
-    //private Point[] destinations = new Point[2];
     private Team CETeam;
     private Team EETeam;
-    private int numberOfEEers = 0;
 
     public boolean isEnded() {
         return ended;
@@ -54,7 +42,6 @@ public class Game {
         tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
         CETeam = new Team(0, INITIAL_RESOURCE);
         EETeam = new Team(1, 0);
-        //tempWallieMoves = new ArrayList[(map.getSizeX() + 1) * 2][map.getSizeY() + 1];
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
                 tempOtherMoves[i][j] = new ArrayList<Unit>();
@@ -65,26 +52,14 @@ public class Game {
     }
 
     public void handleActions(ArrayList<Action> actions) {
-        //ArrayList<Action> attacks = new ArrayList<Action>();
-        //ArrayList<Action> constructionDestructionWalls = new ArrayList<Action>();
         ArrayList<Action> moves = new ArrayList<Action>();
         ArrayList<Action> walls = new ArrayList<Action>();
         for (int i = 0; i < actions.size(); i++) {
-            /*
-            if (actions.get(i).getType() == ActionType.ATTACK) {
-                attacks.add(actions.get(i));
-            } else if (actions.get(i).getType() == ActionType.MAKE_WALL || actions.get(i).getType() == ActionType.DESTROY_WALL) {
-                constructionDestructionWalls.add(actions.get(i));
-            } else */
             if (actions.get(i).getType() == ActionType.MOVE)
                 moves.add(actions.get(i));
             else if(actions.get(i).getType() == ActionType.MAKE_WALL)
                 walls.add(actions.get(i));
         }
-        //handleAttacks(attacks);
-        //map.updateMap(attackDeltas);
-
-        //handleConstructionDestructionWalls(constructionDestructionWalls);
         handleMakeWalls(walls);
         map.updateMap(this.getWallDeltasList());
         handleMoves(moves);

@@ -17,15 +17,7 @@ public class Node implements Serializable {
         for(int i = 0; i < 6; i++)
             edges[i] = new Edge();
     }
-/*
-    public UnitWallie getUnitWallie() {
-        return unitWallie;
-    }
 
-    public void setUnitWallie(UnitWallie unitWallie) {
-        this.unitWallie = unitWallie;
-    }
-*/
     public Edge getEdge(NodeDirection dir) {
         return edges[dir.ordinal()];
     }
