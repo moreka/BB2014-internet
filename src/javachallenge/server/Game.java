@@ -204,7 +204,8 @@ public class Game {
                         CETeam.increaseArrivedNumber();
                     }
                 // if this unit is stayed in mine
-                } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j && thisUnit.getCell().getType() == CellType.MINE) {
+                } else if (thisUnit.getCell().getX() == i && thisUnit.getCell().getY() == j &&
+                        thisUnit.getCell().getType() == CellType.MINE && thisUnit.getTeamId() == 0) {
                     MineCell mineCell = (MineCell) thisUnit.getCell();
                     if (mineCell.getAmount() >= MINE_RATE) {
                         resources[thisUnit.getTeamId()] += MINE_RATE;

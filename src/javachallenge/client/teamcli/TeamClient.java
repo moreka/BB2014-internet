@@ -21,9 +21,9 @@ public class TeamClient extends Client {
          * Move section
          */
         for (Unit myUnit : myUnits) {
-            //move(myUnit, Direction.values()[rnd.nextInt(6)]);
+            move(myUnit, Direction.SOUTHWEST/*Direction.values()[rnd.nextInt(6)]*/);
             //move(myUnits.get(0), Direction.SOUTHEAST);
-            if (turn < 6 && turn % 2 == 0)
+            /*if (turn < 6 && turn % 2 == 0)
                 move(myUnits.get(0), Direction.SOUTHEAST);
             else if (turn < 6 && turn % 2 == 1)
                 move(myUnits.get(0), Direction.SOUTHWEST);
@@ -32,7 +32,7 @@ public class TeamClient extends Client {
             else if (turn % 2 == 1 && turn < 20)
                 move(myUnits.get(0), Direction.NORTHEAST);
             else if (turn % 2 == 0 && turn < 20)
-                move(myUnits.get(0), Direction.NORTHWEST);
+                move(myUnits.get(0), Direction.NORTHWEST);*/
         }
         turn++;
         System.out.println("<------------------------- Resources:" + getResources() + " ------------------------>");
