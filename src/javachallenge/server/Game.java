@@ -105,7 +105,8 @@ public class Game {
             if (CETeam.getResources() >= COST_WALL && wall.getType() == ActionType.MAKE_WALL &&
                     edge.getType() == EdgeType.OPEN) {
                 wallsWantMake.add(edge);
-                if (isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake)) {
+                if (isTherePathAfterThisEdges(map.getSpawnPoint(0), map.getDestinationPoint(0), wallsWantMake) &&
+                        isTherePathAfterThisEdges(map.getSpawnPoint(1), map.getDestinationPoint(1), wallsWantMake)) {
                     CETeam.decreaseResources(COST_WALL);
                     wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
                     otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
