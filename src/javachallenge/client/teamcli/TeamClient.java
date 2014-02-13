@@ -26,8 +26,12 @@ public class TeamClient extends Client {
         /**
          * Making walls section
          */
-        makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
-                Direction.values()[rnd.nextInt(6)]);
+
+        makeWall(map.getCellAt(6, 6), Direction.EAST);
+        makeWall(map.getCellAt(6, 6), Direction.SOUTHEAST);
+        makeWall(map.getCellAt(6, 6), Direction.SOUTHWEST);
+        //makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
+        //        Direction.values()[rnd.nextInt(6)]);
         //for(Direction d : Direction.values())
           //  makeWall(map.getCellAt(3,18),d);
 

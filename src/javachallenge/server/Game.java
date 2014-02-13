@@ -125,6 +125,8 @@ public class Game {
         // moves units to their destination blindly
         for (Action move : moves) {
             Unit unit = map.getCellAtPoint(move.getPosition()).getUnit();
+            if (unit == null)
+                continue;
             Cell source = unit.getCell();
             Cell destination = map.getNeighborCell(source, move.getDirection());
             if (tempOtherMoves[source.getX()][source.getY()] != null && tempOtherMoves[source.getX()][source.getY()].size() > 0 &&
@@ -173,8 +175,10 @@ public class Game {
                 if (zombieNum > 0) {
                     int zombieLasting = rand.nextInt(zombieNum);
                     for (int i = 0; i < overloadedNumber; i++) {
-                        if (zombieLasting == 0 && tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
+                        if (zombieLasting == 0 && tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1) {
                             lasting = i;
+                            zombieLasting--;
+                        }
                         else if (tempOtherMoves[xTemp][yTemp].get(i).getTeamId() == 1)
                             zombieLasting--;
                     }
