@@ -13,7 +13,7 @@ public class TeamServer extends Client {
 
     HashMap<Unit, Boolean> isBlocked = new HashMap<Unit, Boolean>();
 
-    public void init() {
+    public void initHash() {
         for (Unit unit : myUnits) {
             if (!isBlocked.containsKey(unit))
                 isBlocked.put(unit, false);
@@ -22,7 +22,7 @@ public class TeamServer extends Client {
 
     @Override
     public void step() {
-        init();
+        initHash();
         for (Unit unit : myUnits) {
             if (!unit.isArrived()) {
                 boolean isMoved = false;
@@ -30,12 +30,10 @@ public class TeamServer extends Client {
                     Cell neighbor = map.getNeighborCell(unit.getCell(), Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
 
                     if (unit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
-                            (neighbor.getType() == CellType.TERRAIN || neighbor.getType() == CellType.DESTINATION ||
-                                    neighbor.getType() == CellType.SPAWN || neighbor.getType() == CellType.MINE) &&
-                            ((neighbor.getUnit() == null) ||
-                                    ((neighbor.getUnit().getTeamId() == unit.getTeamId()) && neighbor.getUnit().getId() < unit.getId()))
-                            && !isBlocked.get(neighbor.getUnit())
-                            ) {
+                            neighbor.isGround() &&
+                            (neighbor.getUnit() == null ||
+                                    ((neighbor.getUnit().getTeamId() == unit.getTeamId()) && neighbor.getUnit().getId() < unit.getId() &&
+                                            !isBlocked.get(neighbor.getUnit())))) {
                         move(unit, Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
                         isMoved = true;
                         break;

@@ -64,4 +64,8 @@ public class Cell implements Serializable {
         this.unit = unit;
     }
 
+    public boolean isGround() {
+        return this.getType() == CellType.TERRAIN || this.getType() == CellType.SPAWN ||
+                this.getType() == CellType.MINE || this.getType() == CellType.DESTINATION;
+    }
 }

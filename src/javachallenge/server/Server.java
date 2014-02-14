@@ -77,7 +77,8 @@ public class Server {
 
             for (ClientConnection c : clientConnections) {
                 if (c.getClientMessage() != null)
-                    actions.addAll(c.getClientMessage().getActions());
+                    if (c.getClientMessage().getActions() != null)
+                        actions.addAll(c.getClientMessage().getActions());
             }
 //
 //            for (Action action : actions) {

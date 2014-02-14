@@ -617,6 +617,4 @@ public class Map implements Serializable, Cloneable {
     public void setString(String string) {
         this.string = string;
     }
-
-
 }
