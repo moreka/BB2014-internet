@@ -202,7 +202,8 @@ public class Game {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
                     if (destinationPoint.equals(map.getDestinationPoint(thisUnit.getTeamId()))) {
-                        CEScore += 5;
+                        if (thisUnit.getTeamId() == 0)
+                            CEScore += 5;
                         otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
                         CETeam.increaseArrivedNumber();
                     }
