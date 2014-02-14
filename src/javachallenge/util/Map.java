@@ -338,13 +338,12 @@ public class Map implements Serializable, Cloneable {
     public void updateMap(ArrayList<Delta> deltaList) {
         ArrayList<Unit>[][] oldUnits = initUpdate();
 
-        for (int i = 0; i < deltaList.size(); i++) {
-            Delta temp = deltaList.get(i);
+        for (Delta temp : deltaList) {
             Node nodeSr = null;
             Node nodeDes = null;
             Cell cellSr = null;
             Cell cellDes = null;
-            switch (temp.getType()){
+            switch (temp.getType()) {
                 case WALL_DRAW:
                     nodeSr = this.nodes[temp.getSource().getX()][temp.getSource().getY()];
                     nodeDes = this.nodes[temp.getDestination().getX()][temp.getDestination().getY()];

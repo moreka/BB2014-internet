@@ -7,10 +7,7 @@ package javachallenge.server;
 import javachallenge.client.Client;
 import javachallenge.graphics.FJframe;
 import javachallenge.graphics.FJpanel;
-import javachallenge.message.Action;
-import javachallenge.message.Delta;
-import javachallenge.message.InitialMessage;
-import javachallenge.message.ServerMessage;
+import javachallenge.message.*;
 import javachallenge.util.Map;
 import sun.misc.Cleaner;
 
@@ -80,18 +77,13 @@ public class Server {
                     if (c.getClientMessage().getActions() != null)
                         actions.addAll(c.getClientMessage().getActions());
             }
-//
-//            for (Action action : actions) {
-//                System.out.println(action);
-//            }
 
             game.initTurn(turn);
             game.handleActions(actions);
             graphics.repaint();
+            graphics.updateStat();
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
-//            graphics.repaint();
-            //game.getMap().printUnits();
         }
     }
 

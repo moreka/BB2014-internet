@@ -1,11 +1,12 @@
 package javachallenge.graphics;
 
 import javachallenge.server.Game;
+import javachallenge.util.MineCell;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.Toolkit;
 
 public class FJframe extends JFrame{
@@ -45,24 +46,46 @@ public class FJframe extends JFrame{
 
 		initUI();
         setVisible(true);
-	}
-	
-	
-	
+    }
+
+    JLabel label;
+
+    public String getGameStatus() {
+        String format = "<html>Cycle: " + game.getTurn() + "<br>" +
+                "CE Team Score: " + game.getCEScore() + "<br>" +
+                "CE Team Resource: " + game.getCETeam().getResources() + "<br>";
+        for (MineCell cell : game.getMap().getMines()) {
+            format += "Mine [" + cell.getX() + ", " + cell.getY() + "] remaining: " + cell.getAmount() + "<br>";
+        }
+        format += "</html>";
+        return format;
+    }
+
+    public void updateStat() {
+        this.label.setOpaque(true);
+        this.label.setForeground(Color.YELLOW);
+        this.label.setBackground(Color.BLACK);
+        this.label.setText(getGameStatus());
+    }
+
 	private void initUI(){
         this.setBackground(Color.BLACK);
-		FJpanel panel = new FJpanel(game, map, nodes, rows, cols);
-		getContentPane().add(panel);
-		//setLayout(null);
-//		JButton button = new JButton();
-//		button.setText("sdgasdgasg");
-		//panel.add(button);
-		
-		
-		this.add(panel);
+
+        FJpanel panel = new FJpanel(game, map, nodes, rows, cols);
+        this.setContentPane(panel);
+
+        panel.setLayout(null);
+        panel.setBackground(Color.BLACK);
+
+        label = new JLabel();
+        panel.add(label);
+        label.setBounds(10, 10, 200, 100);
+        label.setForeground(Color.YELLOW);
+        label.setVisible(true);
+
 		this.panel = panel;
 	}
-	
+
 	public FJpanel getPanel(){
 		return panel;
 	}

@@ -43,6 +43,9 @@ public class FJpanel extends JPanel implements Runnable{
 
     @Override
     public void paintComponent(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, 200, 200);
+        paintComponents(g);
         Graphics2D g2d = (Graphics2D) g;
 
         //g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));

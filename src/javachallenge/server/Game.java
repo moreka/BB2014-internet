@@ -34,6 +34,18 @@ public class Game {
     private Team EETeam;
     private int CEScore = 0;
 
+    public int getTurn() {
+        return turn;
+    }
+
+    public Team getCETeam() {
+        return CETeam;
+    }
+
+    public Team getEETeam() {
+        return EETeam;
+    }
+
     public boolean isEnded() {
         return ended;
     }
