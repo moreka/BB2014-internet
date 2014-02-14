@@ -23,17 +23,26 @@ public class TeamServer extends Client {
     @Override
     public void step() {
         init();
-        for (Unit unit: myUnits) {
+        for (Unit unit : myUnits) {
             if (!unit.isArrived()) {
+                boolean isMoved = false;
                 for (int j = 0; j < 6; j++) {
-                    Cell neighbor = map.getNeighborCell(unit.getCell(),Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
+                    Cell neighbor = map.getNeighborCell(unit.getCell(), Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
+
                     if (unit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
                             (neighbor.getType() == CellType.TERRAIN || neighbor.getType() == CellType.DESTINATION ||
                                     neighbor.getType() == CellType.SPAWN || neighbor.getType() == CellType.MINE) &&
-                            neighbor.getUnit() == null) {
+                            ((neighbor.getUnit() == null) ||
+                                    ((neighbor.getUnit().getTeamId() == unit.getTeamId()) && neighbor.getUnit().getId() < unit.getId()))
+                            && !isBlocked.get(neighbor.getUnit())
+                            ) {
                         move(unit, Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
+                        isMoved = true;
                         break;
                     }
+                }
+                if (!isMoved) {
+                    isBlocked.put(unit, true);
                 }
             }
         }
