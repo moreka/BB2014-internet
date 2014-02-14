@@ -15,6 +15,7 @@ public class Team {
 //    private Cell destination;
     private ArrayList<Unit> units;
     private int arrivedUnitsNum = 0;
+    private int unitID = 0;
 
     public Team(int teamId, int resources) {
         this.teamId = teamId;
@@ -29,7 +30,7 @@ public class Team {
     public Unit addUnit(){
         Unit newUnit = new Unit();
         newUnit.setTeamId(this.teamId);
-        newUnit.setId(units.size());
+        newUnit.setId(unitID++);
         this.units.add(newUnit);
         return newUnit;
     }

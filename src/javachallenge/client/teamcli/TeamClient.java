@@ -21,7 +21,11 @@ public class TeamClient extends Client {
          * Move section
          */
         for (Unit myUnit : myUnits) {
-            move(myUnit, Direction.SOUTHWEST/*Direction.values()[rnd.nextInt(6)]*/);
+            move(myUnit, Direction.EAST);
+            /*if (myUnit.getCell().getY() == map.getSizeY() - 2)
+                move(myUnit, Direction.WEST);
+            else
+                move(myUnit, Direction.SOUTHWEST/*Direction.values()[rnd.nextInt(6)]);*/
             //move(myUnits.get(0), Direction.SOUTHEAST);
             /*if (turn < 6 && turn % 2 == 0)
                 move(myUnits.get(0), Direction.SOUTHEAST);
@@ -40,11 +44,13 @@ public class TeamClient extends Client {
          * Making walls section
          */
 
-        /*makeWall(map.getCellAt(6, 6), Direction.EAST);
+        makeWall(map.getCellAt(6, 6), Direction.EAST);
         makeWall(map.getCellAt(6, 6), Direction.SOUTHEAST);
-        makeWall(map.getCellAt(6, 6), Direction.SOUTHWEST);*/
-        makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
-            Direction.values()[rnd.nextInt(6)]);
+        makeWall(map.getCellAt(6, 6), Direction.SOUTHWEST);
+        makeWall(map.getCellAt(6, 6), Direction.NORTHEAST);
+        makeWall(map.getCellAt(6, 6), Direction.NORTHWEST);
+        //makeWall(map.getCellAt(rnd.nextInt(map.getSizeX()), rnd.nextInt(map.getSizeY())),
+            //Direction.values()[rnd.nextInt(6)]);
         //for(Direction d : Direction.values())
           //  makeWall(map.getCellAt(3,18),d);
 

@@ -37,6 +37,10 @@ public abstract class Client {
             else if(d.getType() == DeltaType.RESOURCE_CHANGE && d.getTeamID() == this.getTeamID()){
                 this.resources = this.resources + d.getChangeValue();
             }
+            for (int i = myUnits.size() - 1; i >= 0; i--) {
+                if (myUnits.get(i).getCell() == null)
+                    myUnits.remove(i);
+            }
         }
     }
 

@@ -32,6 +32,7 @@ public class Game {
     private int turn;
     private Team CETeam;
     private Team EETeam;
+    private int CEScore = 0;
 
     public boolean isEnded() {
         return ended;
@@ -85,6 +86,7 @@ public class Game {
                     CETeam.decreaseResources(COST_WALL);
                     wallDeltas.add(new Delta(DeltaType.WALL_DRAW, point1, point2));
                     otherDeltas.add(new Delta(DeltaType.RESOURCE_CHANGE, 0, -COST_WALL));
+                    CEScore -= 3;
                 }
                 else {
                     wallsWantMake.remove(edge);
@@ -200,6 +202,7 @@ public class Game {
                     Point destinationPoint = new Point(i, j);
                     moveDeltas.add(new Delta(DeltaType.CELL_MOVE, sourcePoint, destinationPoint));
                     if (destinationPoint.equals(map.getDestinationPoint(thisUnit.getTeamId()))) {
+                        CEScore += 5;
                         otherDeltas.add(new Delta(DeltaType.AGENT_DISAPPEAR, destinationPoint));
                         CETeam.increaseArrivedNumber();
                     }
@@ -300,5 +303,9 @@ public class Game {
 
     public ArrayList<Delta> getOtherDeltasList() {
         return otherDeltas;
+    }
+
+    public int getCEScore() {
+        return CEScore;
     }
 }
