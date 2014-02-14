@@ -4,12 +4,25 @@ import javachallenge.client.Client;
 import javachallenge.units.Unit;
 import javachallenge.util.*;
 
+import java.util.HashMap;
+
 /**
  * Created by merhdad on 2/12/14.
  */
 public class TeamServer extends Client {
+
+    HashMap<Unit, Boolean> isBlocked = new HashMap<Unit, Boolean>();
+
+    public void init() {
+        for (Unit unit : myUnits) {
+            if (!isBlocked.containsKey(unit))
+                isBlocked.put(unit, false);
+        }
+    }
+
     @Override
     public void step() {
+        init();
         for (Unit unit: myUnits) {
             if (!unit.isArrived()) {
                 for (int j = 0; j < 6; j++) {

@@ -79,10 +79,10 @@ public class Server {
                 if (c.getClientMessage() != null)
                     actions.addAll(c.getClientMessage().getActions());
             }
-
-            for (Action action : actions) {
-                System.out.println(action);
-            }
+//
+//            for (Action action : actions) {
+//                System.out.println(action);
+//            }
 
             game.initTurn(turn);
             game.handleActions(actions);
@@ -90,7 +90,7 @@ public class Server {
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
 //            graphics.repaint();
-            game.getMap().printUnits();
+            //game.getMap().printUnits();
         }
     }
 

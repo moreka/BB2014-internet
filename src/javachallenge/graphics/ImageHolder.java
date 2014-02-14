@@ -15,7 +15,7 @@ public class ImageHolder {
     public static Image water = new ImageIcon("data/water.png").getImage();
     public static Image mine = new ImageIcon("data/mine.png").getImage();
     public static Image attacker = new ImageIcon("data/attacker.png").getImage();
-    public static Image wallie = new ImageIcon("data/wallie.png").getImage();
+    public static Image wallie = new ImageIcon("data/black.png").getImage();
     public static Image black = new ImageIcon("data/black.png").getImage();
     public static Image spawn = new ImageIcon("data/spawn.png").getImage();
     public static Image destination = new ImageIcon("data/destination.png").getImage();
@@ -23,6 +23,7 @@ public class ImageHolder {
     public static Image bomber = new ImageIcon("data/bomber.png").getImage();
     public static Image white = new ImageIcon("data/white.jpg").getImage();
     public static Image brickWall = new ImageIcon("data/brickwall.png").getImage();
+
     public static Image[] loadImage(String prefix, int size){
 
         Image[] all = new Image[size];
