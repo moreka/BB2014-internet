@@ -24,6 +24,13 @@ public class Map implements Serializable, Cloneable {
 
     private String string;
 
+    public Map (MapHelper mapHelper) {
+        sizeX = mapHelper.getSizeX();
+        sizeY = mapHelper.getSizeY();
+        this.cells = new Cell[sizeX][sizeY];
+
+    }
+
     public Point getSpawnPoint(int teamId) {
         return spawnPoints[teamId];
     }
