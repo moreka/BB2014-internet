@@ -63,7 +63,7 @@ public class Game {
         MapHelper mapHelper = new MapHelper(map);
         Parser p = new Parser();
         try {
-            p.javaToJson(mapHelper, "/home/merhdad/Desktop/testGson");
+            p.javaToJson(mapHelper, "net.mapHelper");
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
