@@ -11,6 +11,7 @@ import java.util.Random;
  * Created by mohammad on 2/5/14.
  */
 public class TeamClient extends Client {
+    int turn = 0;
     @Override
     public void step() {
         // your code here ...
@@ -20,8 +21,11 @@ public class TeamClient extends Client {
          * Move section
          */
         for (Unit myUnit : myUnits) {
-            move(myUnit, Direction.values()[rnd.nextInt(6)]);
+            //move(myUnit, Direction.values()[rnd.nextInt(6)]);
+            if (turn < 7)
+                move(myUnits.get(0), Direction.SOUTHWEST);
         }
+        turn++;
         /**
          * Making walls section
          */

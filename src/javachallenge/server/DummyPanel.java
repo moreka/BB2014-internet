@@ -21,7 +21,7 @@ public class DummyPanel extends JPanel {
     private Image sand, ocean, zombie, ce;
     private final int WIDTH = 950;
     private final int HEIGHT = 650;
-    private final int SIZE = 42;
+    private final int SIZE = 54;
 
     public DummyPanel(Map map) {
         this.map = map;
