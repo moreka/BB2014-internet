@@ -1,5 +1,9 @@
 package mapmaker;
 
+import javachallenge.util.CellType;
+import javachallenge.util.MapHelper;
+import javachallenge.util.Point;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,12 +18,15 @@ import javax.swing.JPanel;
 
 
 
-public class mapmaker {
+public class MapMaker {
     public static int size = 20;
     public static Color[] colors;
     public static JButton[][] cell;
+    public static CellType[][] cellType;
     public static int x;
     public static int y;
+    public static MapHelper mapHelper;
+
 
     public static void main(String[] args) {
         colors = new Color[7];
@@ -63,6 +70,7 @@ public class mapmaker {
         }
         //Map
         cell = new JButton[x][y];
+        cellType = new CellType[x][y];
         ActionListener a = new cellAction(colors);
         for(int i = 0; i < x; i++){
             for(int j = 0; j < y; j++){
@@ -91,18 +99,38 @@ public class mapmaker {
         menuBar.add(menu);
         JMenuItem saveItem = new JMenuItem("save");
         saveItem.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println(x);
-                System.out.println(y);
-                for (int i = 0; i < y; i++) {
-                    for (int j = 0; j < x; j++) {
-                        System.out.format("%s ", cell[j][i].getName());
+                Point[] sources = new Point[2];
+                int sCount = 0;
+                Point[] Destination = new Point[2];
+                int dCount = 0;
+                for (int i = 0; i < x; i++)
+                    for (int j = 0; j < y; j++) {
+                        cellType[i][j] = CellType.values()[Integer.valueOf(cell[i][j].getName())];
+                        if(cellType[i][j] == CellType.SPAWN){
+                            sources[sCount].x = i;
+                            sources[sCount].y = j;
+                            sCount++;
+                        }
+                        if(cellType[i][j] == CellType.DESTINATION){
+                            Destination[dCount].x = i;
+                            Destination[dCount].y = j;
+                            dCount++;
+                        }
                     }
-                    System.out.format("\n");
+                String awnser = JOptionPane.showInputDialog("Sources[1]:","yes for " + sources[0].x + "," + sources[0].y + " no for " + sources[1].x + "," + sources[1].y);
+                if(awnser.toLowerCase() == "no"){
+                    Point t = sources[1];
+                    sources[1] = sources[0];
+                    sources[0] = t;
                 }
-
+                awnser = JOptionPane.showInputDialog("Des[1]:","yes for " + Destination[0].x + "," + Destination[0].y + " no for " + Destination[1].x + "," + Destination[1].y);
+                if(awnser.toLowerCase() == "no"){
+                    Point t = Destination[1];
+                    Destination[1] = Destination[0];
+                    Destination[0] = t;
+                }
 
             }
         });

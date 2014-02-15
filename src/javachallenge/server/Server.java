@@ -42,12 +42,11 @@ public class Server {
             c.getOut().writeObject(new InitialMessage(map.getString(), i++, Game.INITIAL_RESOURCE));
             c.getOut().flush();
         }
+        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
+        FJpanel panel = graphics.getPanel();
 
-//        FJframe graphics = new FJframe(game, game.getMap().getSizeY(), game.getMap().getSizeX());
-//        FJpanel panel = graphics.getPanel();
-
-        DummyGraphics graphics = new DummyGraphics(map);
-        graphics.setVisible(true);
+//        DummyGraphics graphics = new DummyGraphics(map);
+  //      graphics.setVisible(true);
 
         int turn = 0;
 

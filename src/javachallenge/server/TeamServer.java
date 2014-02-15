@@ -30,7 +30,7 @@ public class TeamServer extends Client {
                     Cell neighbor = map.getNeighborCell(unit.getCell(), Direction.values()[(Direction.EAST.ordinal() + j) % 6]);
 
                     if (unit.getCell().getEdge(Direction.values()[(Direction.EAST.ordinal() + j) % 6]).getType() == EdgeType.OPEN &&
-                            neighbor.isGround() &&
+                            neighbor.isGround() && !(neighbor.getX() == map.getDestinationCell(0).getX() && neighbor.getY() == map.getDestinationCell(0).getY()) &&
                             (neighbor.getUnit() == null ||
                                     ((neighbor.getUnit().getTeamId() == unit.getTeamId()) && neighbor.getUnit().getId() < unit.getId() &&
                                             !isBlocked.get(neighbor.getUnit())))) {
