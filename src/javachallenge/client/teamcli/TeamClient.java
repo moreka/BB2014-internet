@@ -13,6 +13,7 @@ import java.util.Random;
 public class TeamClient extends Client {
     int turn = 0;
     @Override
+
     public void step() {
         // your code here ...
         // this is an example implementation:

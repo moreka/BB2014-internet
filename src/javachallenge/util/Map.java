@@ -5,6 +5,7 @@ import javachallenge.units.Unit;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by mohammad on 2/5/14.
@@ -23,6 +24,20 @@ public class Map implements Serializable, Cloneable {
     private Point[] destinationPoints = new Point[2];
 
     private String string;
+
+    public Map (MapHelper mapHelper) {
+        sizeX = mapHelper.getSizeX();
+        sizeY = mapHelper.getSizeY();
+        this.cells = new Cell[sizeX][sizeY];
+        for (int i = 0; i < sizeX; i++)
+            for (int j = 0; j < cells[i].length; j++)
+                cells[i][j].setType(mapHelper.getCells()[i][j]);
+        spawnPoints[0] = mapHelper.getSpawn1();
+        destinationPoints[0] = mapHelper.getDestination1();
+        spawnPoints[1] = mapHelper.getSpawn2();
+        destinationPoints[1] = mapHelper.getDestination2();
+        mines = new ArrayList<MineCell>();
+    }
 
     public Point getSpawnPoint(int teamId) {
         return spawnPoints[teamId];

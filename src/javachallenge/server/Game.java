@@ -1,5 +1,6 @@
 package javachallenge.server;
 
+import javachallenge.mapParser.Parser;
 import javachallenge.units.Unit;
 import javachallenge.message.Action;
 import javachallenge.message.ActionType;
@@ -8,6 +9,7 @@ import javachallenge.message.DeltaType;
 import javachallenge.util.*;
 import javachallenge.util.Map;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -50,7 +52,7 @@ public class Game {
         return ended;
     }
 
-    public Game (Map map) {
+    public Game (Map map){
         this.map = map;
         tempOtherMoves = new ArrayList[map.getSizeX() + 1][map.getSizeY() + 1];
         CETeam = new Team(0, INITIAL_RESOURCE);
@@ -58,6 +60,13 @@ public class Game {
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
                 tempOtherMoves[i][j] = new ArrayList<Unit>();
+        MapHelper mapHelper = new MapHelper(map);
+        Parser p = new Parser();
+        try {
+            p.javaToJson(mapHelper, "net.mapHelper");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public Map getMap() {
@@ -68,9 +77,11 @@ public class Game {
         ArrayList<Action> moves = new ArrayList<Action>();
         ArrayList<Action> walls = new ArrayList<Action>();
         for (int i = 0; i < actions.size(); i++) {
-            if (actions.get(i).getType() == ActionType.MOVE)
+            if (actions.get(i).getType() == ActionType.MOVE && actions.get(i).getPosition() != null &&
+                    actions.get(i).getDirection() != null)
                 moves.add(actions.get(i));
-            else if(actions.get(i).getType() == ActionType.MAKE_WALL)
+            else if(actions.get(i).getType() == ActionType.MAKE_WALL && actions.get(i).getPosition() != null &&
+                    actions.get(i).getNodeDirection() != null)
                 walls.add(actions.get(i));
         }
         handleMakeWalls(walls);
