@@ -7,6 +7,7 @@ import javachallenge.util.Point;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -105,32 +106,49 @@ public class MapMaker {
                 int sCount = 0;
                 Point[] Destination = new Point[2];
                 int dCount = 0;
+                ArrayList<Point> mines = new ArrayList<Point>();
                 for (int i = 0; i < x; i++)
                     for (int j = 0; j < y; j++) {
                         cellType[i][j] = CellType.values()[Integer.valueOf(cell[i][j].getName())];
                         if(cellType[i][j] == CellType.SPAWN){
+                            sources[sCount] = new Point();
                             sources[sCount].x = i;
                             sources[sCount].y = j;
                             sCount++;
                         }
                         if(cellType[i][j] == CellType.DESTINATION){
+                            Destination[dCount] = new Point();
                             Destination[dCount].x = i;
                             Destination[dCount].y = j;
                             dCount++;
                         }
+                        if(cellType[i][j] == CellType.MINE){
+                            Point temp = new Point();
+                            temp.x = i;
+                            temp.y = j;
+                            mines.add(temp);
+                        }
                     }
-                String awnser = JOptionPane.showInputDialog("Sources[1]:","yes for " + sources[0].x + "," + sources[0].y + " no for " + sources[1].x + "," + sources[1].y);
+                Point[] minesArray = new Point[mines.size()];
+                for(int i = 0; i < minesArray.length; i++){
+                    minesArray[i] = mines.get(i);
+                }
+
+
+                String awnser = JOptionPane.showInputDialog("Sources[0]:","yes for " + sources[0].x + "," + sources[0].y + " no for " + sources[1].x + "," + sources[1].y);
                 if(awnser.toLowerCase() == "no"){
                     Point t = sources[1];
                     sources[1] = sources[0];
                     sources[0] = t;
                 }
-                awnser = JOptionPane.showInputDialog("Des[1]:","yes for " + Destination[0].x + "," + Destination[0].y + " no for " + Destination[1].x + "," + Destination[1].y);
+                awnser = JOptionPane.showInputDialog("Des[0]:","yes for " + Destination[0].x + "," + Destination[0].y + " no for " + Destination[1].x + "," + Destination[1].y);
                 if(awnser.toLowerCase() == "no"){
                     Point t = Destination[1];
                     Destination[1] = Destination[0];
                     Destination[0] = t;
                 }
+
+                mapHelper = new MapHelper(x,y,cellType,sources[0],Destination[0],sources[1], Destination[1],minesArray);
 
             }
         });
@@ -153,7 +171,7 @@ class cellAction implements ActionListener{
     }
     public void actionPerformed(ActionEvent e){
         int m = Integer.valueOf(((JButton)e.getSource()).getName());
-        m = (m + 1) % 6;
+        m = (m + 1) % 7;
         ((JButton)e.getSource()).setBackground(col[m]);
         ((JButton)e.getSource()).setName(String.valueOf(m));
     }
