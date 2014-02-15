@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 import java.io.IOException;
 
 public class GraphicMain {
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

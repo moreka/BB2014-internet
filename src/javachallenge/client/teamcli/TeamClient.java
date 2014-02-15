@@ -12,6 +12,7 @@ import java.util.Random;
  */
 public class TeamClient extends Client {
     @Override
+
     public void step() {
         // your code here ...
         // this is an example implementation:
