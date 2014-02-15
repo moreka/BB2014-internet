@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
+
 public class mapmaker {
     public static int size = 20;
     public static Color[] colors;
