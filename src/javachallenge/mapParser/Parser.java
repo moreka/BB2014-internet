@@ -16,6 +16,7 @@ public class Parser {
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         Gson gson = new GsonBuilder().create();
         MapHelper mapHelper = gson.fromJson(reader, MapHelper.class);
+        reader.close();
         return mapHelper;
     }
 
@@ -23,5 +24,6 @@ public class Parser {
         BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
         Gson gson = new Gson();
         writer.write(gson.toJson(mapHelper));
+        writer.close();
     }
 }

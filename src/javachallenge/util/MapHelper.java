@@ -24,6 +24,19 @@ public class MapHelper {
         this.mines = mines;
     }
 
+    public MapHelper(Map map) {
+        sizeX = map.getSizeX();
+        sizeY = map.getSizeY();
+        cells = new CellType[sizeX][sizeY];
+        for (int i = 0; i < map.getSizeX(); i++)
+            for (int j = 0; j < map.getSizeY(); j++)
+                cells[i][j] = map.getCellAt(i, j).getType();
+        spawn1 = map.getSpawnPoint(0);
+        destination1 = map.getDestinationPoint(0);
+        spawn2 = map.getSpawnPoint(1);
+        destination2 = map.getDestinationPoint(1);
+    }
+
     public int getSizeX() {
         return sizeX;
     }

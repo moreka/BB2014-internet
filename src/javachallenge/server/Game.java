@@ -60,12 +60,13 @@ public class Game {
         for (int i = 0; i < map.getSizeX() + 1; i++)
             for (int j = 0; j < map.getSizeY() + 1; j++)
                 tempOtherMoves[i][j] = new ArrayList<Unit>();
-        /*Parser p = new Parser();
+        MapHelper mapHelper = new MapHelper(map);
+        Parser p = new Parser();
         try {
-            p.javaToJson(map, "/home/merhdad/Desktop/testGson");
+            p.javaToJson(mapHelper, "/home/merhdad/Desktop/testGson");
         } catch (Exception e){
             System.out.println(e.getMessage());
-        }*/
+        }
     }
 
     public Map getMap() {
@@ -76,9 +77,11 @@ public class Game {
         ArrayList<Action> moves = new ArrayList<Action>();
         ArrayList<Action> walls = new ArrayList<Action>();
         for (int i = 0; i < actions.size(); i++) {
-            if (actions.get(i).getType() == ActionType.MOVE)
+            if (actions.get(i).getType() == ActionType.MOVE && actions.get(i).getPosition() != null &&
+                    actions.get(i).getDirection() != null)
                 moves.add(actions.get(i));
-            else if(actions.get(i).getType() == ActionType.MAKE_WALL)
+            else if(actions.get(i).getType() == ActionType.MAKE_WALL && actions.get(i).getPosition() != null &&
+                    actions.get(i).getNodeDirection() != null)
                 walls.add(actions.get(i));
         }
         handleMakeWalls(walls);
