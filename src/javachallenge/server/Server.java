@@ -35,7 +35,7 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("peyman.map");
+        Map map = Map.loadMap("Easy.map");
         Game game = new Game(map);
 
         int i = 0;
