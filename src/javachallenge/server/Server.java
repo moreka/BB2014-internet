@@ -4,24 +4,25 @@
 
 package javachallenge.server;
 
-import javachallenge.client.Client;
 import javachallenge.graphics.FJframe;
 import javachallenge.graphics.FJpanel;
 import javachallenge.message.*;
 import javachallenge.util.Map;
 import sun.misc.Cleaner;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server {
 
     public static int CYCLE_LENGTH = 500;
     public static int PORT = 20140;
 
-    public void run() throws InterruptedException, IOException, ClassNotFoundException {
+    public void run(String name) throws InterruptedException, IOException, ClassNotFoundException {
         int num_clients = 2;
 
         ClientConnection[] clientConnections = new ClientConnection[num_clients];
@@ -34,7 +35,7 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("net.map");
+        Map map = Map.loadMap("peyman.map");
         Game game = new Game(map);
 
         int i = 0;
@@ -50,7 +51,7 @@ public class Server {
 
         int turn = 0;
 
-        while (!game.isEnded()) {
+        while (!game.isEnded() && turn < 700) {
             System.out.println("Turn: " + (++turn));
 
             ServerMessage serverMessage = new ServerMessage(game.getWallDeltasList(),
@@ -84,11 +85,13 @@ public class Server {
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
         }
+        PrintWriter wr = new PrintWriter(new FileOutputStream(new File("scores.txt"),true));
+        wr.append(name + ": " + game.getCEScore() + "\n");
     }
 
     public static void main(String[] args) {
         try {
-            new Server().run();
+            new Server().run("KIR");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IOException e) {

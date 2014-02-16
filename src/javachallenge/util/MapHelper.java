@@ -12,7 +12,8 @@ public class MapHelper {
     private Point spawn2;
     private Point destination2;
     private Point[] mines;
-    private int AmountMines;
+    private int amountMines;
+
     public MapHelper(int sizeX, int sizeY, CellType[][] cells, Point spawn1, Point destination1, Point spawn2, Point destination2, Point[] mines, int amountMines) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -22,7 +23,11 @@ public class MapHelper {
         this.spawn2 = spawn2;
         this.destination2 = destination2;
         this.mines = mines;
-        this.AmountMines = amountMines;
+        this.amountMines = amountMines;
+    }
+
+    public int getAmountMines() {
+        return amountMines;
     }
 
     public MapHelper(Map map) {

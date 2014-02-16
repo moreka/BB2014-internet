@@ -8,6 +8,9 @@ import javachallenge.util.Point;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,7 +27,7 @@ public class MapMaker {
     public static int size = 20;
     public static Color[] colors;
     public static JButton[][] cell;
-    public static CellType[][] cellType;
+    //public static CellType[][] cellType;
     public static int x;
     public static int y;
     public static MapHelper mapHelper;
@@ -73,7 +76,7 @@ public class MapMaker {
         }
         //Map
         cell = new JButton[x][y];
-        cellType = new CellType[x][y];
+        //cellType = new CellType[x][y];
         ActionListener a = new cellAction(colors);
         for(int i = 0; i < x; i++){
             for(int j = 0; j < y; j++){
@@ -104,61 +107,79 @@ public class MapMaker {
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                Point[] sources = new Point[2];
-                int sCount = 0;
-                Point[] Destination = new Point[2];
-                int dCount = 0;
-                ArrayList<Point> mines = new ArrayList<Point>();
-                for (int i = 0; i < x; i++)
-                    for (int j = 0; j < y; j++) {
-                        cellType[i][j] = CellType.values()[Integer.valueOf(cell[i][j].getName())];
-                        if(cellType[i][j] == CellType.SPAWN){
-                            sources[sCount] = new Point();
-                            sources[sCount].x = i;
-                            sources[sCount].y = j;
-                            sCount++;
+
+                try{
+                    PrintWriter printWriter = new PrintWriter(new FileOutputStream(new File(JOptionPane.showInputDialog("Map's name:","**.map")),true));
+                    printWriter.append(String.valueOf(x) + "\n");
+                    printWriter.append(String.valueOf(y) + "\n");
+
+                    Point[] sources = new Point[2];
+                    int sCount = 0;
+                    Point[] Destination = new Point[2];
+                    int dCount = 0;
+                    ArrayList<Point> mines = new ArrayList<Point>();
+                    for (int i = 0; i < y; i++){
+                        for (int j = 0; j < x; j++) {
+                            printWriter.append(cell[j][i].getName() + " ");
+                            if(cell[j][i].getName().equals("5")){
+                                sources[sCount] = new Point();
+                                sources[sCount].x = j;
+                                sources[sCount].y = i;
+                                sCount++;
+                            }
+                            if(cell[j][i].getName().equals("6")){
+                                Destination[dCount] = new Point();
+                                Destination[dCount].x = j;
+                                Destination[dCount].y = i;
+                                dCount++;
+                            }
+                            if(cell[j][i].getName().equals("3")){
+                                Point temp = new Point();
+                                temp.x = j;
+                                temp.y = i;
+                                mines.add(temp);
+                            }
                         }
-                        if(cellType[i][j] == CellType.DESTINATION){
-                            Destination[dCount] = new Point();
-                            Destination[dCount].x = i;
-                            Destination[dCount].y = j;
-                            dCount++;
-                        }
-                        if(cellType[i][j] == CellType.MINE){
-                            Point temp = new Point();
-                            temp.x = i;
-                            temp.y = j;
-                            mines.add(temp);
-                        }
+                        printWriter.append("\n");
                     }
-                Point[] minesArray = new Point[mines.size()];
-                for(int i = 0; i < minesArray.length; i++){
-                    minesArray[i] = mines.get(i);
-                }
+                    Point[] minesArray = new Point[mines.size()];
+                    for(int i = 0; i < minesArray.length; i++){
+                        minesArray[i] = mines.get(i);
+                    }
 
 
-                String awnser = JOptionPane.showInputDialog("Sources[0]:","yes for " + sources[0].x + "," + sources[0].y + " no for " + sources[1].x + "," + sources[1].y);
-                if(awnser.toLowerCase() == "no"){
-                    Point t = sources[1];
-                    sources[1] = sources[0];
-                    sources[0] = t;
-                }
-                awnser = JOptionPane.showInputDialog("Des[0]:","yes for " + Destination[0].x + "," + Destination[0].y + " no for " + Destination[1].x + "," + Destination[1].y);
-                if(awnser.toLowerCase() == "no"){
-                    Point t = Destination[1];
-                    Destination[1] = Destination[0];
-                    Destination[0] = t;
-                }
+                    String awnser = JOptionPane.showInputDialog("Sources[0]:","yes for " + sources[0].x + "," + sources[0].y + " no for " + sources[1].x + "," + sources[1].y);
+                    if(awnser.toLowerCase() == "no"){
+                        Point t = sources[1];
+                        sources[1] = sources[0];
+                        sources[0] = t;
+                    }
+                    awnser = JOptionPane.showInputDialog("Des[0]:","yes for " + Destination[0].x + "," + Destination[0].y + " no for " + Destination[1].x + "," + Destination[1].y);
+                    if(awnser.toLowerCase() == "no"){
+                        Point t = Destination[1];
+                        Destination[1] = Destination[0];
+                        Destination[0] = t;
+                    }
 
-                int mine = Integer.valueOf(JOptionPane.showInputDialog("Amount of the map:","400"));
-                mapHelper = new MapHelper(x,y,cellType,sources[0],Destination[0],sources[1], Destination[1],minesArray,mine);
+                    int mine = Integer.valueOf(JOptionPane.showInputDialog("Amount of the map:","400"));
+                    printWriter.append(String.valueOf(mine) + "\n");
+                    printWriter.append(String.valueOf(sources[0].getX()) + " " + String.valueOf(sources[0].getY()) + "\n");
+                    printWriter.append(String.valueOf(sources[1].getX()) + " " + String.valueOf(sources[1].getY()) + "\n");
+                    printWriter.append(Destination[0].getX() + " " + Destination[0].getY() + "\n");
+                    printWriter.append(Destination[1].getX() + " " + Destination[1].getY());
+                    printWriter.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("Exe." + e.getMessage());
+                }
+                /*mapHelper = new MapHelper(x,y,cellType,sources[0],Destination[0],sources[1], Destination[1],minesArray,mine);
                 Parser p = new Parser();
                 String name = JOptionPane.showInputDialog("Map's name:");
                 try {
                     p.javaToJson(mapHelper, name);
                 } catch (Exception e){
                     System.out.println(e.getMessage());
-                }
+                }*/
 
             }
         });
