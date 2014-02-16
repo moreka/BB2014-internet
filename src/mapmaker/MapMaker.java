@@ -168,9 +168,6 @@ public class MapMaker {
         mapMaker.setVisible(true);
 
     }
-
-
-
 }
 
 class cellAction implements ActionListener{
