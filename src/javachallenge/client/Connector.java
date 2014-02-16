@@ -22,6 +22,7 @@ public class Connector {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
+
     private Object lock = new Object();
     ServerMessage serverMessage = null;
     ServerMessage otherThreadMessage = null;
