@@ -8,6 +8,7 @@ import javachallenge.message.Delta;
 import javachallenge.message.DeltaType;
 import javachallenge.util.*;
 import javachallenge.util.Map;
+import mapmaker.MapMaker;
 
 import java.io.IOException;
 import java.util.*;

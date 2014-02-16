@@ -1,5 +1,6 @@
 package mapmaker;
 
+import javachallenge.mapParser.Parser;
 import javachallenge.util.CellType;
 import javachallenge.util.MapHelper;
 import javachallenge.util.Point;
@@ -27,6 +28,7 @@ public class MapMaker {
     public static int x;
     public static int y;
     public static MapHelper mapHelper;
+
 
 
     public static void main(String[] args) {
@@ -148,7 +150,15 @@ public class MapMaker {
                     Destination[0] = t;
                 }
 
-                mapHelper = new MapHelper(x,y,cellType,sources[0],Destination[0],sources[1], Destination[1],minesArray);
+                int mine = Integer.valueOf(JOptionPane.showInputDialog("Amount of the map:","400"));
+                mapHelper = new MapHelper(x,y,cellType,sources[0],Destination[0],sources[1], Destination[1],minesArray,mine);
+                Parser p = new Parser();
+                String name = JOptionPane.showInputDialog("Map's name:");
+                try {
+                    p.javaToJson(mapHelper, name);
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
 
             }
         });
