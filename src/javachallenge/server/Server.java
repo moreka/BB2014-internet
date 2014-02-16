@@ -35,7 +35,7 @@ public class Server {
             System.out.println("Player " + i + " connected!");
         }
 
-        Map map = Map.loadMap("Easy.map");
+        Map map = Map.loadMap("hard.map");
         Game game = new Game(map);
 
         int i = 0;
@@ -85,8 +85,7 @@ public class Server {
             game.endTurn();
             game.getMap().updateMap(game.getOtherDeltasList());
         }
-        PrintWriter wr = new PrintWriter(new FileOutputStream(new File("scores.txt"),true));
-        wr.append(name + ": " + game.getCEScore() + "\n");
+        System.out.println("SCORE:" + game.getCEScore());
     }
 
     public static void main(String[] args) {
